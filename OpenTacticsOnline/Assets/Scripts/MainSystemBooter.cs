@@ -8,7 +8,7 @@ public class MainSystemBooter : MonoBehaviour
     void Start()
     {
         StateManager.Init();
-        StateManager.PushGameState(new TitleGameState());
+        StateManager.PushGameState(new TitleState());
     }
 
 
