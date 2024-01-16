@@ -8,7 +8,28 @@ public class MainSystemBooter : MonoBehaviour
     void Start()
     {
         StateManager.Init();
+
+        BattleGridModelData.Init();
+
+        ContentLoader.Init();
+
         StateManager.PushGameState(new TitleState());
+
+
+        ContentLoader.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
+
+
+
+        // GameObject tile;
+        // tile = ContentLoader.CreateGridTile(1);
+        // tile.transform.position = new Vector3(1,0,0);
+
+        // tile = ContentLoader.CreateGridTile(1);
+        // tile.transform.position = new Vector3(-1,0,0);
+
+        // tile = ContentLoader.CreateGridTile(54);
+        // tile.transform.position = new Vector3(0,0,0);
+
     }
 
 
@@ -16,5 +37,23 @@ public class MainSystemBooter : MonoBehaviour
     void Update()
     {
         StateManager.Update();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ContentLoader.DestroyBattleGridVisuals();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            BattleGridModelData.ChangeTileID(2, 2, 7);
+
+            
+
+            //ContentLoader.DestroyBattleGridVisuals();
+            //ContentLoader.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
+            
+            //change a single tile
+            //
+        }
     }
 }
