@@ -32,7 +32,7 @@ public static class BattleGridModelData
     public static void ChangeTileID(int x, int y, int newID)
     {
         battleGridTiles[x,y].id = newID;
-        ContentLoader.UpdateGridTileSprite(x, y, newID);
+        GridVisuals.UpdateGridTileSprite(x, y, newID);
     }
 
 }

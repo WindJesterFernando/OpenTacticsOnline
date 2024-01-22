@@ -16,7 +16,7 @@ public class MainSystemBooter : MonoBehaviour
         StateManager.PushGameState(new TitleState());
 
 
-        ContentLoader.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
+        GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
 
 
 
@@ -36,24 +36,27 @@ public class MainSystemBooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StateManager.Update();
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            ContentLoader.DestroyBattleGridVisuals();
-        }
+        
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            BattleGridModelData.ChangeTileID(2, 2, 7);
+        //StateManager.Update();
+
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //     GridVisuals.DestroyBattleGridVisuals();
+        // }
+
+        // if (Input.GetKeyDown(KeyCode.W))
+        // {
+        //     BattleGridModelData.ChangeTileID(2, 2, 7);
 
             
 
-            //ContentLoader.DestroyBattleGridVisuals();
-            //ContentLoader.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
+        //     //ContentLoader.DestroyBattleGridVisuals();
+        //     //ContentLoader.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
             
-            //change a single tile
-            //
-        }
+        //     //change a single tile
+        //     //
+        // }
     }
 }
