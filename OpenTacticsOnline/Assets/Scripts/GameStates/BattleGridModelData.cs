@@ -12,7 +12,6 @@ public static class BattleGridModelData
 
     const int MoveCost = 1;
 
-
     public static void Init()
     {
         battleGridTiles = new BattleGridTile[gridSizeX, gridSizeY];
@@ -33,6 +32,8 @@ public static class BattleGridModelData
         battleGridTiles[1, 4].isWalkable = false;
         battleGridTiles[1, 5].isWalkable = false;
         battleGridTiles[1, 6].isWalkable = false;
+
+        //battleGridTiles[0, 7].isWalkable = false;
 
         battleGridTiles[0, 8].isWalkable = false;
         battleGridTiles[1, 8].isWalkable = false;
@@ -71,6 +72,45 @@ public static class BattleGridModelData
     {
         ChangeTileID(start, 104);
         ChangeTileID(end, 107);
+
+        LinkedList<Vector2Int> visitedTiles = new LinkedList<Vector2Int>();
+        LinkedList<Vector2Int> neighbourTiles = new LinkedList<Vector2Int>();
+
+        visitedTiles.AddLast(start);
+
+        foreach (Vector2Int n in GetWalkableNeighbours(start))
+        {
+            neighbourTiles.AddLast(n);
+        }
+
+        while(neighbourTiles.Count > 0)
+        {
+            Vector2Int t = neighbourTiles.First.Value;
+            //Debug.Log("iteration: " + t);
+            neighbourTiles.RemoveFirst();
+            visitedTiles.AddLast(t);
+
+            ChangeTileID(t, 10);
+
+            foreach (Vector2Int n in GetWalkableNeighbours(t))
+            {
+                if(!neighbourTiles.Contains(n) && !visitedTiles.Contains(n))
+                    neighbourTiles.AddLast(n);
+            }
+
+        }
+
+
+
+        // foreach (var item in )
+        // {
+
+        // }
+
+
+
+
+
     }
 
     public static int GetDistance(Vector2Int start, Vector2Int end)
