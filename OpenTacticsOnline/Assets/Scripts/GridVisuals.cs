@@ -28,7 +28,6 @@ public static class GridVisuals
             tile.transform.parent = containerParent.transform;
             tileVisuals[bgt.x, bgt.y] = tile;
         }
-
     }
 
     public static void DestroyBattleGridVisuals()
@@ -37,9 +36,9 @@ public static class GridVisuals
         tileVisuals = null;
     }
 
-    public static GameObject UpdateGridTileSprite(int x, int y, int spriteID)
+    public static GameObject UpdateGridTileSprite(Vector2Int coord, int spriteID)
     {
-        GameObject tile = tileVisuals[x, y];
+        GameObject tile = tileVisuals[coord.x, coord.y];
         SpriteRenderer sReader = tile.GetComponent<SpriteRenderer>();
         sReader.sprite = ContentLoader.GetMapTileSprite(spriteID);
         return tile;
