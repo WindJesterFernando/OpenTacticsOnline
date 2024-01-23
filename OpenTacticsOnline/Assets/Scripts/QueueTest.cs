@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class QueueTest : MonoBehaviour
 {
+    public static QueueTest instance;
 
     Queue<ActionContainer> queueOfActions;
 
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+
         queueOfActions = new Queue<ActionContainer>();
 
-        queueOfActions.Enqueue(new ActionDebugLogContainer("1"));
-        queueOfActions.Enqueue(new ActionWaitContainer(1));
-        queueOfActions.Enqueue(new ActionDebugLogContainer("2"));
-        queueOfActions.Enqueue(new ActionWaitContainer(2));
-        queueOfActions.Enqueue(new ActionDebugLogContainer("3"));
-        queueOfActions.Enqueue(new ActionWaitContainer(3));
-        queueOfActions.Enqueue(new ActionDebugLogContainer("4"));
-        queueOfActions.Enqueue(new ActionWaitContainer(4));
-        queueOfActions.Enqueue(new ActionDebugLogContainer("5"));
-        queueOfActions.Enqueue(new ActionWaitContainer(5));
+        // queueOfActions.Enqueue(new ActionDebugLogContainer("1"));
+        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
+        // queueOfActions.Enqueue(new ActionDebugLogContainer("2"));
+        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
+        // queueOfActions.Enqueue(new ActionDebugLogContainer("3"));
+        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
+        // queueOfActions.Enqueue(new ActionDebugLogContainer("4"));
+        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
+        // queueOfActions.Enqueue(new ActionDebugLogContainer("5"));
+        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
 
 
 
@@ -55,6 +58,11 @@ public class QueueTest : MonoBehaviour
             if(queueOfActions.Peek().IsDone)
                 queueOfActions.Dequeue();
         }
+    }
+
+    public void EnqueueAction(ActionContainer action)
+    {
+        queueOfActions.Enqueue(action);
     }
 
 }
@@ -105,3 +113,21 @@ public class ActionWaitContainer : ActionContainer
     }
 }
 
+
+public class ActionChangeTileContainer : ActionContainer
+{
+    int id;
+    Vector2Int coord;
+
+    public ActionChangeTileContainer(Vector2Int coord, int id)
+    {
+        this.id = id;
+        this.coord = coord;
+    }
+
+    public override void Update()
+    {
+        BattleGridModelData.ChangeTileID(coord, id);
+        IsDone = true;
+    }
+}

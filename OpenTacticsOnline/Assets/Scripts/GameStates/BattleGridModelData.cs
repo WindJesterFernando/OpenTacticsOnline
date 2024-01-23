@@ -83,21 +83,40 @@ public static class BattleGridModelData
             neighbourTiles.AddLast(n);
         }
 
+        bool isFound = false;
+
         while(neighbourTiles.Count > 0)
         {
             Vector2Int t = neighbourTiles.First.Value;
-            //Debug.Log("iteration: " + t);
+
+            //QueueTest.instance.EnqueueAction(new ActionDebugLogContainer("iteration: " + t));
+            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(t, 101));
+            QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
+
+            //Debug.Log();
             neighbourTiles.RemoveFirst();
             visitedTiles.AddLast(t);
 
-            ChangeTileID(t, 10);
+            //ChangeTileID(t, 10);
 
             foreach (Vector2Int n in GetWalkableNeighbours(t))
             {
                 if(!neighbourTiles.Contains(n) && !visitedTiles.Contains(n))
-                    neighbourTiles.AddLast(n);
+                {
+                    neighbourTiles.AddFirst(n);//AddLast(n);
+                    QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(n, 106));
+                    QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
+                }
+                if(end == n)
+                {
+                    Debug.Log("Found!");
+                    isFound = true;
+                    break;
+                }
             }
 
+            if(isFound)
+                break;
         }
 
 
