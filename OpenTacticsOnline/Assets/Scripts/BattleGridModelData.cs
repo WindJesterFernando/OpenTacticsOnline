@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using UnityEngine;
 
 public static class BattleGridModelData
 {
     const int gridSizeX = 20, gridSizeY = 10;
     static BattleGridTile[,] battleGridTiles;
+
     const int MoveCost = 1;
 
     public static void Init()
@@ -44,7 +46,7 @@ public static class BattleGridModelData
         battleGridTiles[3, 8].isWalkable = false;
         battleGridTiles[4, 8].isWalkable = false;
 
-        battleGridTiles[7, 9].isWalkable = false;
+        //battleGridTiles[7, 9].isWalkable = false;
         battleGridTiles[7, 8].isWalkable = false;
         battleGridTiles[7, 7].isWalkable = false;
         battleGridTiles[7, 6].isWalkable = false;
@@ -54,33 +56,31 @@ public static class BattleGridModelData
         battleGridTiles[7, 2].isWalkable = false;
         battleGridTiles[7, 1].isWalkable = false;
 
-        battleGridTiles[8, 3].isWalkable = false;
-        battleGridTiles[9, 3].isWalkable = false;
-        battleGridTiles[10, 3].isWalkable = false;
-        battleGridTiles[11, 3].isWalkable = false;
-        battleGridTiles[12, 3].isWalkable = false;
-        battleGridTiles[13, 3].isWalkable = false;
-        battleGridTiles[14, 3].isWalkable = false;
+        // battleGridTiles[8, 3].isWalkable = false;
+        // battleGridTiles[9, 3].isWalkable = false;
+        // battleGridTiles[10, 3].isWalkable = false;
+        // battleGridTiles[11, 3].isWalkable = false;
+        // battleGridTiles[12, 3].isWalkable = false;
+        // battleGridTiles[13, 3].isWalkable = false;
+        //battleGridTiles[14, 3].isWalkable = false;
+
+        battleGridTiles[8, 7].isWalkable = false;
+        battleGridTiles[9, 7].isWalkable = false;
+        battleGridTiles[10, 7].isWalkable = false;
+        battleGridTiles[11, 7].isWalkable = false;
+        battleGridTiles[12, 7].isWalkable = false;
+        battleGridTiles[13, 7].isWalkable = false;
+        // battleGridTiles[14, 7].isWalkable = false;
+        // battleGridTiles[15, 7].isWalkable = false;
+        // battleGridTiles[16, 7].isWalkable = false;
+
+        battleGridTiles[11, 6].isWalkable = false;
+        battleGridTiles[11, 5].isWalkable = false;
+        battleGridTiles[11, 4].isWalkable = false;
 
         #endregion
 
-        #region Default Visual IDs
-
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                battleGridTiles[x, y].x = x;
-                battleGridTiles[x, y].y = y;
-
-                if (battleGridTiles[x, y].isWalkable)
-                    battleGridTiles[x, y].id = 1;
-                else
-                    battleGridTiles[x, y].id = 54;
-            }
-        }
-
-        #endregion
+        SetAllTilesToDefault();
 
     }
 
@@ -97,17 +97,32 @@ public static class BattleGridModelData
 
     public static void DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end)
     {
+        SetAllTilesToDefault();
+
         ChangeTileID(start, 104);
         ChangeTileID(end, 107);
 
         LinkedList<Vector2Int> visitedTiles = new LinkedList<Vector2Int>();
         LinkedList<Vector2Int> neighbourTiles = new LinkedList<Vector2Int>();
 
+        int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                travelDistancesFromStart[x,y] = -1;
+            }
+        }
+
+
         visitedTiles.AddLast(start);
+        travelDistancesFromStart[start.x, start.y] = 0;
 
         foreach (Vector2Int n in GetWalkableNeighbours(start))
         {
             neighbourTiles.AddLast(n);
+            travelDistancesFromStart[n.x, n.y] = MoveCost;
         }
 
         bool isFound = false;
@@ -117,11 +132,11 @@ public static class BattleGridModelData
             Vector2Int tileToEvaluate = neighbourTiles.First.Value;
             int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end);
 
-            foreach(Vector2Int n in neighbourTiles)
+            foreach (Vector2Int n in neighbourTiles)
             {
                 int neighbourDistance = GetDistance(n, end);
-                
-                if(neighbourDistance < currentlyFoundMinDistance)
+
+                if (neighbourDistance < currentlyFoundMinDistance)
                 {
                     currentlyFoundMinDistance = neighbourDistance;
                     tileToEvaluate = n;
@@ -133,7 +148,7 @@ public static class BattleGridModelData
             QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tileToEvaluate, 101));
             QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
 
-            neighbourTiles.Remove(tileToEvaluate);//.RemoveFirst();
+            neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
 
             foreach (Vector2Int neighbour in GetWalkableNeighbours(tileToEvaluate))
@@ -144,6 +159,17 @@ public static class BattleGridModelData
                     QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(neighbour, 106));
                     QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f / 2f));
                 }
+
+                int prevTileMoveCost =  travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+                int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
+
+                if(travelDistancesFromStart[neighbour.x, neighbour.y] == -1)
+                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+                else if(travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost)
+                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+
+                QueueTest.instance.EnqueueAction(new ActionDebugLogContainer(neighbour + " : " + travelDistancesFromStart[neighbour.x, neighbour.y]));
+
                 if (end == neighbour)
                 {
                     Debug.Log("Found!");
@@ -205,6 +231,27 @@ public static class BattleGridModelData
         }
 
         return walkableNeighbours;
+    }
+
+    private static void SetAllTilesToDefault()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                battleGridTiles[x, y].x = x;
+                battleGridTiles[x, y].y = y;
+
+                if (battleGridTiles[x, y].isWalkable)
+                    ChangeTileID(new Vector2Int(x, y), 1);
+                else
+                    ChangeTileID(new Vector2Int(x, y), 54);
+
+                //     battleGridTiles[x, y].id = 1;
+                // else
+                //     battleGridTiles[x, y].id = 54;
+            }
+        }
     }
 
 }

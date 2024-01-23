@@ -38,9 +38,15 @@ public static class GridVisuals
 
     public static GameObject UpdateGridTileSprite(Vector2Int coord, int spriteID)
     {
-        GameObject tile = tileVisuals[coord.x, coord.y];
-        SpriteRenderer sReader = tile.GetComponent<SpriteRenderer>();
-        sReader.sprite = ContentLoader.GetMapTileSprite(spriteID);
+        GameObject tile = null;
+
+        if (tileVisuals != null)
+        {
+            tile = tileVisuals[coord.x, coord.y];
+            SpriteRenderer sReader = tile.GetComponent<SpriteRenderer>();
+            sReader.sprite = ContentLoader.GetMapTileSprite(spriteID);
+        }
+        
         return tile;
     }
 
