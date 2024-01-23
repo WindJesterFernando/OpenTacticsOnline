@@ -44,6 +44,24 @@ public static class BattleGridModelData
         battleGridTiles[3, 8].isWalkable = false;
         battleGridTiles[4, 8].isWalkable = false;
 
+        battleGridTiles[7, 9].isWalkable = false;
+        battleGridTiles[7, 8].isWalkable = false;
+        battleGridTiles[7, 7].isWalkable = false;
+        battleGridTiles[7, 6].isWalkable = false;
+        battleGridTiles[7, 5].isWalkable = false;
+        battleGridTiles[7, 4].isWalkable = false;
+        battleGridTiles[7, 3].isWalkable = false;
+        battleGridTiles[7, 2].isWalkable = false;
+        battleGridTiles[7, 1].isWalkable = false;
+
+        battleGridTiles[8, 3].isWalkable = false;
+        battleGridTiles[9, 3].isWalkable = false;
+        battleGridTiles[10, 3].isWalkable = false;
+        battleGridTiles[11, 3].isWalkable = false;
+        battleGridTiles[12, 3].isWalkable = false;
+        battleGridTiles[13, 3].isWalkable = false;
+        battleGridTiles[14, 3].isWalkable = false;
+
         #endregion
 
         #region Default Visual IDs
@@ -94,25 +112,39 @@ public static class BattleGridModelData
 
         bool isFound = false;
 
-        while(neighbourTiles.Count > 0)
+        while (neighbourTiles.Count > 0)
         {
             Vector2Int tileToEvaluate = neighbourTiles.First.Value;
+            int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end);
+
+            foreach(Vector2Int n in neighbourTiles)
+            {
+                int neighbourDistance = GetDistance(n, end);
+                
+                if(neighbourDistance < currentlyFoundMinDistance)
+                {
+                    currentlyFoundMinDistance = neighbourDistance;
+                    tileToEvaluate = n;
+                }
+            }
+
+            //Debug.Log("tile has dist == " + GetDistance(tileToEvaluate, end));
 
             QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tileToEvaluate, 101));
             QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
 
-            neighbourTiles.RemoveFirst();
+            neighbourTiles.Remove(tileToEvaluate);//.RemoveFirst();
             visitedTiles.AddLast(tileToEvaluate);
 
             foreach (Vector2Int neighbour in GetWalkableNeighbours(tileToEvaluate))
             {
-                if(!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
+                if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
                     neighbourTiles.AddLast(neighbour);
                     QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(neighbour, 106));
-                    QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
+                    QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f / 2f));
                 }
-                if(end == neighbour)
+                if (end == neighbour)
                 {
                     Debug.Log("Found!");
                     isFound = true;
@@ -120,7 +152,7 @@ public static class BattleGridModelData
                 }
             }
 
-            if(isFound)
+            if (isFound)
                 break;
         }
     }
