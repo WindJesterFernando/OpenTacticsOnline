@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
+using System.Linq;
 using UnityEngine;
 
 public static class BattleGridModelData
@@ -97,7 +98,7 @@ public static class BattleGridModelData
         GridVisuals.UpdateGridTileSprite(coord, newID);
     }
 
-    public static void DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end)
+    public static List<Vector2Int> DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end)
     {
         SetAllTilesToDefault();
 
@@ -183,30 +184,39 @@ public static class BattleGridModelData
                 break;
         }
 
-        if (isFound)
-        {
-            Vector2Int currentTile = end;
-            
-            while (currentTile != start)
-            {
-                int smallestDistanceToStart = Int32.MaxValue;
-                Vector2Int nextCoord = new Vector2Int();
-                foreach (Vector2Int neighbour in GetWalkableNeighbours(currentTile))
-                {
-                    if (travelDistancesFromStart[neighbour.x, neighbour.y] == -1) continue;
-                    
-                    if (smallestDistanceToStart > travelDistancesFromStart[neighbour.x, neighbour.y])
-                    {
-                        smallestDistanceToStart = travelDistancesFromStart[neighbour.x, neighbour.y];
-                        nextCoord = neighbour;
-                    }
-                }
 
-                currentTile = nextCoord;
-                QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(currentTile, 17));
-                QueueTest.instance.EnqueueAction(new ActionWaitContainer(delayBetweenMoves));
+        if (!isFound)
+            return null;
+        
+    
+        Vector2Int currentTile = end;
+        LinkedList<Vector2Int> path = new LinkedList<Vector2Int>();
+        while (currentTile != start)
+        {
+            path.AddFirst(currentTile);
+            int smallestDistanceToStart = Int32.MaxValue;
+            Vector2Int nextCoord = new Vector2Int();
+            foreach (Vector2Int neighbour in GetWalkableNeighbours(currentTile))
+            {
+                if (travelDistancesFromStart[neighbour.x, neighbour.y] == -1) continue;
+                
+                if (smallestDistanceToStart > travelDistancesFromStart[neighbour.x, neighbour.y])
+                {
+                    smallestDistanceToStart = travelDistancesFromStart[neighbour.x, neighbour.y];
+                    nextCoord = neighbour;
+                }
             }
+
+            currentTile = nextCoord;
         }
+
+        foreach (Vector2Int tile in path)
+        {
+            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tile, 17));
+            QueueTest.instance.EnqueueAction(new ActionWaitContainer(delayBetweenMoves));
+        }
+
+        return path.ToList();
     }
 
     
