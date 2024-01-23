@@ -12,6 +12,8 @@ public static class BattleGridModelData
 
     const int MoveCost = 1;
 
+    const  float delayBetweenMoves = 0;
+    
     public static void Init()
     {
         #region Setup & isWalkable Default
@@ -130,11 +132,11 @@ public static class BattleGridModelData
         while (neighbourTiles.Count > 0)
         {
             Vector2Int tileToEvaluate = neighbourTiles.First.Value;
-            int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end);
+            int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end) + travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
 
             foreach (Vector2Int n in neighbourTiles)
             {
-                int neighbourDistance = GetDistance(n, end);
+                int neighbourDistance = GetDistance(n, end) + travelDistancesFromStart[n.x, n.y];
 
                 if (neighbourDistance < currentlyFoundMinDistance)
                 {
@@ -143,10 +145,8 @@ public static class BattleGridModelData
                 }
             }
 
-            //Debug.Log("tile has dist == " + GetDistance(tileToEvaluate, end));
-
             QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tileToEvaluate, 101));
-            QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
+            QueueTest.instance.EnqueueAction(new ActionWaitContainer(delayBetweenMoves));
 
             neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
@@ -157,12 +157,13 @@ public static class BattleGridModelData
                 {
                     neighbourTiles.AddLast(neighbour);
                     QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(neighbour, 106));
-                    QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f / 2f));
+                    QueueTest.instance.EnqueueAction(new ActionWaitContainer(delayBetweenMoves));
                 }
 
                 int prevTileMoveCost =  travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
                 int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
 
+                
                 if(travelDistancesFromStart[neighbour.x, neighbour.y] == -1)
                     travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
                 else if(travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost)
@@ -181,8 +182,34 @@ public static class BattleGridModelData
             if (isFound)
                 break;
         }
+
+        if (isFound)
+        {
+            Vector2Int currentTile = end;
+            
+            while (currentTile != start)
+            {
+                int smallestDistanceToStart = Int32.MaxValue;
+                Vector2Int nextCoord = new Vector2Int();
+                foreach (Vector2Int neighbour in GetWalkableNeighbours(currentTile))
+                {
+                    if (travelDistancesFromStart[neighbour.x, neighbour.y] == -1) continue;
+                    
+                    if (smallestDistanceToStart > travelDistancesFromStart[neighbour.x, neighbour.y])
+                    {
+                        smallestDistanceToStart = travelDistancesFromStart[neighbour.x, neighbour.y];
+                        nextCoord = neighbour;
+                    }
+                }
+
+                currentTile = nextCoord;
+                QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(currentTile, 17));
+                QueueTest.instance.EnqueueAction(new ActionWaitContainer(delayBetweenMoves));
+            }
+        }
     }
 
+    
     public static int GetDistance(Vector2Int start, Vector2Int end)
     {
         Vector2Int dif = end - start;
