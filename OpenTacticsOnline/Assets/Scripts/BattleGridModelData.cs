@@ -7,13 +7,13 @@ using UnityEngine;
 public static class BattleGridModelData
 {
     const int gridSizeX = 20, gridSizeY = 10;
-
     static BattleGridTile[,] battleGridTiles;
-
     const int MoveCost = 1;
 
     public static void Init()
     {
+        #region Setup & isWalkable Default
+
         battleGridTiles = new BattleGridTile[gridSizeX, gridSizeY];
 
         for (int x = 0; x < gridSizeX; x++)
@@ -24,6 +24,9 @@ public static class BattleGridModelData
             }
         }
 
+        #endregion
+
+        #region Maze Content
 
         battleGridTiles[1, 0].isWalkable = false;
         battleGridTiles[1, 1].isWalkable = false;
@@ -41,6 +44,10 @@ public static class BattleGridModelData
         battleGridTiles[3, 8].isWalkable = false;
         battleGridTiles[4, 8].isWalkable = false;
 
+        #endregion
+
+        #region Default Visual IDs
+
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -54,6 +61,8 @@ public static class BattleGridModelData
                     battleGridTiles[x, y].id = 54;
             }
         }
+
+        #endregion
 
     }
 
@@ -87,27 +96,23 @@ public static class BattleGridModelData
 
         while(neighbourTiles.Count > 0)
         {
-            Vector2Int t = neighbourTiles.First.Value;
+            Vector2Int tileToEvaluate = neighbourTiles.First.Value;
 
-            //QueueTest.instance.EnqueueAction(new ActionDebugLogContainer("iteration: " + t));
-            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(t, 101));
+            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tileToEvaluate, 101));
             QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
 
-            //Debug.Log();
             neighbourTiles.RemoveFirst();
-            visitedTiles.AddLast(t);
+            visitedTiles.AddLast(tileToEvaluate);
 
-            //ChangeTileID(t, 10);
-
-            foreach (Vector2Int n in GetWalkableNeighbours(t))
+            foreach (Vector2Int neighbour in GetWalkableNeighbours(tileToEvaluate))
             {
-                if(!neighbourTiles.Contains(n) && !visitedTiles.Contains(n))
+                if(!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
-                    neighbourTiles.AddFirst(n);//AddLast(n);
-                    QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(n, 106));
+                    neighbourTiles.AddLast(neighbour);
+                    QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(neighbour, 106));
                     QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.125f));
                 }
-                if(end == n)
+                if(end == neighbour)
                 {
                     Debug.Log("Found!");
                     isFound = true;
@@ -118,18 +123,6 @@ public static class BattleGridModelData
             if(isFound)
                 break;
         }
-
-
-
-        // foreach (var item in )
-        // {
-
-        // }
-
-
-
-
-
     }
 
     public static int GetDistance(Vector2Int start, Vector2Int end)
@@ -142,10 +135,10 @@ public static class BattleGridModelData
     {
         LinkedList<Vector2Int> walkableNeighbours = new LinkedList<Vector2Int>();
 
-        Vector2Int leftCoord = new Vector2Int(coord.x - 1, coord.y);
-        Vector2Int rightCoord = new Vector2Int(coord.x + 1, coord.y);
-        Vector2Int topCoord = new Vector2Int(coord.x, coord.y + 1);
-        Vector2Int bottomCoord = new Vector2Int(coord.x, coord.y - 1);
+        Vector2Int leftCoord = coord + Vector2Int.left;
+        Vector2Int rightCoord = coord + Vector2Int.right;
+        Vector2Int topCoord = coord + Vector2Int.up;
+        Vector2Int bottomCoord = coord + Vector2Int.down;
 
         if (coord.x > 0)
         {
@@ -180,7 +173,6 @@ public static class BattleGridModelData
         }
 
         return walkableNeighbours;
-
     }
 
 }
@@ -190,6 +182,5 @@ public struct BattleGridTile
     public int x, y;
     public int id;
     public bool isWalkable;
-
 }
 

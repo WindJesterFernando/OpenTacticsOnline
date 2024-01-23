@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainSystemBooter : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Start()
     {
         StateManager.Init();
@@ -15,38 +15,21 @@ public class MainSystemBooter : MonoBehaviour
 
         StateManager.PushGameState(new TitleState());
 
-
         GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
-
-
-
-        // GameObject tile;
-        // tile = ContentLoader.CreateGridTile(1);
-        // tile.transform.position = new Vector3(1,0,0);
-
-        // tile = ContentLoader.CreateGridTile(1);
-        // tile.transform.position = new Vector3(-1,0,0);
-
-        // tile = ContentLoader.CreateGridTile(54);
-        // tile.transform.position = new Vector3(0,0,0);
 
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            BattleGridModelData.DoTheAStarThingMyGuy(new Vector2Int(0, 0), new Vector2Int(19, 9));
+            BattleGridModelData.DoTheAStarThingMyGuy(new Vector2Int(0, 0), new Vector2Int(10, 5));
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
             Debug.Log(BattleGridModelData.GetDistance(new Vector2Int(0, 0), new Vector2Int(19, 9)));
         }
-
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -64,8 +47,6 @@ public class MainSystemBooter : MonoBehaviour
                 Debug.Log(t);
         }
 
-
-
         //StateManager.Update();
 
         // if (Input.GetKeyDown(KeyCode.Q))
@@ -76,8 +57,6 @@ public class MainSystemBooter : MonoBehaviour
         // if (Input.GetKeyDown(KeyCode.W))
         // {
         //     BattleGridModelData.ChangeTileID(2, 2, 7);
-
-
 
         //     //ContentLoader.DestroyBattleGridVisuals();
         //     //ContentLoader.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
