@@ -14,10 +14,10 @@ public static partial class BattleGridModelData
 
     public static List<Vector2Int> DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end)
     {
-        SetAllTilesToDefault();
+        //SetAllTilesToDefault();
 
-        ChangeTileID(start, 104);
-        ChangeTileID(end, 107);
+        // ChangeTileID(start, 104);
+        // ChangeTileID(end, 107);
 
         LinkedList<Vector2Int> visitedTiles = new LinkedList<Vector2Int>();
         LinkedList<Vector2Int> neighbourTiles = new LinkedList<Vector2Int>();
@@ -63,8 +63,8 @@ public static partial class BattleGridModelData
                 }
             }
 
-            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tileToEvaluate, 101));
-            QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
+            // QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tileToEvaluate, 101));
+            // QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
 
             neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
@@ -74,27 +74,26 @@ public static partial class BattleGridModelData
                 if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
                     neighbourTiles.AddLast(neighbour);
-                    QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(neighbour, 106));
-                    QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
+                    // QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(neighbour, 106));
+                    // QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
                 }
 
                 int prevTileMoveCost = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
                 int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
 
-                if (travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance)
-                {
-                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
-                }
-                else if (travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost)
+                bool isDistanceUninitialized = travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
+                bool isNewMoveCostCheaper = travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost;
+
+                if (isDistanceUninitialized || isNewMoveCostCheaper)
                 {
                     travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
                 }
 
-                QueueTest.instance.EnqueueAction(new ActionDebugLogContainer(neighbour + " : " + travelDistancesFromStart[neighbour.x, neighbour.y]));
+                //QueueTest.instance.EnqueueAction(new ActionDebugLogContainer(neighbour + " : " + travelDistancesFromStart[neighbour.x, neighbour.y]));
 
                 if (end == neighbour)
                 {
-                    Debug.Log("Found!");
+                    // Debug.Log("Found!");
                     isFound = true;
                     break;
                 }
@@ -121,7 +120,7 @@ public static partial class BattleGridModelData
                 bool isDistanceUninitialized = travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
                 bool isCurrentPathLonger = smallestDistanceToStart <= travelDistancesFromStart[neighbour.x, neighbour.y];
 
-                if(isDistanceUninitialized || isCurrentPathLonger)
+                if (isDistanceUninitialized || isCurrentPathLonger)
                     continue;
 
                 smallestDistanceToStart = travelDistancesFromStart[neighbour.x, neighbour.y];
@@ -131,11 +130,11 @@ public static partial class BattleGridModelData
             currentTile = nextCoord;
         }
 
-        foreach (Vector2Int tile in path)
-        {
-            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tile, 17));
-            QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
-        }
+        // foreach (Vector2Int tile in path)
+        // {
+        //     QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(tile, 17));
+        //     QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
+        // }
 
         return path.ToList();
     }
@@ -189,5 +188,6 @@ public static partial class BattleGridModelData
 
         return walkableNeighbours;
     }
+
 
 }
