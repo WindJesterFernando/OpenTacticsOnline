@@ -29,18 +29,29 @@ public static class ContentLoader
     {
         GameObject go = new GameObject();
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        
-        FrameAnimator fa = go.AddComponent<FrameAnimator>();
-        
 
-        Sprite[] spriteFrames = null;
+        FrameAnimator fa = go.AddComponent<FrameAnimator>();
+
+
+        AnimationFrame[] animationFrames = null;
 
         if(spriteID == 1)
         {
-            spriteFrames = Resources.LoadAll<Sprite>("HeroSprites/BlackMage_Spritesheet");
+            Sprite[] allFrames = Resources.LoadAll<Sprite>("HeroSprites/BlackMage_Spritesheet");
+            animationFrames = new AnimationFrame[5];
+            animationFrames[0].sprite = allFrames[0];
+            animationFrames[0].time = 0.5f;
+            animationFrames[1].sprite = allFrames[6];
+            animationFrames[1].time = 1.5f;
+            animationFrames[2].sprite = allFrames[5];
+            animationFrames[2].time = 0.15f;
+            animationFrames[3].sprite = allFrames[6];
+            animationFrames[3].time = 0.15f;
+            animationFrames[4].sprite = allFrames[0];
+            animationFrames[4].time = 0.5f;
         }
         
-        fa.Setup(sr, spriteFrames, 1.5f);
+        fa.Setup(sr, animationFrames);
 
         return go;
     }

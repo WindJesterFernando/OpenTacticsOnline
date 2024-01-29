@@ -4,23 +4,49 @@ using UnityEngine;
 
 public class FrameAnimator : MonoBehaviour
 {
-    Sprite[] spriteFrames;
+    AnimationFrame[] animationFrames;
     float timeUntilNextFrame;
 
-    float timeOnEachFrame = 1.5f;
+    //float timeOnEachFrame = 1.5f;
 
     SpriteRenderer spriteRenderer;
 
+    int currentFrame;
+
     void Update()
     {
-        
+        timeUntilNextFrame -= Time.deltaTime;
+
+        if(timeUntilNextFrame < 0)
+        {
+            currentFrame++;
+
+            if(currentFrame >= animationFrames.Length)
+            {
+                currentFrame = 0;
+            }
+
+            timeUntilNextFrame = animationFrames[currentFrame].time;
+
+            spriteRenderer.sprite = animationFrames[currentFrame].sprite;
+        }
     }
 
-    public void Setup(SpriteRenderer spriteRenderer, Sprite[] spriteFrames, float timeOnEachFrame)
+    public void Setup(SpriteRenderer spriteRenderer, AnimationFrame[] animationFrames)
     {
-        this.timeOnEachFrame = timeOnEachFrame;
         this.spriteRenderer = spriteRenderer;
-        this.spriteFrames = spriteFrames;
-        spriteRenderer.sprite = spriteFrames[0];
+        this.animationFrames = animationFrames;
+        spriteRenderer.sprite = animationFrames[0].sprite;
+        spriteRenderer.sortingOrder = 3;
+        currentFrame = 0;
+        timeUntilNextFrame = animationFrames[currentFrame].time;
     }
 }
+
+
+public struct AnimationFrame
+{
+    public Sprite sprite;
+    public float time;
+}
+
