@@ -17,6 +17,8 @@ public class MainSystemBooter : MonoBehaviour
 
         GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
 
+        ContentLoader.CreateAnimatedSprite(1);
+
     }
 
     void Update()

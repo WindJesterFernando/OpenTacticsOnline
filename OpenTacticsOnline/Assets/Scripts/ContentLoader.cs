@@ -25,5 +25,25 @@ public static class ContentLoader
         return mapTileSprites[spriteID];
     }
 
+    public static GameObject CreateAnimatedSprite(int spriteID)
+    {
+        GameObject go = new GameObject();
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        
+        FrameAnimator fa = go.AddComponent<FrameAnimator>();
+        
+
+        Sprite[] spriteFrames = null;
+
+        if(spriteID == 1)
+        {
+            spriteFrames = Resources.LoadAll<Sprite>("HeroSprites/BlackMage_Spritesheet");
+        }
+        
+        fa.Setup(sr, spriteFrames, 1.5f);
+
+        return go;
+    }
+
 }
 
