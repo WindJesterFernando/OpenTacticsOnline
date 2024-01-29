@@ -33,25 +33,38 @@ public static class ContentLoader
         FrameAnimator fa = go.AddComponent<FrameAnimator>();
 
 
-        AnimationFrame[] animationFrames = null;
+        AnimationFrame[] idleFrames = null;
+        AnimationFrame[] walkingFrames = null;
+        AnimationFrame[] castingFrames = null;
 
         if(spriteID == 1)
         {
             Sprite[] allFrames = Resources.LoadAll<Sprite>("HeroSprites/BlackMage_Spritesheet");
-            animationFrames = new AnimationFrame[5];
-            animationFrames[0].sprite = allFrames[0];
-            animationFrames[0].time = 0.5f;
-            animationFrames[1].sprite = allFrames[6];
-            animationFrames[1].time = 1.5f;
-            animationFrames[2].sprite = allFrames[5];
-            animationFrames[2].time = 0.15f;
-            animationFrames[3].sprite = allFrames[6];
-            animationFrames[3].time = 0.15f;
-            animationFrames[4].sprite = allFrames[0];
-            animationFrames[4].time = 0.5f;
+            castingFrames = new AnimationFrame[5];
+            castingFrames[0].sprite = allFrames[0];
+            castingFrames[0].time = 0.5f;
+            castingFrames[1].sprite = allFrames[6];
+            castingFrames[1].time = 1.5f;
+            castingFrames[2].sprite = allFrames[5];
+            castingFrames[2].time = 0.15f;
+            castingFrames[3].sprite = allFrames[6];
+            castingFrames[3].time = 0.15f;
+            castingFrames[4].sprite = allFrames[0];
+            castingFrames[4].time = 0.5f;
+
+            idleFrames = new AnimationFrame[1];
+            idleFrames[0].sprite = allFrames[0];
+            idleFrames[0].time = 999f;
+
+            walkingFrames = new AnimationFrame[2];
+            walkingFrames[0].sprite = allFrames[1];
+            walkingFrames[0].time = 0.5f;
+            walkingFrames[1].sprite = allFrames[2];
+            walkingFrames[1].time = 0.5f;
+
         }
         
-        fa.Setup(sr, animationFrames);
+        fa.Setup(sr, idleFrames, walkingFrames, castingFrames);
 
         return go;
     }
