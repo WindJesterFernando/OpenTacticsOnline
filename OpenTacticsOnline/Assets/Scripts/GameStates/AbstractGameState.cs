@@ -26,5 +26,6 @@ public abstract class AbstractGameState
     public AbstractGameState(GameState gameState)
     {
         this.gameState = gameState;
+        
     }
 }
