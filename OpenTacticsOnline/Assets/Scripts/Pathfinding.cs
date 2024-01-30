@@ -12,7 +12,7 @@ public static partial class BattleGridModelData
     const float DelayBetweenMoves = 0;
     const int UninitializedDistance = -1;
 
-    public static List<Vector2Int> DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end)
+    public static LinkedList<Vector2Int> DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end)
     {
         //SetAllTilesToDefault();
 
@@ -136,7 +136,7 @@ public static partial class BattleGridModelData
         //     QueueTest.instance.EnqueueAction(new ActionWaitContainer(DelayBetweenMoves));
         // }
 
-        return path.ToList();
+        return path;
     }
 
     public static int GetDistance(Vector2Int start, Vector2Int end)

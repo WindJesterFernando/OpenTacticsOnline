@@ -4,6 +4,7 @@ using System.Collections.Generic;
 //using System.ComponentModel;
 //using System.Data.Common;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static partial class BattleGridModelData
@@ -11,6 +12,8 @@ public static partial class BattleGridModelData
     public const int gridSizeX = 20, gridSizeY = 10;
     static BattleGridTile[,] battleGridTiles;
     private static LinkedList<Hero> heroes;
+
+    private static Vector2Int EmptyVector2Int = new Vector2Int(-99, -99);
 
     public static void Init()
     {
@@ -86,10 +89,9 @@ public static partial class BattleGridModelData
 
         Hero h = new Hero(2, 2, 1, 6);
         heroes.AddLast(h);
-        
+
         h = new Hero(15, 6, 1, 8);
         heroes.AddLast(h);
-        
     }
 
     public static BattleGridTile[,] GetBattleGridTiles()
@@ -128,6 +130,43 @@ public static partial class BattleGridModelData
     {
         return heroes;
     }
+
+    public static Vector2Int GetTileUnderMouse()
+    {
+        Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        GameObject[,] tileVisuals = GridVisuals.GetTileVisuals();
+
+        for (int x = 0; x < BattleGridModelData.gridSizeX; x++)
+        {
+            for (int y = 0; y < BattleGridModelData.gridSizeY; y++)
+            {
+                GameObject bgt = tileVisuals[x, y];
+                Bounds b = bgt.GetComponent<SpriteRenderer>().bounds;
+
+                mouseWorldPoint.z = b.center.z;
+
+                if (b.Contains(mouseWorldPoint))
+                {
+                    Debug.Log("Tile Hit @ " + x + "," + y);
+                    return new Vector2Int(x, y);
+                }
+            }
+        }
+        
+        return EmptyVector2Int;
+    }
+
+    public static Hero GetHeroAtCoord(Vector2Int coord)
+    {
+        foreach (Hero h in heroes)
+        {
+            if (h.x == coord.x && h.y == coord.y)
+                return h;
+        }
+
+        return null;
+    }
     
 }
 
@@ -151,5 +190,4 @@ public class Hero
         this.id = id;
         this.maxSteps = maxSteps;
     }
-    
 }

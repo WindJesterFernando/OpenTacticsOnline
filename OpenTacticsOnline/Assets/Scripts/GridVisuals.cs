@@ -77,4 +77,10 @@ public static class GridVisuals
     {
         return heroVisuals;
     }
+
+    public static void ChangeColorOfTile(Vector2Int coord, Color color)
+    {
+        tileVisuals[coord.x, coord.y].GetComponent<SpriteRenderer>().color = color;
+    }
+    
 }

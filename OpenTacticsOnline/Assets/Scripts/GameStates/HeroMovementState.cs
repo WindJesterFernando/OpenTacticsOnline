@@ -1,40 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroMovementState : AbstractGameState
 {
-    public HeroMovementState()
+    private Hero heroToMove;
+    private Vector2Int coordToMoveTo;
+    
+    public HeroMovementState(Hero heroToMove, Vector2Int coordToMoveTo)
         : base(GameState.PerformingMove)
     {
+        this.heroToMove = heroToMove;
+        this.coordToMoveTo = coordToMoveTo;
+    }
+
+    public override void OnStateEnter()
+    {
+        Vector2Int start = new Vector2Int(heroToMove.x, heroToMove.y);
         
+        LinkedList<Vector2Int> path = BattleGridModelData.DoTheAStarThingMyGuy(start, coordToMoveTo);
+
+        foreach (Vector2Int t in path)
+        {
+            QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(t, 101));
+            QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.25f));
+        }
+        
+
+        //pop the two states to get back to main
+    }
+
+    public override void OnStateExit()
+    {
+        base.OnStateExit();
     }
 
     public override void Update()
     {
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //
-        //     //foreach (GameObject bgt in GridVisuals.GetTileVisuals())
-        //
-        //     GameObject[,] tileVisuals = GridVisuals.GetTileVisuals();
-        //
-        //     for (int x = 0; x < BattleGridModelData.gridSizeX; x++)
-        //     {
-        //         for (int y = 0; y < BattleGridModelData.gridSizeY; y++)
-        //         {
-        //             GameObject bgt = tileVisuals[x, y];
-        //             Bounds b = bgt.GetComponent<SpriteRenderer>().bounds;
-        //
-        //             mouseWorldPoint.z = b.center.z;
-        //
-        //             if (b.Contains(mouseWorldPoint))
-        //             {
-        //                 Debug.Log("Tile Hit @ " + x + "," + y);
-        //             }
-        //         }
-        //     }
-        // }
+        
     }
 }

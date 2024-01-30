@@ -11,6 +11,8 @@ public class MainBattleState : AbstractGameState
 
     public override void Update()
     {
+        //TODO: refactor!!
+        
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
