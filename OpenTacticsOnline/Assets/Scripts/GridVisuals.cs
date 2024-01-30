@@ -4,13 +4,16 @@ using UnityEngine;
 
 public static class GridVisuals
 {
-    static GameObject containerParent;
+    static GameObject containerTileParent;
+    static GameObject containerHeroParent;
 
     static GameObject[,] tileVisuals;
+    private static LinkedList<GameObject> heroVisuals;
 
     public static void CreateBattleGridVisuals(BattleGridTile[,] battleGridTiles)
     {
-        containerParent = new GameObject("TileContainerParent");
+        containerTileParent = new GameObject("TileContainerParent");
+        containerHeroParent = new GameObject("HeroContainerParent");
 
         int xLength = battleGridTiles.GetLength(0);
         int yLength = battleGridTiles.GetLength(1);
@@ -25,14 +28,29 @@ public static class GridVisuals
             GameObject tile;
             tile = ContentLoader.CreateGridTile(bgt.id);
             tile.transform.position = new Vector3(bgt.x + xOffSet, bgt.y + yOffSet, 0);
-            tile.transform.parent = containerParent.transform;
+            tile.transform.parent = containerTileParent.transform;
             tileVisuals[bgt.x, bgt.y] = tile;
         }
+
+        heroVisuals = new LinkedList<GameObject>();
+        foreach (Hero h in BattleGridModelData.GetHeroes())
+        {
+            GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.id);
+            hGameObject.transform.position = new Vector3(h.x + xOffSet, h.y + yOffSet, 0);
+            hGameObject.transform.parent = containerHeroParent.transform;
+            heroVisuals.AddLast(hGameObject);
+        }
+        
     }
 
     public static void DestroyBattleGridVisuals()
     {
-        GameObject.Destroy(containerParent);
+        heroVisuals.Clear();
+        heroVisuals = null;
+        
+        GameObject.Destroy(containerTileParent);
+        GameObject.Destroy(containerHeroParent);
+        
         tileVisuals = null;
     }
 
@@ -53,5 +71,10 @@ public static class GridVisuals
     public static GameObject[,] GetTileVisuals()
     {
         return tileVisuals;
+    }
+
+    public static LinkedList<GameObject> GetHeroVisuals()
+    {
+        return heroVisuals;
     }
 }

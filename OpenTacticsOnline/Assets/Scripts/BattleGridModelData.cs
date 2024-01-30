@@ -10,6 +10,7 @@ public static partial class BattleGridModelData
 {
     public const int gridSizeX = 20, gridSizeY = 10;
     static BattleGridTile[,] battleGridTiles;
+    private static LinkedList<Hero> heroes;
 
     public static void Init()
     {
@@ -81,6 +82,14 @@ public static partial class BattleGridModelData
 
         SetAllTilesToDefault();
 
+        heroes = new LinkedList<Hero>();
+
+        Hero h = new Hero(2, 2, 1);
+        heroes.AddLast(h);
+        
+        h = new Hero(15, 6, 1);
+        heroes.AddLast(h);
+        
     }
 
     public static BattleGridTile[,] GetBattleGridTiles()
@@ -104,7 +113,7 @@ public static partial class BattleGridModelData
                 battleGridTiles[x, y].y = y;
 
                 if (battleGridTiles[x, y].isWalkable)
-                    ChangeTileID(new Vector2Int(x, y), 1);
+                    ChangeTileID(new Vector2Int(x, y), 48);
                 else
                     ChangeTileID(new Vector2Int(x, y), 54);
 
@@ -115,6 +124,11 @@ public static partial class BattleGridModelData
         }
     }
 
+    public static LinkedList<Hero> GetHeroes()
+    {
+        return heroes;
+    }
+    
 }
 
 public struct BattleGridTile
@@ -124,3 +138,16 @@ public struct BattleGridTile
     public bool isWalkable;
 }
 
+public class Hero
+{
+    public int x, y;
+    public int id;
+
+    public Hero(int x, int y, int id)
+    {
+        this.x = x;
+        this.y = y;
+        this.id = id;
+    }
+    
+}
