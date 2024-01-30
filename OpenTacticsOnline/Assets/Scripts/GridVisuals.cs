@@ -39,12 +39,16 @@ public static class GridVisuals
             hGameObject.transform.position = new Vector3(h.x + xOffSet, h.y + yOffSet, 0);
             hGameObject.transform.parent = containerHeroParent.transform;
             heroVisuals.AddLast(hGameObject);
+            h.visualRepresentation = hGameObject;
         }
         
     }
 
     public static void DestroyBattleGridVisuals()
     {
+        foreach (Hero h in BattleGridModelData.GetHeroes())
+            h.visualRepresentation = null;
+        
         heroVisuals.Clear();
         heroVisuals = null;
         
@@ -82,5 +86,12 @@ public static class GridVisuals
     {
         tileVisuals[coord.x, coord.y].GetComponent<SpriteRenderer>().color = color;
     }
+    
+    // public static GameObject GetHeroVisuals()
+    // {
+    //     return heroVisuals;
+    // }
+    
+    
     
 }

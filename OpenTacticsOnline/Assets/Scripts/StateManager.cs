@@ -41,6 +41,12 @@ public static class StateManager
         gameStateStack.Pop();
     }
 
+    public static void PopGameStateUntilStateIs(GameState gameState)
+    {
+        while(gameStateStack.Peek().GetGameState() != gameState)
+            PopGameState();
+    }
+    
 }
 
 public enum GameState

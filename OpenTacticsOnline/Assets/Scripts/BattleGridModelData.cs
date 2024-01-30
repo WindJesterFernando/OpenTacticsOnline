@@ -182,6 +182,7 @@ public class Hero
     public int x, y;
     public int id;
     public int maxSteps;
+    public GameObject visualRepresentation;
 
     public Hero(int x, int y, int id, int maxSteps)
     {

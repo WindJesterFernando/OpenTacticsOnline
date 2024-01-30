@@ -65,6 +65,10 @@ public class QueueTest : MonoBehaviour
         queueOfActions.Enqueue(action);
     }
 
+    public int GetActionCount()
+    {
+        return queueOfActions.Count;
+    }
 }
 
 abstract public class ActionContainer
@@ -129,5 +133,35 @@ public class ActionChangeTileContainer : ActionContainer
     {
         BattleGridModelData.ChangeTileID(coord, id);
         IsDone = true;
+    }
+}
+
+public class ActionMoveSpriteContainer : ActionContainer
+{
+    GameObject heroVisualRepresentation;
+    float duration;
+    Vector3 startPos;
+    Vector3 endPos;
+
+    float curTime;
+    
+    public ActionMoveSpriteContainer(GameObject heroVisualRepresentation, Vector3 startPos, Vector3 endPos, float duration)
+    {
+        this.heroVisualRepresentation = heroVisualRepresentation;
+        this.duration = duration;
+        this.startPos = startPos;
+        this.endPos = endPos;
+    }
+
+    public override void Update()
+    {
+        curTime += Time.deltaTime;
+
+        Vector3 lerpVal = Vector3.Lerp(startPos, endPos, curTime / duration);
+        lerpVal.z = heroVisualRepresentation.transform.position.z;
+        heroVisualRepresentation.transform.position = lerpVal;
+        
+        if(curTime >= duration)
+            IsDone = true;
     }
 }

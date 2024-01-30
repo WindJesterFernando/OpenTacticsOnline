@@ -56,6 +56,9 @@ public class HeroMoveSeletionState : AbstractGameState
                 //call A*
                 //...
                 //
+
+                heroBeingMoved.x = coord.x;
+                heroBeingMoved.y = coord.y;
             }
             else
             {
