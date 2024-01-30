@@ -15,7 +15,7 @@ public class SelectSaveFileState : AbstractGameState
         if (Input.GetKeyDown(KeyCode.D))
         {
             StateManager.PopGameState();
-            StateManager.PushGameState(new MainPlayState());
+            StateManager.PushGameState(new MainBattleState());
         }
     }
 

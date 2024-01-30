@@ -48,6 +48,8 @@ public enum GameState
     Title,
     SelectSaveFile,
     MainPlay,
+    MoveSelection,
+    PerformingMove,
     Inventory,
     Equiping,
 

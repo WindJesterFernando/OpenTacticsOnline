@@ -189,5 +189,91 @@ public static partial class BattleGridModelData
         return walkableNeighbours;
     }
 
+    
+    public static LinkedList<Vector2Int> GetTilesWithinSteps(Vector2Int start, int steps)
+    {
+        LinkedList<Vector2Int> visitedTiles = new LinkedList<Vector2Int>();
+        LinkedList<Vector2Int> neighbourTiles = new LinkedList<Vector2Int>();
+
+        int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
+
+        #region Set travelDistancesFromStart Elements to UninitializedDistance
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                travelDistancesFromStart[x, y] = UninitializedDistance;
+            }
+        }
+
+        #endregion
+
+        visitedTiles.AddLast(start);
+        travelDistancesFromStart[start.x, start.y] = 0;
+
+        foreach (Vector2Int neighbour in GetWalkableNeighbours(start))
+        {
+            neighbourTiles.AddLast(neighbour);
+            travelDistancesFromStart[neighbour.x, neighbour.y] = MoveCost;
+        }
+
+        while (neighbourTiles.Count > 0)
+        {
+            Vector2Int tileToEvaluate = neighbourTiles.First.Value;
+            int currentlyFoundMinDistance = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+
+            foreach (Vector2Int neighbour in neighbourTiles)
+            {
+                int neighbourDistance = travelDistancesFromStart[neighbour.x, neighbour.y];
+
+                if (neighbourDistance < currentlyFoundMinDistance)
+                {
+                    currentlyFoundMinDistance = neighbourDistance;
+                    tileToEvaluate = neighbour;
+                }
+            }
+
+            neighbourTiles.Remove(tileToEvaluate);
+            visitedTiles.AddLast(tileToEvaluate);
+
+            foreach (Vector2Int neighbour in GetWalkableNeighbours(tileToEvaluate))
+            {
+                if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
+                {
+                    neighbourTiles.AddLast(neighbour);
+                }
+
+                int prevTileMoveCost = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+                int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
+
+                bool isDistanceUninitialized =
+                    travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
+                bool isNewMoveCostCheaper =
+                    travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost;
+
+                if (isDistanceUninitialized || isNewMoveCostCheaper)
+                {
+                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+                }
+            }
+        }
+
+        LinkedList<Vector2Int> tilesWithinSteps = new LinkedList<Vector2Int>();
+        
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if(travelDistancesFromStart[x, y] == UninitializedDistance)
+                    continue;
+                if(travelDistancesFromStart[x, y] > steps)
+                    continue;
+                tilesWithinSteps.AddLast(new Vector2Int(x, y));
+            }
+        }
+        
+        return tilesWithinSteps;
+    }
 
 }

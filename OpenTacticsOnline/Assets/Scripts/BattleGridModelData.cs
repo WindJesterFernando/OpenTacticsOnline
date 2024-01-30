@@ -84,10 +84,10 @@ public static partial class BattleGridModelData
 
         heroes = new LinkedList<Hero>();
 
-        Hero h = new Hero(2, 2, 1);
+        Hero h = new Hero(2, 2, 1, 6);
         heroes.AddLast(h);
         
-        h = new Hero(15, 6, 1);
+        h = new Hero(15, 6, 1, 8);
         heroes.AddLast(h);
         
     }
@@ -142,12 +142,14 @@ public class Hero
 {
     public int x, y;
     public int id;
+    public int maxSteps;
 
-    public Hero(int x, int y, int id)
+    public Hero(int x, int y, int id, int maxSteps)
     {
         this.x = x;
         this.y = y;
         this.id = id;
+        this.maxSteps = maxSteps;
     }
     
 }

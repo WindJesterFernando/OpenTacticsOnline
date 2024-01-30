@@ -25,7 +25,7 @@ public class TitleState : AbstractGameState
         //Debug.Log("Sanity check!!!");
         if (Input.GetMouseButtonDown(0))
         {
-            StateManager.PushGameState(new MainPlayState());
+            StateManager.PushGameState(new MainBattleState());
         }
     }
 
