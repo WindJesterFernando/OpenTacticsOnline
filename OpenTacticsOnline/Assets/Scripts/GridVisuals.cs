@@ -50,4 +50,8 @@ public static class GridVisuals
         return tile;
     }
 
+    public static GameObject[,] GetTileVisuals()
+    {
+        return tileVisuals;
+    }
 }

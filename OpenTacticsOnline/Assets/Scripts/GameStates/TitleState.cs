@@ -20,9 +20,13 @@ public class TitleState : AbstractGameState
 
     // }
 
-    // public override void Update()
-    // {
-
-    // }
+    public override void Update()
+    {
+        //Debug.Log("Sanity check!!!");
+        if (Input.GetMouseButtonDown(0))
+        {
+            StateManager.PushGameState(new MainPlayState());
+        }
+    }
 
 }

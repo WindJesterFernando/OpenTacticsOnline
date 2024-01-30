@@ -8,7 +8,7 @@ using UnityEngine;
 
 public static partial class BattleGridModelData
 {
-    const int gridSizeX = 20, gridSizeY = 10;
+    public const int gridSizeX = 20, gridSizeY = 10;
     static BattleGridTile[,] battleGridTiles;
 
     public static void Init()
