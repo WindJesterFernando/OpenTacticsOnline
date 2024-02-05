@@ -87,10 +87,22 @@ public static partial class BattleGridModelData
 
         heroes = new LinkedList<Hero>();
 
-        Hero h = new Hero(2, 2, 1, 6);
+        Hero h = new Hero(2, 2, 1, 6, 20, true);
+        heroes.AddLast(h);
+        
+        h = new Hero(3, 2, 1, 6, 20, true);
+        heroes.AddLast(h);
+        
+        h = new Hero(3, 3, 1, 6, 20, true);
         heroes.AddLast(h);
 
-        h = new Hero(15, 6, 1, 8);
+        h = new Hero(15, 7, 1, 8,20, false);
+        heroes.AddLast(h);
+        
+        h = new Hero(15, 6, 1, 8, 20, false);
+        heroes.AddLast(h);
+        
+        h = new Hero(15, 5, 1, 8, 20, false);
         heroes.AddLast(h);
     }
 
@@ -177,17 +189,3 @@ public struct BattleGridTile
     public bool isWalkable;
 }
 
-public class Hero
-{
-    public Vector2Int coord;
-    public int id;
-    public int maxSteps;
-    public GameObject visualRepresentation;
-
-    public Hero(int x, int y, int id, int maxSteps)
-    {
-        coord = new Vector2Int(x, y);
-        this.id = id;
-        this.maxSteps = maxSteps;
-    }
-}
