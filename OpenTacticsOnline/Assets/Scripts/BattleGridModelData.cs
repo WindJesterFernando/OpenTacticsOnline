@@ -111,8 +111,8 @@ public static partial class BattleGridModelData
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                battleGridTiles[x, y].x = x;
-                battleGridTiles[x, y].y = y;
+                battleGridTiles[x, y].coord.x = x;
+                battleGridTiles[x, y].coord.y = y;
 
                 if (battleGridTiles[x, y].isWalkable)
                     ChangeTileID(new Vector2Int(x, y), 48);
@@ -161,7 +161,7 @@ public static partial class BattleGridModelData
     {
         foreach (Hero h in heroes)
         {
-            if (h.x == coord.x && h.y == coord.y)
+            if (h.coord == coord)
                 return h;
         }
 
@@ -172,23 +172,21 @@ public static partial class BattleGridModelData
 
 public struct BattleGridTile
 {
-    //TODO: make it struct
-    public int x, y;
+    public Vector2Int coord;
     public int id;
     public bool isWalkable;
 }
 
 public class Hero
 {
-    public int x, y;
+    public Vector2Int coord;
     public int id;
     public int maxSteps;
     public GameObject visualRepresentation;
 
     public Hero(int x, int y, int id, int maxSteps)
     {
-        this.x = x;
-        this.y = y;
+        coord = new Vector2Int(x, y);
         this.id = id;
         this.maxSteps = maxSteps;
     }

@@ -21,14 +21,14 @@ public class MainBattleState : AbstractGameState
 
             foreach (Hero h in BattleGridModelData.GetHeroes())
             {
-                GameObject bgt = tileVisuals[h.x, h.y];
+                GameObject bgt = tileVisuals[h.coord.x, h.coord.y];
                 Bounds b = bgt.GetComponent<SpriteRenderer>().bounds;
 
                 mouseWorldPoint.z = b.center.z;
 
                 if (b.Contains(mouseWorldPoint))
                 {
-                    Debug.Log("Tile Hit @ " + h.x + "," + h.y);
+                    Debug.Log("Tile Hit @ " + h.coord);
                     StateManager.PushGameState(new HeroMoveSeletionState(h));
                 }
             }

@@ -17,7 +17,7 @@ public class HeroMovementState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        Vector2Int start = new Vector2Int(heroToMove.x, heroToMove.y);
+        Vector2Int start = heroToMove.coord;
         LinkedList<Vector2Int> path = BattleGridModelData.DoTheAStarThingMyGuy(start, coordToMoveTo);
         GameObject[,] bgVisuals = GridVisuals.GetTileVisuals();
 

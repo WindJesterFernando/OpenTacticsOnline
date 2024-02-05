@@ -27,16 +27,16 @@ public static class GridVisuals
         {
             GameObject tile;
             tile = ContentLoader.CreateGridTile(bgt.id);
-            tile.transform.position = new Vector3(bgt.x + xOffSet, bgt.y + yOffSet, 0);
+            tile.transform.position = new Vector3(bgt.coord.x + xOffSet, bgt.coord.y + yOffSet, 0);
             tile.transform.parent = containerTileParent.transform;
-            tileVisuals[bgt.x, bgt.y] = tile;
+            tileVisuals[bgt.coord.x, bgt.coord.y] = tile;
         }
 
         heroVisuals = new LinkedList<GameObject>();
         foreach (Hero h in BattleGridModelData.GetHeroes())
         {
             GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.id);
-            hGameObject.transform.position = new Vector3(h.x + xOffSet, h.y + yOffSet, 0);
+            hGameObject.transform.position = new Vector3(h.coord.x + xOffSet, h.coord.y + yOffSet, 0);
             hGameObject.transform.parent = containerHeroParent.transform;
             heroVisuals.AddLast(hGameObject);
             h.visualRepresentation = hGameObject;

@@ -17,7 +17,7 @@ public class HeroMoveSeletionState : AbstractGameState
     public override void OnStateEnter()
     {
         
-        LinkedList<Vector2Int> tilesWithinSteps = BattleGridModelData.GetTilesWithinSteps(new Vector2Int(heroBeingMoved.x, heroBeingMoved.y), heroBeingMoved.maxSteps);
+        LinkedList<Vector2Int> tilesWithinSteps = BattleGridModelData.GetTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps);
 
         tilesThatCanBeMovedTo = new LinkedList<Vector2Int>();
         
@@ -42,8 +42,7 @@ public class HeroMoveSeletionState : AbstractGameState
             if (tilesThatCanBeMovedTo.Contains(coord))
             {
                 StateManager.PushGameState(new HeroMovementState(heroBeingMoved, coord));
-                heroBeingMoved.x = coord.x;
-                heroBeingMoved.y = coord.y;
+                heroBeingMoved.coord = coord;
             }
             else
             {
