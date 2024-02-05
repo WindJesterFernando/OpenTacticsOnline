@@ -2,55 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueueTest : MonoBehaviour
+public static class ActionQueue
 {
-    public static QueueTest instance;
-
-    Queue<ActionContainer> queueOfActions;
-
-    // Start is called before the first frame update
-    void Start()
+    static Queue<ActionContainer> queueOfActions;
+    
+    public static void Init()
     {
-        instance = this;
-
         queueOfActions = new Queue<ActionContainer>();
-
-        // queueOfActions.Enqueue(new ActionDebugLogContainer("1"));
-        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
-        // queueOfActions.Enqueue(new ActionDebugLogContainer("2"));
-        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
-        // queueOfActions.Enqueue(new ActionDebugLogContainer("3"));
-        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
-        // queueOfActions.Enqueue(new ActionDebugLogContainer("4"));
-        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
-        // queueOfActions.Enqueue(new ActionDebugLogContainer("5"));
-        // queueOfActions.Enqueue(new ActionWaitContainer(0.5f));
-
-
-
-
-
-
-        // queueOfActions
-
-
-        //ActionContainer ac = new ActionContainer();
-
-
-
-        // Debug.Log("1");
-        // //wait 2 seconds
-        // Debug.Log("2");
-        // //wait 3 seconds
-        // Debug.Log("3");
-        // //wait 4 seconds
-        // Debug.Log("4");
-        // //wait 5 seconds
-        // Debug.Log("5");
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    public static void Update()
     {
         if(queueOfActions.Count > 0)
         {
@@ -60,24 +21,22 @@ public class QueueTest : MonoBehaviour
         }
     }
 
-    public void EnqueueAction(ActionContainer action)
+    public static void EnqueueAction(ActionContainer action)
     {
         queueOfActions.Enqueue(action);
     }
 
-    public int GetActionCount()
+    public static int GetActionCount()
     {
         return queueOfActions.Count;
     }
 }
-
-abstract public class ActionContainer
+public abstract class ActionContainer
 {
     //abstract public void Execute();
-    abstract public void Update();
+    public abstract void Update();
     public bool IsDone;
 }
-
 
 public class ActionDebugLogContainer : ActionContainer
 {
@@ -94,8 +53,6 @@ public class ActionDebugLogContainer : ActionContainer
         IsDone = true;
     }
 }
-
-
 
 public class ActionWaitContainer : ActionContainer
 {
@@ -116,7 +73,6 @@ public class ActionWaitContainer : ActionContainer
         }
     }
 }
-
 
 public class ActionChangeTileContainer : ActionContainer
 {

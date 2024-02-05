@@ -172,6 +172,7 @@ public static partial class BattleGridModelData
 
 public struct BattleGridTile
 {
+    //TODO: make it struct
     public int x, y;
     public int id;
     public bool isWalkable;

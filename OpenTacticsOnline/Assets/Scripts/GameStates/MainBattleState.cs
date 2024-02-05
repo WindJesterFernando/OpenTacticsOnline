@@ -16,9 +16,7 @@ public class MainBattleState : AbstractGameState
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            //foreach (GameObject bgt in GridVisuals.GetTileVisuals())
-
+            
             GameObject[,] tileVisuals = GridVisuals.GetTileVisuals();
 
             foreach (Hero h in BattleGridModelData.GetHeroes())

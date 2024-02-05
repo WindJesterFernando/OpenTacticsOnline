@@ -18,11 +18,7 @@ public class HeroMovementState : AbstractGameState
     public override void OnStateEnter()
     {
         Vector2Int start = new Vector2Int(heroToMove.x, heroToMove.y);
-        
         LinkedList<Vector2Int> path = BattleGridModelData.DoTheAStarThingMyGuy(start, coordToMoveTo);
-
-        //GridVisuals.GetHeroVisuals[heroToMove.x, heroToMove.y];
-
         GameObject[,] bgVisuals = GridVisuals.GetTileVisuals();
 
         Vector3 startPos = bgVisuals[start.x, start.y].transform.position;
@@ -30,26 +26,17 @@ public class HeroMovementState : AbstractGameState
         foreach (Vector2Int t in path)
         {
             Vector3 endPos = bgVisuals[t.x, t.y].transform.position;
-            //QueueTest.instance.EnqueueAction(new ActionChangeTileContainer(t, 101));
-            QueueTest.instance.EnqueueAction(new ActionMoveSpriteContainer(heroToMove.visualRepresentation, startPos, endPos, 0.25f ));
-            //QueueTest.instance.EnqueueAction(new ActionWaitContainer(0.25f));
+            //ActionQueue.instance.EnqueueAction(new ActionChangeTileContainer(t, 101));
+            ActionQueue.EnqueueAction(new ActionMoveSpriteContainer(heroToMove.visualRepresentation, startPos, endPos, 0.25f ));
+            //ActionQueue.instance.EnqueueAction(new ActionWaitContainer(0.25f));
 
             startPos = endPos;
         }
-        
-
-        //pop the two states to get back to main
-        //update model data hero coord
-    }
-
-    public override void OnStateExit()
-    {
-        base.OnStateExit();
     }
 
     public override void Update()
     {
-        if (QueueTest.instance.GetActionCount() == 0)
+        if (ActionQueue.GetActionCount() == 0)
         {
             StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
         }

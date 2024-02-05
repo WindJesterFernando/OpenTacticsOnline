@@ -7,12 +7,9 @@ public class FrameAnimator : MonoBehaviour
     AnimationFrame[] idleAnimationFrames;
     AnimationFrame[] walkingAnimationFrames;
     AnimationFrame[] castingAnimationFrames;
-
-
+    
     AnimationFrame[] animationFrames;
     float timeUntilNextFrame;
-
-    //float timeOnEachFrame = 1.5f;
 
     SpriteRenderer spriteRenderer;
 
@@ -70,8 +67,8 @@ public class FrameAnimator : MonoBehaviour
         timeUntilNextFrame = animationFrames[currentFrame].time;
         this.returnToIdleAfterAnimationFrameCompletion = returnToIdleAfterAnimationFrameCompletion;
     }
+    
 }
-
 
 public struct AnimationFrame
 {

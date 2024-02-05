@@ -14,12 +14,7 @@ public class TitleState : AbstractGameState
     {
         Debug.Log("OVERRIDED On Enter: " + GetGameState());
     }
-
-    // public override void OnStateExit()
-    // {
-
-    // }
-
+    
     public override void Update()
     {
         //Debug.Log("Sanity check!!!");

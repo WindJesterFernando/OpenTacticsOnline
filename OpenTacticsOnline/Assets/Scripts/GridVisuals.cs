@@ -87,11 +87,4 @@ public static class GridVisuals
         tileVisuals[coord.x, coord.y].GetComponent<SpriteRenderer>().color = color;
     }
     
-    // public static GameObject GetHeroVisuals()
-    // {
-    //     return heroVisuals;
-    // }
-    
-    
-    
 }

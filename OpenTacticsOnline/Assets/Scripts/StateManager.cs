@@ -13,18 +13,6 @@ public static class StateManager
 
     public static void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            PopGameState();
-            //Debug.Log("fasdfsdfgdsgd");
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            PushGameState(new SelectSaveFileState());
-            //Debug.Log("fasdfsdfgdsgd");
-        }
-
-
         if (gameStateStack.Count > 0)
             gameStateStack.Peek().Update();
     }
