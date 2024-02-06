@@ -7,18 +7,16 @@ using Random = System.Random;
 public static class BattleSystemModelData
 { 
     static Hero[] turnOrder;
+    static int currentHeroTurnIndex;
 
-    public static void Init()
-    {
-        
-    }
-
+    
+    
     public static void RandomlyOrderTurns()
     {
         #region Randomly Generate Priority For Turn Order
         
         const int seedForRandom = 9999;
-        const int maxRandomValue = 100;
+        const int maxRandomValue = 1000;
         Random r = new Random(seedForRandom);
         
         LinkedList<HeroAndTurnPriority> unorderedHeroTurnPriorities = new LinkedList<HeroAndTurnPriority>();
@@ -53,14 +51,25 @@ public static class BattleSystemModelData
             turnOrder[currentIndex] = highest.hero;
             currentIndex++;
             
-            Debug.Log("adding " + highest.priority);
+            //Debug.Log("adding " + highest.priority);
         }
         
         #endregion
         
     }
-    
-    
+
+    public static Hero GetActiveHero()
+    {
+        return turnOrder[currentHeroTurnIndex];
+    }
+
+    public static void AdvanceCurrentHeroTurnIndex()
+    {
+        currentHeroTurnIndex++;
+
+        if (currentHeroTurnIndex >= turnOrder.Length - 1)
+            currentHeroTurnIndex = 0;
+    }
     
 }
 

@@ -43,16 +43,21 @@ public class HeroMoveSeletionState : AbstractGameState
             {
                 StateManager.PushGameState(new HeroMovementState(heroBeingMoved, coord));
                 heroBeingMoved.coord = coord;
+                
+                foreach (Vector2Int t in tilesThatCanBeMovedTo)
+                {
+                    GridVisuals.ChangeColorOfTile(t, Color.white);
+                }
             }
             else
             {
-                StateManager.PopGameState();
+                //StateManager.PopGameState();
             }
             
-            foreach (Vector2Int t in tilesThatCanBeMovedTo)
-            {
-                GridVisuals.ChangeColorOfTile(t, Color.white);
-            }
+            // foreach (Vector2Int t in tilesThatCanBeMovedTo)
+            // {
+            //     GridVisuals.ChangeColorOfTile(t, Color.white);
+            // }
         }
     }
 }

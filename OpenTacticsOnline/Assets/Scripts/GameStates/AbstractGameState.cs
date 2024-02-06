@@ -10,10 +10,22 @@ public abstract class AbstractGameState
     {
         Debug.Log("On Enter: " + GetGameState());
     }
+    
     public virtual void OnStateExit()
     {
         Debug.Log("On Exit: " + GetGameState());
     }
+    
+    public virtual void OnStateContinue()
+    {
+        Debug.Log("On Continue: " + GetGameState());
+    }
+    
+    public virtual void OnStatePause()
+    {
+        Debug.Log("On Pause: " + GetGameState());
+    }
+    
     public virtual void Update()
     {
         Debug.Log("On Update: " + GetGameState());

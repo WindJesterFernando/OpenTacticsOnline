@@ -19,16 +19,23 @@ public static class StateManager
 
     public static void PushGameState(AbstractGameState gameState)
     {
+        if(gameStateStack.Count > 0)
+            gameStateStack.Peek().OnStatePause();
+        
         gameStateStack.Push(gameState);
         gameState.OnStateEnter();
     }
 
     public static void PopGameState()
     {
+        Debug.Log("popping " + gameStateStack.Peek().GetGameState());
+        
         gameStateStack.Peek().OnStateExit();
         gameStateStack.Pop();
+        
+        if(gameStateStack.Count > 0)
+            gameStateStack.Peek().OnStateContinue();
     }
-
     public static void PopGameStateUntilStateIs(GameState gameState)
     {
         while(gameStateStack.Peek().GetGameState() != gameState)
