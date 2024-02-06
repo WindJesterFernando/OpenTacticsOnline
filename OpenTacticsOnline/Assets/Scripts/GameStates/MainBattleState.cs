@@ -12,6 +12,7 @@ public class MainBattleState : AbstractGameState
 
     public override void OnStateEnter()
     {
+        GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
         BattleSystemModelData.RandomlyOrderTurns();
     }
 
@@ -32,18 +33,9 @@ public class MainBattleState : AbstractGameState
             return;
         }
         
-        if (IsTeamDead(BattleGridModelData.GetAllyHeroes()))
-        {
-            StateManager.PushGameState(new GameResultsState(false));
-            return;
-        }
+        if (CheckBattleEndConditions()) 
+            return; 
 
-        if (IsTeamDead(BattleGridModelData.GetEnemyHeroes()))
-        {
-            StateManager.PushGameState(new GameResultsState(true));
-            return;
-        }
-    
         if (nextHero.isAlly)
         {
             StateManager.PushGameState(new HeroMoveSeletionState(nextHero));
@@ -51,7 +43,7 @@ public class MainBattleState : AbstractGameState
         else
         {
             List<Vector2Int> nearTiles =
-                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps).ToList();
+                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
             
             int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
             StateManager.PushGameState(new HeroMovementState(nextHero, nearTiles[randomIndex]));
@@ -82,6 +74,23 @@ public class MainBattleState : AbstractGameState
         //     }
         // }
         */
+    }
+
+    private static bool CheckBattleEndConditions()
+    {
+        if (IsTeamDead(BattleGridModelData.GetAllyHeroes()))
+        {
+            StateManager.PushGameState(new GameResultsState(false));
+            return true;
+        }
+
+        if (IsTeamDead(BattleGridModelData.GetEnemyHeroes()))
+        {
+            StateManager.PushGameState(new GameResultsState(true));
+            return true;
+        }
+
+        return false;
     }
 
     private static bool IsTeamDead(LinkedList<Hero> team)
