@@ -22,6 +22,11 @@ public class Hero
         currentHealth = maxHealth;
         this.isAlly = isAlly;
     }
+
+    public bool IsAlive()
+    {
+        return currentHealth > 0;
+    }
 }
 
 

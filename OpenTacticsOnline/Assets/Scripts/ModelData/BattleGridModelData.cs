@@ -91,6 +91,7 @@ public static partial class BattleGridModelData
         heroes.AddLast(h);
         
         h = new Hero(3, 2, 1, 6, 20, true);
+        h.currentHealth = 0;
         heroes.AddLast(h);
         
         h = new Hero(3, 3, 1, 6, 20, true);
@@ -103,6 +104,7 @@ public static partial class BattleGridModelData
         heroes.AddLast(h);
         
         h = new Hero(15, 5, 1, 8, 20, false);
+        h.currentHealth = 0;
         heroes.AddLast(h);
     }
 

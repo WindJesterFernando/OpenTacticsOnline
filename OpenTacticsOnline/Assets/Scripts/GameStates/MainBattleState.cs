@@ -24,6 +24,14 @@ public class MainBattleState : AbstractGameState
     public override void Update()
     {
         Hero nextHero = BattleSystemModelData.GetActiveHero();
+
+        if (!nextHero.IsAlive())
+        {
+            nextHero.visualRepresentation.GetComponent<SpriteRenderer>().color = Color.black;
+            
+            BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+            return;
+        }
         
         if (nextHero.isAlly)
         {
