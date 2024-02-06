@@ -9,8 +9,6 @@ public static class BattleSystemModelData
     static Hero[] turnOrder;
     static int currentHeroTurnIndex;
 
-    
-    
     public static void RandomlyOrderTurns()
     {
         #region Randomly Generate Priority For Turn Order
@@ -67,10 +65,9 @@ public static class BattleSystemModelData
     {
         currentHeroTurnIndex++;
 
-        if (currentHeroTurnIndex >= turnOrder.Length - 1)
+        if (currentHeroTurnIndex > turnOrder.Length - 1)
             currentHeroTurnIndex = 0;
     }
-    
 }
 
 

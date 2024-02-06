@@ -271,4 +271,18 @@ public static partial class BattleGridModelData
         return tilesWithinSteps;
     }
 
+    // TODO think about name 
+    public static LinkedList<Vector2Int> GetNonOccupiedTilesWithinSteps(Vector2Int start, int steps)
+    {
+        LinkedList<Vector2Int> tilesWithinSteps = GetTilesWithinSteps(start, steps);
+        foreach (Hero h in heroes)
+        {
+            if (tilesWithinSteps.Contains(h.coord))
+            {
+                tilesWithinSteps.Remove(h.coord);
+            }
+        }
+
+        return tilesWithinSteps;
+    }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = System.Random;
 
 public class MainBattleState : AbstractGameState
 {
@@ -21,9 +23,23 @@ public class MainBattleState : AbstractGameState
 
     public override void Update()
     {
+        Hero nextHero = BattleSystemModelData.GetActiveHero();
         
-        StateManager.PushGameState(new HeroMoveSeletionState(BattleSystemModelData.GetActiveHero()));
-        
+        if (nextHero.isAlly)
+        {
+            StateManager.PushGameState(new HeroMoveSeletionState(nextHero));
+        }
+        else
+        {
+            List<Vector2Int> nearTiles =
+                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps).ToList();
+
+            int seedForRandom = 9999;
+            System.Random random = new Random(seedForRandom);
+            int randomIndex = random.Next(nearTiles.Count);
+            StateManager.PushGameState(new HeroMovementState(nextHero, nearTiles[randomIndex]));
+            nextHero.coord = nearTiles[randomIndex];
+        }
         
         //TODO: refactor!!
         

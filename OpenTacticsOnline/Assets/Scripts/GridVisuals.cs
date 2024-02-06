@@ -36,12 +36,17 @@ public static class GridVisuals
         foreach (Hero h in BattleGridModelData.GetHeroes())
         {
             GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.id);
+
+            if (!h.isAlly)
+            {
+                hGameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            
             hGameObject.transform.position = new Vector3(h.coord.x + xOffSet, h.coord.y + yOffSet, 0);
             hGameObject.transform.parent = containerHeroParent.transform;
             heroVisuals.AddLast(hGameObject);
             h.visualRepresentation = hGameObject;
         }
-        
     }
 
     public static void DestroyBattleGridVisuals()

@@ -16,20 +16,11 @@ public class HeroMoveSeletionState : AbstractGameState
 
     public override void OnStateEnter()
     {
+        tilesThatCanBeMovedTo = BattleGridModelData.GetNonOccupiedTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps);
         
-        LinkedList<Vector2Int> tilesWithinSteps = BattleGridModelData.GetTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps);
-
-        tilesThatCanBeMovedTo = new LinkedList<Vector2Int>();
-        
-        foreach (Vector2Int t in tilesWithinSteps)
+        foreach (Vector2Int t in tilesThatCanBeMovedTo)
         {
-            Hero h = BattleGridModelData.GetHeroAtCoord(t);
-
-            if (h == null)
-            {
                 GridVisuals.ChangeColorOfTile(t, Color.magenta);
-                tilesThatCanBeMovedTo.AddLast(t);
-            }
         }
     }
 
