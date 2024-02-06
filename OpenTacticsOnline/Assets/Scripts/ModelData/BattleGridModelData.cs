@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Data.Common;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public static partial class BattleGridModelData
@@ -12,7 +6,10 @@ public static partial class BattleGridModelData
     public const int gridSizeX = 20, gridSizeY = 10;
     static BattleGridTile[,] battleGridTiles;
     private static LinkedList<Hero> heroes;
-
+    
+    private static LinkedList<Hero> allyHeroes;
+    private static LinkedList<Hero> enemyHeroes;
+    
     private static Vector2Int EmptyVector2Int = new Vector2Int(-99, -99);
 
     public static void Init()
@@ -86,12 +83,13 @@ public static partial class BattleGridModelData
         SetAllTilesToDefault();
 
         heroes = new LinkedList<Hero>();
+        allyHeroes = new LinkedList<Hero>();
+        enemyHeroes = new LinkedList<Hero>();
 
         Hero h = new Hero(2, 2, 1, 6, 20, true);
         heroes.AddLast(h);
         
         h = new Hero(3, 2, 1, 6, 20, true);
-        h.currentHealth = 0;
         heroes.AddLast(h);
         
         h = new Hero(3, 3, 1, 6, 20, true);
@@ -104,8 +102,19 @@ public static partial class BattleGridModelData
         heroes.AddLast(h);
         
         h = new Hero(15, 5, 1, 8, 20, false);
-        h.currentHealth = 0;
         heroes.AddLast(h);
+
+        foreach (Hero hero in heroes)
+        {
+            if (hero.isAlly)
+            {
+                allyHeroes.AddLast(hero);
+            }
+            else
+            {
+                enemyHeroes.AddLast(hero);
+            }
+        }
     }
 
     public static BattleGridTile[,] GetBattleGridTiles()
@@ -144,7 +153,18 @@ public static partial class BattleGridModelData
     {
         return heroes;
     }
+    
+    public static LinkedList<Hero> GetAllyHeroes()
+    {
+        return allyHeroes;
+    }
+    
+    public static LinkedList<Hero> GetEnemyHeroes()
+    {
+        return enemyHeroes;
+    }
 
+    
     public static Vector2Int GetTileUnderMouse()
     {
         Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = System.Random;
 
 public class MainBattleState : AbstractGameState
 {
@@ -33,6 +32,18 @@ public class MainBattleState : AbstractGameState
             return;
         }
         
+        if (IsTeamDead(BattleGridModelData.GetAllyHeroes()))
+        {
+            StateManager.PushGameState(new GameResultsState(false));
+            return;
+        }
+
+        if (IsTeamDead(BattleGridModelData.GetEnemyHeroes()))
+        {
+            StateManager.PushGameState(new GameResultsState(true));
+            return;
+        }
+    
         if (nextHero.isAlly)
         {
             StateManager.PushGameState(new HeroMoveSeletionState(nextHero));
@@ -47,8 +58,9 @@ public class MainBattleState : AbstractGameState
             nextHero.coord = nearTiles[randomIndex];
         }
         
-        //TODO: refactor!!
         
+        
+        /* Mouse click on hero
         // if (Input.GetMouseButtonDown(0))
         // {
         //     Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -69,5 +81,18 @@ public class MainBattleState : AbstractGameState
         //         }
         //     }
         // }
+        */
+    }
+
+    private static bool IsTeamDead(LinkedList<Hero> team)
+    {
+        foreach (Hero h in team)
+        {
+            if (h.IsAlive())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

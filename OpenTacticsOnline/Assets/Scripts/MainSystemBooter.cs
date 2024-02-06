@@ -14,7 +14,7 @@ public class MainSystemBooter : MonoBehaviour
         
         StateManager.PushGameState(new TitleState());
         GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
-
+        
         BattleSystemModelData.RandomlyOrderTurns();
     }
 

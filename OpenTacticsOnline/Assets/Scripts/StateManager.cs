@@ -51,7 +51,7 @@ public enum GameState
     MainPlay,
     MoveSelection,
     PerformingMove,
-    Inventory,
-    Equiping,
-
+    GameResults,
+    // Inventory,
+    // Equiping,
 }
