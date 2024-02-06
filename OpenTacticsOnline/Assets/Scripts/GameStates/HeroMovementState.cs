@@ -41,4 +41,10 @@ public class HeroMovementState : AbstractGameState
             StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
         }
     }
+
+    public override void OnStateExit()
+    {
+        base.OnStateExit();
+        BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+    }
 }

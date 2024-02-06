@@ -12,20 +12,17 @@ public class MainBattleState : AbstractGameState
     public override void OnStateEnter()
     {
         BattleSystemModelData.RandomlyOrderTurns();
-        StateManager.PushGameState(new HeroMoveSeletionState(BattleSystemModelData.GetActiveHero()));
     }
 
     public override void OnStateContinue()
     {
         base.OnStateContinue();
-        
-        BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
-        StateManager.PushGameState(new HeroMoveSeletionState(BattleSystemModelData.GetActiveHero()));
     }
 
     public override void Update()
     {
         
+        StateManager.PushGameState(new HeroMoveSeletionState(BattleSystemModelData.GetActiveHero()));
         
         
         //TODO: refactor!!
