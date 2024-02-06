@@ -33,10 +33,8 @@ public class MainBattleState : AbstractGameState
         {
             List<Vector2Int> nearTiles =
                 BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps).ToList();
-
-            int seedForRandom = 9999;
-            System.Random random = new Random(seedForRandom);
-            int randomIndex = random.Next(nearTiles.Count);
+            
+            int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
             StateManager.PushGameState(new HeroMovementState(nextHero, nearTiles[randomIndex]));
             nextHero.coord = nearTiles[randomIndex];
         }

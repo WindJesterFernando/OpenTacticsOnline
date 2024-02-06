@@ -13,15 +13,13 @@ public static class BattleSystemModelData
     {
         #region Randomly Generate Priority For Turn Order
         
-        const int seedForRandom = 9999;
         const int maxRandomValue = 1000;
-        Random r = new Random(seedForRandom);
         
         LinkedList<HeroAndTurnPriority> unorderedHeroTurnPriorities = new LinkedList<HeroAndTurnPriority>();
 
         foreach (Hero h in BattleGridModelData.GetHeroes())
         {
-            HeroAndTurnPriority heroAndTurnPriority = new HeroAndTurnPriority(h, r.Next(maxRandomValue));
+            HeroAndTurnPriority heroAndTurnPriority = new HeroAndTurnPriority(h, RandomGenerator.random.Next(maxRandomValue));
             unorderedHeroTurnPriorities.AddLast(heroAndTurnPriority);
         }
 
