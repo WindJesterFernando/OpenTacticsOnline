@@ -3,17 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HeroJobClasses
+{
+    BlackMage,
+    RedMage,
+    WhiteMage,
+    Fighter,
+    Monk,
+    Thief
+}
+
 public class Hero
 {
     public Vector2Int coord;
-    public CharacterJobClasses jobClass;
+    public HeroJobClasses jobClass;
     public int maxSteps;
     public GameObject visualRepresentation;
     
     public int currentHealth, maxHealth;
     public bool isAlly;
 
-    public Hero(int x, int y, CharacterJobClasses jobClass, int maxSteps, int maxHealth, bool isAlly)
+    public Hero(int x, int y, HeroJobClasses jobClass, int maxSteps, int maxHealth, bool isAlly)
     {
         coord = new Vector2Int(x, y);
         this.jobClass = jobClass;

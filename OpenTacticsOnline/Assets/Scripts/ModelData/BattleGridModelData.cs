@@ -86,22 +86,22 @@ public static partial class BattleGridModelData
         allyHeroes = new LinkedList<Hero>();
         enemyHeroes = new LinkedList<Hero>();
 
-        Hero h = new Hero(2, 2, CharacterJobClasses.BlackMage, 6, 20, true);
+        Hero h = new Hero(2, 2, HeroJobClasses.BlackMage, 6, 20, true);
         heroes.AddLast(h);
         
-        h = new Hero(3, 2, CharacterJobClasses.BlackMage, 6, 20, true);
+        h = new Hero(3, 2, HeroJobClasses.RedMage, 6, 20, true);
         heroes.AddLast(h);
         
-        h = new Hero(3, 3, CharacterJobClasses.BlackMage, 6, 20, true);
+        h = new Hero(3, 3, HeroJobClasses.WhiteMage, 6, 20, true);
         heroes.AddLast(h);
 
-        h = new Hero(15, 7, CharacterJobClasses.BlackMage, 8,20, false);
+        h = new Hero(15, 7, HeroJobClasses.Fighter, 8,20, false);
         heroes.AddLast(h);
         
-        h = new Hero(15, 6, CharacterJobClasses.BlackMage, 8, 20, false);
+        h = new Hero(15, 6, HeroJobClasses.Monk, 8, 20, false);
         heroes.AddLast(h);
         
-        h = new Hero(15, 5, CharacterJobClasses.BlackMage, 8, 20, false);
+        h = new Hero(15, 5, HeroJobClasses.Thief, 8, 20, false);
         heroes.AddLast(h);
 
         foreach (Hero hero in heroes)
