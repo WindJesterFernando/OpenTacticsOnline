@@ -35,7 +35,7 @@ public static class GridVisuals
         heroVisuals = new LinkedList<GameObject>();
         foreach (Hero h in BattleGridModelData.GetHeroes())
         {
-            GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.id);
+            GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.jobClass);
 
             if (!h.isAlly)
             {

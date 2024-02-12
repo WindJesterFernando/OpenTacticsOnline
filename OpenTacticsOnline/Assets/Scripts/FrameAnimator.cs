@@ -2,12 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AnimationKey
+{
+    Idle,
+    Walking,
+    Casting,
+    Blocking,
+    KnockedOut,
+    Hurt,
+    Attack
+}
+
 public class FrameAnimator : MonoBehaviour
 {
-    AnimationFrame[] idleAnimationFrames;
-    AnimationFrame[] walkingAnimationFrames;
-    AnimationFrame[] castingAnimationFrames;
-    
+    Dictionary<AnimationKey, AnimationFrame[]> frameAnimationLibrary = new Dictionary<AnimationKey, AnimationFrame[]>();
+
+    //AnimationFrame[] idleAnimationFrames;
+    //AnimationFrame[] walkingAnimationFrames;
+    //AnimationFrame[] castingAnimationFrames;
+
     AnimationFrame[] animationFrames;
     float timeUntilNextFrame;
 
@@ -16,6 +29,11 @@ public class FrameAnimator : MonoBehaviour
     int currentFrame;
 
     bool returnToIdleAfterAnimationFrameCompletion;
+
+    public void SetSpriteRenderer(SpriteRenderer spriteRenderer)
+    {
+        this.spriteRenderer = spriteRenderer;
+    }
 
     void Update()
     {
@@ -31,7 +49,7 @@ public class FrameAnimator : MonoBehaviour
 
                 if(returnToIdleAfterAnimationFrameCompletion)
                 {
-                    animationFrames = idleAnimationFrames;
+                    animationFrames = frameAnimationLibrary[AnimationKey.Idle];
                 }
             }
 
@@ -42,36 +60,35 @@ public class FrameAnimator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            StartAnimation(ref castingAnimationFrames, true);
+            StartAnimation(AnimationKey.Casting, true);
 
         }
     }
 
-    public void Setup(SpriteRenderer spriteRenderer, AnimationFrame[] idleAnimationFrames, AnimationFrame[] walkingAnimationFrames, AnimationFrame[] castingAnimationFrames)
-    {
-        spriteRenderer.sortingOrder = 3;
-
-        this.spriteRenderer = spriteRenderer;
-        this.idleAnimationFrames = idleAnimationFrames;
-        this.walkingAnimationFrames = walkingAnimationFrames;
-        this.castingAnimationFrames = castingAnimationFrames;
-
-        StartAnimation(ref idleAnimationFrames);
-    }
-
-    private void StartAnimation(ref AnimationFrame[] animationFrames, bool returnToIdleAfterAnimationFrameCompletion = false)
+    public void StartAnimation(AnimationKey key, bool returnToIdleAfterAnimationFrameCompletion = false)
     {
         currentFrame = 0;
-        this.animationFrames = animationFrames;
+        animationFrames = frameAnimationLibrary[key];
         spriteRenderer.sprite = animationFrames[currentFrame].sprite;
         timeUntilNextFrame = animationFrames[currentFrame].time;
         this.returnToIdleAfterAnimationFrameCompletion = returnToIdleAfterAnimationFrameCompletion;
     }
+
+    public void AddFrameAnimationToLibrary(AnimationKey key, AnimationFrame[] frames)
+    {
+        frameAnimationLibrary.Add(key, frames);
+    }
     
 }
 
-public struct AnimationFrame
+public class AnimationFrame
 {
+    public AnimationFrame(Sprite sprite, float time)
+    {
+        this.sprite = sprite;
+        this.time = time;
+    }
+
     public Sprite sprite;
     public float time;
 }

@@ -6,17 +6,17 @@ using UnityEngine;
 public class Hero
 {
     public Vector2Int coord;
-    public int id;
+    public CharacterJobClasses jobClass;
     public int maxSteps;
     public GameObject visualRepresentation;
     
     public int currentHealth, maxHealth;
     public bool isAlly;
 
-    public Hero(int x, int y, int id, int maxSteps, int maxHealth, bool isAlly)
+    public Hero(int x, int y, CharacterJobClasses jobClass, int maxSteps, int maxHealth, bool isAlly)
     {
         coord = new Vector2Int(x, y);
-        this.id = id;
+        this.jobClass = jobClass;
         this.maxSteps = maxSteps;
         this.maxHealth = maxHealth;
         currentHealth = maxHealth;
