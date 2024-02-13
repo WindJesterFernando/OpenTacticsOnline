@@ -22,7 +22,7 @@ public class FrameAnimator : MonoBehaviour
     AnimationFrame[] animationFrames;
     float timeUntilNextFrame;
     int currentFrame;
-    bool returnToIdleAfterAnimationFrameCompletion;
+    bool returnToIdleAfterCompletion;
 
     public void SetSpriteRenderer(SpriteRenderer spriteRenderer)
     {
@@ -41,7 +41,7 @@ public class FrameAnimator : MonoBehaviour
             {
                 currentFrame = 0;
 
-                if(returnToIdleAfterAnimationFrameCompletion)
+                if(returnToIdleAfterCompletion)
                 {
                     StartAnimation(AnimationKey.Idle);
                 }
@@ -93,13 +93,13 @@ public class FrameAnimator : MonoBehaviour
         #endregion
     }
 
-    public void StartAnimation(AnimationKey key, bool returnToIdleAfterAnimationFrameCompletion = false)
+    public void StartAnimation(AnimationKey key, bool returnToIdleAfterCompletion = false)
     {
         currentFrame = 0;
         animationFrames = frameAnimationLibrary[key];
         spriteRenderer.sprite = animationFrames[currentFrame].sprite;
         timeUntilNextFrame = animationFrames[currentFrame].time;
-        this.returnToIdleAfterAnimationFrameCompletion = returnToIdleAfterAnimationFrameCompletion;
+        this.returnToIdleAfterCompletion = returnToIdleAfterCompletion;
     }
 
     public void AddFrameAnimationToLibrary(AnimationKey key, AnimationFrame[] frames)

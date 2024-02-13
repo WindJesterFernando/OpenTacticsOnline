@@ -28,7 +28,7 @@ public static class StateManager
 
     public static void PopGameState()
     {
-        Debug.Log("popping " + gameStateStack.Peek().GetGameState());
+        //Debug.Log("popping " + gameStateStack.Peek().GetGameState());
         
         gameStateStack.Peek().OnStateExit();
         gameStateStack.Pop();

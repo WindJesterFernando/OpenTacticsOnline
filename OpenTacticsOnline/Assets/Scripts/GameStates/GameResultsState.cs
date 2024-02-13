@@ -12,10 +12,14 @@ public class GameResultsState : AbstractGameState
     public override void OnStateEnter()
     {
         base.OnStateEnter();
+        Debug.Log($"Player won: {playerWon}");
     }
 
     public override void Update()
     {
-        Debug.Log($"Player won: {playerWon}");
+        if(Input.GetMouseButtonDown(0))
+        {
+            StateManager.PopGameStateUntilStateIs(GameState.Title);
+        }
     }
 }

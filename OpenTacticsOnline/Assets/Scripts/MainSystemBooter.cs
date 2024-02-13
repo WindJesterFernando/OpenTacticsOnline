@@ -9,7 +9,7 @@ public class MainSystemBooter : MonoBehaviour
     {
         ActionQueue.Init();
         StateManager.Init();
-        BattleGridModelData.Init();
+        //BattleGridModelData.Init();
         ContentLoader.Init();
         
         StateManager.PushGameState(new TitleState());
