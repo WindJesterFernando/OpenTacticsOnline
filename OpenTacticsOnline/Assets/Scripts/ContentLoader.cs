@@ -26,7 +26,7 @@ public static class ContentLoader
         return mapTileSprites[spriteID];
     }
 
-    public static GameObject CreateAnimatedSprite(HeroJobClasses spriteID)
+    public static GameObject CreateAnimatedSprite(HeroJobClasses heroJobClass)
     {
         #region Setup GameObject
 
@@ -43,7 +43,7 @@ public static class ContentLoader
 
         string filePath;
 
-        switch (spriteID)
+        switch (heroJobClass)
         {
             case HeroJobClasses.BlackMage:
                 filePath = "HeroSprites/BlackMage_Spritesheet";
@@ -65,7 +65,8 @@ public static class ContentLoader
                 break;
             default:
                 filePath = string.Empty;
-                break;
+                Debug.LogWarning("ContentLoader.CreateAnimatedSprite(): heroJobClass spritesheet not found.");
+                return null;
         }
 
         Sprite[] allFrames = Resources.LoadAll<Sprite>(filePath);

@@ -17,19 +17,11 @@ public enum AnimationKey
 
 public class FrameAnimator : MonoBehaviour
 {
+    SpriteRenderer spriteRenderer;
     Dictionary<AnimationKey, AnimationFrame[]> frameAnimationLibrary = new Dictionary<AnimationKey, AnimationFrame[]>();
-
-    //AnimationFrame[] idleAnimationFrames;
-    //AnimationFrame[] walkingAnimationFrames;
-    //AnimationFrame[] castingAnimationFrames;
-
     AnimationFrame[] animationFrames;
     float timeUntilNextFrame;
-
-    SpriteRenderer spriteRenderer;
-
     int currentFrame;
-
     bool returnToIdleAfterAnimationFrameCompletion;
 
     public void SetSpriteRenderer(SpriteRenderer spriteRenderer)
@@ -51,12 +43,11 @@ public class FrameAnimator : MonoBehaviour
 
                 if(returnToIdleAfterAnimationFrameCompletion)
                 {
-                    animationFrames = frameAnimationLibrary[AnimationKey.Idle];
+                    StartAnimation(AnimationKey.Idle);
                 }
             }
 
             timeUntilNextFrame = animationFrames[currentFrame].time;
-
             spriteRenderer.sprite = animationFrames[currentFrame].sprite;
         }
 
@@ -66,7 +57,7 @@ public class FrameAnimator : MonoBehaviour
         {
             StartAnimation(AnimationKey.Idle);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             StartAnimation(AnimationKey.Walking);
         }
@@ -94,7 +85,7 @@ public class FrameAnimator : MonoBehaviour
         {
             StartAnimation(AnimationKey.Hurt);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha9))
+        if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             StartAnimation(AnimationKey.DanceChoreography);
         }
