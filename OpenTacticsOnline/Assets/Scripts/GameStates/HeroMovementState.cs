@@ -44,8 +44,7 @@ public class HeroMovementState : AbstractGameState
 
     public override void OnStateExit()
     {
-        heroToMove.currentHealth = 0;
         base.OnStateExit();
-        BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+        // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
     }
 }

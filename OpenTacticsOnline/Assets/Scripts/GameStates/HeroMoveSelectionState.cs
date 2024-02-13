@@ -17,6 +17,14 @@ public class HeroMoveSeletionState : AbstractGameState
     public override void OnStateEnter()
     {
         tilesThatCanBeMovedTo = BattleGridModelData.GetNonOccupiedTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps, heroBeingMoved.isAlly);
+
+        if (tilesThatCanBeMovedTo.Count == 0)
+        {
+            Debug.Log("No tiles to move to");
+            //TODO
+            // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+            StateManager.PopGameState();
+        }
         
         foreach (Vector2Int t in tilesThatCanBeMovedTo)
         {
