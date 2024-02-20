@@ -7,7 +7,6 @@ public static class ContentLoader
 {
     static Sprite[] mapTileSprites;
 
-
     public static void Init()
     {
         mapTileSprites = Resources.LoadAll<Sprite>("tileSet_64x64");
@@ -15,7 +14,7 @@ public static class ContentLoader
 
     public static GameObject CreateGridTile(int spriteID)
     {
-        GameObject go = new GameObject();
+        GameObject go = new GameObject("Tile");
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = mapTileSprites[spriteID];
         return go;
@@ -26,11 +25,11 @@ public static class ContentLoader
         return mapTileSprites[spriteID];
     }
 
-    public static GameObject CreateAnimatedSprite(HeroJobClasses heroJobClass)
+    public static GameObject CreateAnimatedSprite(HeroRole heroRole)
     {
         #region Setup GameObject
 
-        GameObject go = new GameObject();
+        GameObject go = new GameObject("Hero");
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         sr.sortingOrder = 3;
 
@@ -43,24 +42,24 @@ public static class ContentLoader
 
         string filePath;
 
-        switch (heroJobClass)
+        switch (heroRole)
         {
-            case HeroJobClasses.BlackMage:
+            case HeroRole.BlackMage:
                 filePath = "HeroSprites/BlackMage_Spritesheet";
                 break;
-            case HeroJobClasses.WhiteMage:
+            case HeroRole.WhiteMage:
                 filePath = "HeroSprites/WhiteMage_Spritesheet";
                 break;
-            case HeroJobClasses.RedMage:
+            case HeroRole.RedMage:
                 filePath = "HeroSprites/RedMage_Spritesheet";
                 break;
-            case HeroJobClasses.Fighter:
+            case HeroRole.Fighter:
                 filePath = "HeroSprites/Fighter_Spritesheet";
                 break;
-            case HeroJobClasses.Monk:
+            case HeroRole.Monk:
                 filePath = "HeroSprites/Monk_Spritesheet";
                 break;
-            case HeroJobClasses.Thief:
+            case HeroRole.Thief:
                 filePath = "HeroSprites/Thief_Spritesheet";
                 break;
             default:
@@ -138,7 +137,7 @@ public static class ContentLoader
         fa.StartAnimation(AnimationKey.Idle);
 
         return go;
+
     }
 
 }
-

@@ -4,48 +4,56 @@ using UnityEngine;
 
 public static class GridVisuals
 {
-    static GameObject containerTileParent;
-    static GameObject containerHeroParent;
+    static GameObject tileParent;
+    static GameObject heroParent;
 
     static GameObject[,] tileVisuals;
     private static LinkedList<GameObject> heroVisuals;
 
     public static void CreateBattleGridVisuals(BattleGridTile[,] battleGridTiles)
     {
-        containerTileParent = new GameObject("TileContainerParent");
-        containerHeroParent = new GameObject("HeroContainerParent");
+        tileParent = new GameObject("TileParent");
+        heroParent = new GameObject("HeroParent");
 
         int xLength = battleGridTiles.GetLength(0);
         int yLength = battleGridTiles.GetLength(1);
 
         tileVisuals = new GameObject[xLength, yLength];
 
-        float xOffSet = -((float)xLength - 1f) / 2f;
-        float yOffSet = -((float)yLength - 1f) / 2f;
+        float xOffSet = -(xLength - 1) / 2f;
+        float yOffSet = -(yLength - 1) / 2f;
 
         foreach (BattleGridTile bgt in battleGridTiles)
         {
             GameObject tile;
             tile = ContentLoader.CreateGridTile(bgt.id);
+            tile.name = "Tile (" + bgt.coord.x + ", " + bgt.coord.y + ")";
             tile.transform.position = new Vector3(bgt.coord.x + xOffSet, bgt.coord.y + yOffSet, 0);
-            tile.transform.parent = containerTileParent.transform;
+            tile.transform.parent = tileParent.transform;
             tileVisuals[bgt.coord.x, bgt.coord.y] = tile;
         }
 
         heroVisuals = new LinkedList<GameObject>();
         foreach (Hero h in BattleGridModelData.GetHeroes())
         {
-            GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.jobClass);
+            GameObject hGameObject = ContentLoader.CreateAnimatedSprite(h.role);
 
-            if (!h.isAlly)
+            if (h.isAlly)
             {
+                hGameObject.name = "Ally " + h.role;
+            }
+            else
+            {
+                hGameObject.name = "Foe " + h.role;
                 hGameObject.GetComponent<SpriteRenderer>().color = Color.red;
             }
             
             hGameObject.transform.position = new Vector3(h.coord.x + xOffSet, h.coord.y + yOffSet, 0);
-            hGameObject.transform.parent = containerHeroParent.transform;
+            hGameObject.transform.parent = heroParent.transform;
             heroVisuals.AddLast(hGameObject);
             h.visualRepresentation = hGameObject;
+
+            
         }
     }
 
@@ -57,8 +65,8 @@ public static class GridVisuals
         heroVisuals.Clear();
         heroVisuals = null;
         
-        GameObject.Destroy(containerTileParent);
-        GameObject.Destroy(containerHeroParent);
+        GameObject.Destroy(tileParent);
+        GameObject.Destroy(heroParent);
         
         tileVisuals = null;
     }

@@ -43,8 +43,7 @@ public class MainBattleState : AbstractGameState
         }
         else
         {
-            List<Vector2Int> nearTiles =
-                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
+            List<Vector2Int> nearTiles = BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
             
             int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
             StateManager.PushGameState(new HeroMovementState(nextHero, nearTiles[randomIndex]));
@@ -85,7 +84,7 @@ public class MainBattleState : AbstractGameState
             return true;
         }
 
-        if (IsTeamDead(BattleGridModelData.GetEnemyHeroes()))
+        if (IsTeamDead(BattleGridModelData.GetFoeHeroes()))
         {
             StateManager.PushGameState(new GameResultsState(true));
             return true;

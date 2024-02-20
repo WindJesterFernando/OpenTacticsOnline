@@ -8,7 +8,7 @@ public static partial class BattleGridModelData
     private static LinkedList<Hero> heroes;
     
     private static LinkedList<Hero> allyHeroes;
-    private static LinkedList<Hero> enemyHeroes;
+    private static LinkedList<Hero> foeHeroes;
     
     private static Vector2Int EmptyVector2Int = new Vector2Int(-99, -99);
 
@@ -84,24 +84,24 @@ public static partial class BattleGridModelData
 
         heroes = new LinkedList<Hero>();
         allyHeroes = new LinkedList<Hero>();
-        enemyHeroes = new LinkedList<Hero>();
+        foeHeroes = new LinkedList<Hero>();
 
-        Hero h = new Hero(2, 2, HeroJobClasses.BlackMage, 6, 20, true);
+        Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, true);
         heroes.AddLast(h);
         
-        h = new Hero(3, 2, HeroJobClasses.RedMage, 6, 20, true);
+        h = new Hero(3, 2, HeroRole.RedMage, 6, 20, true);
         heroes.AddLast(h);
         
-        h = new Hero(3, 3, HeroJobClasses.WhiteMage, 6, 20, true);
+        h = new Hero(3, 3, HeroRole.WhiteMage, 6, 20, true);
         heroes.AddLast(h);
 
-        h = new Hero(15, 7, HeroJobClasses.Fighter, 8,20, false);
+        h = new Hero(15, 7, HeroRole.Fighter, 8,20, false);
         heroes.AddLast(h);
         
-        h = new Hero(15, 6, HeroJobClasses.Monk, 8, 20, false);
+        h = new Hero(15, 6, HeroRole.Monk, 8, 20, false);
         heroes.AddLast(h);
         
-        h = new Hero(15, 5, HeroJobClasses.Thief, 8, 20, false);
+        h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);
         heroes.AddLast(h);
 
         foreach (Hero hero in heroes)
@@ -112,7 +112,7 @@ public static partial class BattleGridModelData
             }
             else
             {
-                enemyHeroes.AddLast(hero);
+                foeHeroes.AddLast(hero);
             }
         }
     }
@@ -159,9 +159,9 @@ public static partial class BattleGridModelData
         return allyHeroes;
     }
     
-    public static LinkedList<Hero> GetEnemyHeroes()
+    public static LinkedList<Hero> GetFoeHeroes()
     {
-        return enemyHeroes;
+        return foeHeroes;
     }
 
     

@@ -106,18 +106,18 @@ public class FrameAnimator : MonoBehaviour
     {
         frameAnimationLibrary.Add(key, frames);
     }
-    
+
 }
 
 public class AnimationFrame
 {
+    public Sprite sprite;
+    public float time;
+
     public AnimationFrame(Sprite sprite, float time)
     {
         this.sprite = sprite;
         this.time = time;
     }
-
-    public Sprite sprite;
-    public float time;
 }
 
