@@ -71,7 +71,7 @@ public static class GridVisuals
         tileVisuals = null;
     }
 
-    public static GameObject UpdateGridTileSprite(Vector2Int coord, int spriteID)
+    public static GameObject UpdateGridTileSprite(GridCoord coord, int spriteID)
     {
         GameObject tile = null;
 
@@ -95,7 +95,7 @@ public static class GridVisuals
         return heroVisuals;
     }
 
-    public static void ChangeColorOfTile(Vector2Int coord, Color color)
+    public static void ChangeColorOfTile(GridCoord coord, Color color)
     {
         tileVisuals[coord.x, coord.y].GetComponent<SpriteRenderer>().color = color;
     }

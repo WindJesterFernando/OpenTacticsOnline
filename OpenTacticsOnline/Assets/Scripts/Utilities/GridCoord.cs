@@ -30,4 +30,45 @@ public struct GridCoord
         return !(lhs == rhs);
     }
 
+    public static GridCoord operator +(GridCoord a, GridCoord b)
+    {
+        return new GridCoord(a.x + b.x, a.y + b.y);
+    }
+
+    public static GridCoord operator -(GridCoord a, GridCoord b)
+    {
+        return new GridCoord(a.x - b.x, a.y - b.y);
+    }
+
+    public override string ToString()
+    {
+        return "Grid Coord: (" + x + ", " + y + ")";
+    }
+
+    public override bool Equals(object other)
+    {
+        if (!(other is GridCoord))
+        {
+            return false;
+        }
+
+        return Equals((GridCoord)other);
+    }
+
+    public bool Equals(GridCoord other)
+    {
+        return x == other.x && y == other.y;
+    }
+
+    public override int GetHashCode()
+    {
+        return x.GetHashCode() ^ (y.GetHashCode() << 2);
+    }
+
+
+
+
+
+
+
 }

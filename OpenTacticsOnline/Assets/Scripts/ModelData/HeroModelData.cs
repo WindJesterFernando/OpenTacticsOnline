@@ -15,7 +15,7 @@ public enum HeroRole
 
 public class Hero
 {
-    public Vector2Int coord;
+    public GridCoord coord;
     public HeroRole role;
     public int maxSteps;
     public GameObject visualRepresentation;
@@ -25,7 +25,7 @@ public class Hero
 
     public Hero(int x, int y, HeroRole heroRole, int maxSteps, int maxHealth, bool isAlly)
     {
-        coord = new Vector2Int(x, y);
+        coord = new GridCoord(x, y);
         this.role = heroRole;
         this.maxSteps = maxSteps;
         this.maxHealth = maxHealth;

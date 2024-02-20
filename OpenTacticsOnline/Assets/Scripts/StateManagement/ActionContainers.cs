@@ -47,9 +47,9 @@ public class ActionWaitContainer : ActionContainer
 public class ActionChangeTileContainer : ActionContainer
 {
     int id;
-    Vector2Int coord;
+    GridCoord coord;
 
-    public ActionChangeTileContainer(Vector2Int coord, int id)
+    public ActionChangeTileContainer(GridCoord coord, int id)
     {
         this.id = id;
         this.coord = coord;

@@ -12,10 +12,10 @@ public static partial class BattleGridModelData
     const float DelayBetweenMoves = 0;
     const int UninitializedDistance = -1;
 
-    public static LinkedList<Vector2Int> DoTheAStarThingMyGuy(Vector2Int start, Vector2Int end, bool isPlayerTeam)
+    public static LinkedList<GridCoord> DoTheAStarThingMyGuy(GridCoord start, GridCoord end, bool isPlayerTeam)
     {
-        LinkedList<Vector2Int> visitedTiles = new LinkedList<Vector2Int>();
-        LinkedList<Vector2Int> neighbourTiles = new LinkedList<Vector2Int>();
+        LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
+        LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
 
         int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
 
@@ -34,7 +34,7 @@ public static partial class BattleGridModelData
         visitedTiles.AddLast(start);
         travelDistancesFromStart[start.x, start.y] = 0;
 
-        foreach (Vector2Int neighbour in GetTraversableNeighboursTiles(start, isPlayerTeam))
+        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, isPlayerTeam))
         {
             neighbourTiles.AddLast(neighbour);
             travelDistancesFromStart[neighbour.x, neighbour.y] = MoveCost;
@@ -44,10 +44,10 @@ public static partial class BattleGridModelData
 
         while (neighbourTiles.Count > 0)
         {
-            Vector2Int tileToEvaluate = neighbourTiles.First.Value;
+            GridCoord tileToEvaluate = neighbourTiles.First.Value;
             int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end) + travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
 
-            foreach (Vector2Int neighbour in neighbourTiles)
+            foreach (GridCoord neighbour in neighbourTiles)
             {
                 int neighbourDistance = GetDistance(neighbour, end) + travelDistancesFromStart[neighbour.x, neighbour.y];
 
@@ -64,7 +64,7 @@ public static partial class BattleGridModelData
             neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
 
-            foreach (Vector2Int neighbour in GetTraversableNeighboursTiles(tileToEvaluate, isPlayerTeam))
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, isPlayerTeam))
             {
                 if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
@@ -101,16 +101,16 @@ public static partial class BattleGridModelData
         if (!isFound)
             return null;
 
-        Vector2Int currentTile = end;
-        LinkedList<Vector2Int> path = new LinkedList<Vector2Int>();
+        GridCoord currentTile = end;
+        LinkedList<GridCoord> path = new LinkedList<GridCoord>();
 
         while (currentTile != start)
         {
             path.AddFirst(currentTile);
             int smallestDistanceToStart = Int32.MaxValue;
-            Vector2Int nextCoord = new Vector2Int();
+            GridCoord nextCoord = new GridCoord();
 
-            foreach (Vector2Int neighbour in GetTraversableNeighboursTiles(currentTile, isPlayerTeam))
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(currentTile, isPlayerTeam))
             {
                 bool isDistanceUninitialized = travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
                 bool isCurrentPathLonger = smallestDistanceToStart <= travelDistancesFromStart[neighbour.x, neighbour.y];
@@ -134,20 +134,20 @@ public static partial class BattleGridModelData
         return path;
     }
 
-    public static int GetDistance(Vector2Int start, Vector2Int end)
+    public static int GetDistance(GridCoord start, GridCoord end)
     {
-        Vector2Int dif = end - start;
+        GridCoord dif = end - start;
         return Math.Abs(dif.x) + Math.Abs(dif.y);
     }
 
-    public static LinkedList<Vector2Int> GetTraversableNeighboursTiles(Vector2Int coord, bool isPlayerTeam)
+    public static LinkedList<GridCoord> GetTraversableNeighboursTiles(GridCoord coord, bool isPlayerTeam)
     {
-        LinkedList<Vector2Int> walkableNeighbours = new LinkedList<Vector2Int>();
+        LinkedList<GridCoord> walkableNeighbours = new LinkedList<GridCoord>();
 
-        Vector2Int leftCoord = coord + Vector2Int.left;
-        Vector2Int rightCoord = coord + Vector2Int.right;
-        Vector2Int topCoord = coord + Vector2Int.up;
-        Vector2Int bottomCoord = coord + Vector2Int.down;
+        GridCoord leftCoord = coord + GridCoord.Left;
+        GridCoord rightCoord = coord + GridCoord.Right;
+        GridCoord topCoord = coord + GridCoord.Up;
+        GridCoord bottomCoord = coord + GridCoord.Down;
 
         if (IsTileTraversable(leftCoord, isPlayerTeam))
         {
@@ -172,7 +172,7 @@ public static partial class BattleGridModelData
         return walkableNeighbours;
     }
 
-    private static bool IsTileTraversable(Vector2Int coord, bool isPlayerTeam)
+    private static bool IsTileTraversable(GridCoord coord, bool isPlayerTeam)
     {
         bool isTileInBounds;
         bool isTileWalkable;
@@ -206,10 +206,10 @@ public static partial class BattleGridModelData
             return true;
     }
     
-    public static LinkedList<Vector2Int> GetTilesWithinSteps(Vector2Int start, int steps, bool isPlayerTeam)
+    public static LinkedList<GridCoord> GetTilesWithinSteps(GridCoord start, int steps, bool isPlayerTeam)
     {
-        LinkedList<Vector2Int> visitedTiles = new LinkedList<Vector2Int>();
-        LinkedList<Vector2Int> neighbourTiles = new LinkedList<Vector2Int>();
+        LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
+        LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
 
         int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
 
@@ -228,7 +228,7 @@ public static partial class BattleGridModelData
         visitedTiles.AddLast(start);
         travelDistancesFromStart[start.x, start.y] = 0;
 
-        foreach (Vector2Int neighbour in GetTraversableNeighboursTiles(start, isPlayerTeam))
+        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, isPlayerTeam))
         {
             neighbourTiles.AddLast(neighbour);
             travelDistancesFromStart[neighbour.x, neighbour.y] = MoveCost;
@@ -236,10 +236,10 @@ public static partial class BattleGridModelData
 
         while (neighbourTiles.Count > 0)
         {
-            Vector2Int tileToEvaluate = neighbourTiles.First.Value;
+            GridCoord tileToEvaluate = neighbourTiles.First.Value;
             int currentlyFoundMinDistance = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
 
-            foreach (Vector2Int neighbour in neighbourTiles)
+            foreach (GridCoord neighbour in neighbourTiles)
             {
                 int neighbourDistance = travelDistancesFromStart[neighbour.x, neighbour.y];
 
@@ -253,7 +253,7 @@ public static partial class BattleGridModelData
             neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
 
-            foreach (Vector2Int neighbour in GetTraversableNeighboursTiles(tileToEvaluate, isPlayerTeam))
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, isPlayerTeam))
             {
                 if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
@@ -275,7 +275,7 @@ public static partial class BattleGridModelData
             }
         }
 
-        LinkedList<Vector2Int> tilesWithinSteps = new LinkedList<Vector2Int>();
+        LinkedList<GridCoord> tilesWithinSteps = new LinkedList<GridCoord>();
         
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -285,7 +285,7 @@ public static partial class BattleGridModelData
                     continue;
                 if(travelDistancesFromStart[x, y] > steps)
                     continue;
-                tilesWithinSteps.AddLast(new Vector2Int(x, y));
+                tilesWithinSteps.AddLast(new GridCoord(x, y));
             }
         }
         
@@ -293,9 +293,9 @@ public static partial class BattleGridModelData
     }
 
     // TODO think about name 
-    public static LinkedList<Vector2Int> GetNonOccupiedTilesWithinSteps(Vector2Int start, int steps, bool isPlayerTeam)
+    public static LinkedList<GridCoord> GetNonOccupiedTilesWithinSteps(GridCoord start, int steps, bool isPlayerTeam)
     {
-        LinkedList<Vector2Int> tilesWithinSteps = GetTilesWithinSteps(start, steps, isPlayerTeam);
+        LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps, isPlayerTeam);
         foreach (Hero h in heroes)
         {
             if (tilesWithinSteps.Contains(h.coord))

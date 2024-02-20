@@ -6,7 +6,7 @@ public class HeroMoveSeletionState : AbstractGameState
 {
     private Hero heroBeingMoved;
 
-    private LinkedList<Vector2Int> tilesThatCanBeMovedTo;
+    private LinkedList<GridCoord> tilesThatCanBeMovedTo;
     
     public HeroMoveSeletionState(Hero heroBeingMoved)
         : base(GameState.MoveSelection)
@@ -26,7 +26,7 @@ public class HeroMoveSeletionState : AbstractGameState
             StateManager.PopGameState();
         }
         
-        foreach (Vector2Int t in tilesThatCanBeMovedTo)
+        foreach (GridCoord t in tilesThatCanBeMovedTo)
         {
                 GridVisuals.ChangeColorOfTile(t, Color.magenta);
         }
@@ -36,14 +36,14 @@ public class HeroMoveSeletionState : AbstractGameState
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector2Int coord = BattleGridModelData.GetTileUnderMouse();
+            GridCoord coord = BattleGridModelData.GetTileUnderMouse();
 
             if (tilesThatCanBeMovedTo.Contains(coord))
             {
                 StateManager.PushGameState(new HeroMovementState(heroBeingMoved, coord));
                 heroBeingMoved.coord = coord;
                 
-                foreach (Vector2Int t in tilesThatCanBeMovedTo)
+                foreach (GridCoord t in tilesThatCanBeMovedTo)
                 {
                     GridVisuals.ChangeColorOfTile(t, Color.white);
                 }

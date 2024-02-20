@@ -10,7 +10,7 @@ public static partial class BattleGridModelData
     private static LinkedList<Hero> allyHeroes;
     private static LinkedList<Hero> foeHeroes;
     
-    private static Vector2Int EmptyVector2Int = new Vector2Int(-99, -99);
+    private static GridCoord EmptyVector2Int = new GridCoord(-99, -99);
 
     public static void Init()
     {
@@ -106,7 +106,6 @@ public static partial class BattleGridModelData
         heroes.AddLast(h);
         
         
-        
         foreach (Hero hero in heroes)
         {
             if (hero.isAlly)
@@ -125,7 +124,7 @@ public static partial class BattleGridModelData
         return battleGridTiles;
     }
 
-    public static void ChangeTileID(Vector2Int coord, int newID)
+    public static void ChangeTileID(GridCoord coord, int newID)
     {
         battleGridTiles[coord.x, coord.y].id = newID;
         GridVisuals.UpdateGridTileSprite(coord, newID);
@@ -141,9 +140,9 @@ public static partial class BattleGridModelData
                 battleGridTiles[x, y].coord.y = y;
 
                 if (battleGridTiles[x, y].isWalkable)
-                    ChangeTileID(new Vector2Int(x, y), 48);
+                    ChangeTileID(new GridCoord(x, y), 48);
                 else
-                    ChangeTileID(new Vector2Int(x, y), 54);
+                    ChangeTileID(new GridCoord(x, y), 54);
 
                 //     battleGridTiles[x, y].id = 1;
                 // else
@@ -168,7 +167,7 @@ public static partial class BattleGridModelData
     }
 
     
-    public static Vector2Int GetTileUnderMouse()
+    public static GridCoord GetTileUnderMouse()
     {
         Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -186,7 +185,7 @@ public static partial class BattleGridModelData
                 if (b.Contains(mouseWorldPoint))
                 {
                     Debug.Log("Tile Hit @ " + x + "," + y);
-                    return new Vector2Int(x, y);
+                    return new GridCoord(x, y);
                 }
             }
         }
@@ -194,7 +193,7 @@ public static partial class BattleGridModelData
         return EmptyVector2Int;
     }
 
-    public static Hero GetHeroAtCoord(Vector2Int coord)
+    public static Hero GetHeroAtCoord(GridCoord coord)
     {
         foreach (Hero h in heroes)
         {

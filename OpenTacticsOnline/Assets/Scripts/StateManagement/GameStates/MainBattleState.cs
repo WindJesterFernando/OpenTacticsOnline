@@ -44,7 +44,7 @@ public class MainBattleState : AbstractGameState
         }
         else
         {
-            List<Vector2Int> nearTiles =
+            List<GridCoord> nearTiles =
                 BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
 
             if (nearTiles.Count == 0)
