@@ -78,6 +78,7 @@ public static partial class BattleGridModelData
         battleGridTiles[11, 5].isWalkable = false;
         battleGridTiles[11, 4].isWalkable = false;
 
+        battleGridTiles[0, 1].isWalkable = false;
         #endregion
 
         SetAllTilesToDefault();
@@ -103,7 +104,9 @@ public static partial class BattleGridModelData
         
         h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);
         heroes.AddLast(h);
-
+        
+        
+        
         foreach (Hero hero in heroes)
         {
             if (hero.isAlly)

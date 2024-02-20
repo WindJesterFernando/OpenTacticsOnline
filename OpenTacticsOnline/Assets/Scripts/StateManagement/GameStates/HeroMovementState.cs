@@ -46,6 +46,6 @@ public class HeroMovementState : AbstractGameState
     {
         //heroToMove.currentHealth = 0;
         base.OnStateExit();
-        BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+        // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
     }
 }

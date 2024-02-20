@@ -20,6 +20,7 @@ public class MainBattleState : AbstractGameState
     public override void OnStateContinue()
     {
         base.OnStateContinue();
+        BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
     }
 
     public override void Update()
@@ -43,7 +44,14 @@ public class MainBattleState : AbstractGameState
         }
         else
         {
-            List<Vector2Int> nearTiles = BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
+            List<Vector2Int> nearTiles =
+                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
+
+            if (nearTiles.Count == 0)
+            {
+                BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+                return;
+            }
             
             int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
             StateManager.PushGameState(new HeroMovementState(nextHero, nearTiles[randomIndex]));
