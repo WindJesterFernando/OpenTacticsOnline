@@ -33,9 +33,6 @@ public class SelectActionUIState : AbstractGameState
 
     private void EnableButtons()
     {
-        List<TurnAction> actions = new List<TurnAction>();
-        actions.Add(new AttackTurnAction(o));
-        actions.Add(new MoveTurnAction(o));
-        UIManager.EnableButtons(actions); 
+        UIManager.EnableButtons(o.actions); 
     }
 }

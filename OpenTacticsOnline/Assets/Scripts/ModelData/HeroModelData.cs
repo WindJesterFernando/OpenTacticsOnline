@@ -25,6 +25,7 @@ public class Hero
     
     public int currentHealth, maxHealth;
     public bool isAlly;
+    public List<TurnAction> actions;
 
     public Hero(int x, int y, HeroRole heroRole, int maxSteps, int maxHealth, bool isAlly)
     {
@@ -34,11 +35,38 @@ public class Hero
         this.maxHealth = maxHealth;
         currentHealth = maxHealth;
         this.isAlly = isAlly;
+        CreateTurnActions();
+        Debug.Log(this.maxHealth);
     }
 
     public bool IsAlive()
     {
         return currentHealth > 0;
+    }
+
+    private void CreateTurnActions()
+    {
+        actions = new List<TurnAction>();
+        actions.Add(new MoveTurnAction(this));
+        actions.Add(new AttackTurnAction(this));
+        switch (role)
+        {
+            case HeroRole.BlackMage:
+                actions.Add(new AttackTurnAction(this));
+                break;
+            case HeroRole.RedMage:
+                break;
+            case HeroRole.WhiteMage:
+                break;
+            case HeroRole.Fighter:
+                break;
+            case HeroRole.Monk:
+                break;
+            case HeroRole.Thief:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }
 
