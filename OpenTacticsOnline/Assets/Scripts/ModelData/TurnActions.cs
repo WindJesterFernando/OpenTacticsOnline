@@ -9,22 +9,26 @@ public abstract class TurnAction
 
 public class MoveTurnAction : TurnAction
 {
-    public MoveTurnAction()
+    private Hero o;
+    public MoveTurnAction(Hero o)
     {
+        this.o = o;
         name = "Move";
     }
     
     public override void Execute()
     {
         Debug.Log("Moving");
-        StateManager.PopGameState();
+        StateManager.PushGameState(new HeroMoveSelectionState(o));
     }
 }
 
 public class AttackTurnAction : TurnAction
 {
-    public AttackTurnAction()
+    private Hero o;
+    public AttackTurnAction(Hero e)
     {
+        o = e;
         name = "Attack";
     }
     

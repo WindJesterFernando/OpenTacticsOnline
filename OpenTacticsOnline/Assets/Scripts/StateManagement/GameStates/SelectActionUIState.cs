@@ -2,25 +2,40 @@ using System.Collections.Generic;
 
 public class SelectActionUIState : AbstractGameState
 {
-    private Hero owner;
+    private Hero o;
     
-    public SelectActionUIState(Hero owner) 
+    public SelectActionUIState(Hero o) 
         : base(GameState.SelectActionUI)
     {
-        this.owner = owner;
+        this.o = o;
     }
 
     public override void OnStateEnter()
     {
         // construct list of actions based on hero
-        List<TurnAction> actions = new List<TurnAction>();
-        actions.Add(new AttackTurnAction());
-        actions.Add(new MoveTurnAction());
-        UIManager.EnableButtons(actions);
+       EnableButtons();
     }
 
+    public override void OnStateContinue()
+    {
+        EnableButtons();
+    }
+
+    public override void OnStatePause()
+    {
+        UIManager.DisableButtons();
+    }
+    
     public override void OnStateExit()
     {
         UIManager.DisableButtons();
+    }
+
+    private void EnableButtons()
+    {
+        List<TurnAction> actions = new List<TurnAction>();
+        actions.Add(new AttackTurnAction(o));
+        actions.Add(new MoveTurnAction(o));
+        UIManager.EnableButtons(actions); 
     }
 }

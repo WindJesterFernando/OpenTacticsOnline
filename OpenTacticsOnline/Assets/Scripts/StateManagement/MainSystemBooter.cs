@@ -21,17 +21,5 @@ public class MainSystemBooter : MonoBehaviour
         print("");
         StateManager.Update();
         ActionQueue.Update();
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            List<TurnAction> actions = new List<TurnAction>();
-            actions.Add(new AttackTurnAction());
-            actions.Add(new MoveTurnAction());
-            UIManager.EnableButtons(actions);
-        }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            UIManager.DisableButtons();
-        }
     }
 }

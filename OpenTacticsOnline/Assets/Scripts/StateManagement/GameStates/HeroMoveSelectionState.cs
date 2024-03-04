@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroMoveSeletionState : AbstractGameState
+public class HeroMoveSelectionState : AbstractGameState
 {
     private Hero heroBeingMoved;
 
     private LinkedList<GridCoord> tilesThatCanBeMovedTo;
     
-    public HeroMoveSeletionState(Hero heroBeingMoved)
+    public HeroMoveSelectionState(Hero heroBeingMoved)
         : base(GameState.MoveSelection)
     {
         this.heroBeingMoved = heroBeingMoved;
@@ -42,21 +42,16 @@ public class HeroMoveSeletionState : AbstractGameState
             {
                 StateManager.PushGameState(new HeroMovementState(heroBeingMoved, coord));
                 heroBeingMoved.coord = coord;
-                
-                foreach (GridCoord t in tilesThatCanBeMovedTo)
-                {
-                    GridVisuals.ChangeColorOfTile(t, Color.white);
-                }
             }
             else
             {
-                //StateManager.PopGameState();
+                StateManager.PopGameState();
             }
             
-            // foreach (Vector2Int t in tilesThatCanBeMovedTo)
-            // {
-            //     GridVisuals.ChangeColorOfTile(t, Color.white);
-            // }
+            foreach (GridCoord t in tilesThatCanBeMovedTo)
+            {
+                GridVisuals.ChangeColorOfTile(t, Color.white);
+            }
         }
     }
 }
