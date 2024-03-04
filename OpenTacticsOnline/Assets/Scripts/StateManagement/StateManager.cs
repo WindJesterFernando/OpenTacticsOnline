@@ -50,7 +50,9 @@ public enum GameState
     SelectSaveFile,
     MainPlay,
     MoveSelection,
+    AttackSelection,
     PerformingMove,
+    PerformingAction,
     GameResults,
     SelectActionUI,
     

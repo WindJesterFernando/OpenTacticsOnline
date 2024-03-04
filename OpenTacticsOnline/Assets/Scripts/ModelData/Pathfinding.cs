@@ -306,4 +306,20 @@ public static partial class BattleGridModelData
 
         return tilesWithinSteps;
     }
+    
+    public static LinkedList<GridCoord> GetHeroesWithinSteps(GridCoord start, int steps, bool isTargetingFoe)
+    {
+         LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps, !isTargetingFoe);
+         LinkedList<GridCoord> targetableHeroes = new LinkedList<GridCoord>();
+         foreach (Hero h in heroes)
+         {
+             if (tilesWithinSteps.Contains(h.coord))
+             {
+                 targetableHeroes.AddLast(h.coord);
+             }
+         }
+ 
+         return targetableHeroes;
+    }
+     
 }

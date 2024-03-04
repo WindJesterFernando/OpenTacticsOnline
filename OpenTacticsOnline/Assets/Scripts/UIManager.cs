@@ -22,8 +22,8 @@ public static class UIManager
             actionButtons[i].gameObject.SetActive(true);
             actionButtons[i].GetComponentInChildren<TMP_Text>().text = actions[i].name;
             actionButtons[i].onClick.AddListener(actions[i].Execute);
-            var s = (AttackTurnAction)actions[i];
-            if (s != null && s.resetS)
+            var s = actions[i] is AttackTurnAction;
+            if (s && ((AttackTurnAction)actions[i]).resetS)
             {
                 StateManager.PopGameStateUntilStateIs(GameState.Title);
             }

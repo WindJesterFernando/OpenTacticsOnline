@@ -18,7 +18,6 @@ public class MainSystemBooter : MonoBehaviour
 
     void Update()
     {
-        print("");
         StateManager.Update();
         ActionQueue.Update();
     }

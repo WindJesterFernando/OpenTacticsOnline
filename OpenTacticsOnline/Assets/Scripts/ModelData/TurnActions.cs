@@ -43,6 +43,6 @@ public class AttackTurnAction : TurnAction
     public override void Execute()
     {
         Debug.Log("Attacking");
-        StateManager.PopGameState();
+        StateManager.PushGameState(new HeroAttackSelectionState(l, q));
     }
 }
