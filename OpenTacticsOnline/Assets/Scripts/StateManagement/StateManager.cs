@@ -52,6 +52,8 @@ public enum GameState
     MoveSelection,
     PerformingMove,
     GameResults,
+    SelectActionUI,
+    
     // Inventory,
     // Equiping,
 }

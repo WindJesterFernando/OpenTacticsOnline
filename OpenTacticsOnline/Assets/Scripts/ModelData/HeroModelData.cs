@@ -12,7 +12,10 @@ public enum HeroRole
     Monk,
     Thief
 }
-
+/// <summary>
+/// something here <br/>
+/// <para>more comments</para>
+/// </summary>
 public class Hero
 {
     public GridCoord coord;

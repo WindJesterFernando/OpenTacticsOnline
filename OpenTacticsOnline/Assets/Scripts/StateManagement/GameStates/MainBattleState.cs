@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -40,7 +39,8 @@ public class MainBattleState : AbstractGameState
 
         if (nextHero.isAlly)
         {
-            StateManager.PushGameState(new HeroMoveSeletionState(nextHero));
+            StateManager.PushGameState(new SelectActionUIState(nextHero));
+            // StateManager.PushGameState(new HeroMoveSeletionState(nextHero));
         }
         else
         {
