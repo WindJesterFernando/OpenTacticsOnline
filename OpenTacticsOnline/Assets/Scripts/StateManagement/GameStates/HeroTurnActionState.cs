@@ -19,7 +19,6 @@ public class HeroTurnActionState : AbstractGameState
     {
         if (ActionQueue.GetActionCount() == 0)
         {
-            //mb here do damage
             StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
         }
     }

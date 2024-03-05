@@ -7,7 +7,7 @@ public abstract class TurnAction
     public string name;
     public int steps;
     public bool isTargetingFoe;
-    public bool isMoving;
+    public BattleGridModelData.PathfindingOptions pathfindingOptions;
     public abstract void Execute(GridCoord target);
     public abstract void AddVisuals(GridCoord target);
 }
@@ -17,9 +17,16 @@ public class MoveTurnAction : TurnAction
 {
     public MoveTurnAction(Hero owner)
     {
-        isMoving = true;
+        pathfindingOptions = new BattleGridModelData.PathfindingOptions()
+        {
+            pathBlockers = BattleGridModelData.PathBlocker.Foe 
+                            | BattleGridModelData.PathBlocker.Terrain,
+            canTargetSelf = false,
+            targetType = BattleGridModelData.TargetType.EmptyTile
+        };
         this.owner = owner;
         name = "Move";
+        steps = owner.maxSteps;
     }
     
     public override void Execute(GridCoord target)
@@ -50,11 +57,11 @@ public class MoveTurnAction : TurnAction
 
 public class AttackTurnAction : TurnAction
 {
-    public AttackTurnAction(Hero owner, int range = 1, string m = "Attack", bool isTargetingFoe = true)
+    public AttackTurnAction(Hero owner, int range = 1, string name = "Attack", bool isTargetingFoe = true)
     {
         this.owner = owner;
         this.steps = range;
-        name = m;
+        base.name = name;
         this.isTargetingFoe = isTargetingFoe;
     }
     
