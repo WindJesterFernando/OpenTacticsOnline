@@ -321,10 +321,30 @@ public static partial class BattleGridModelData
  
          return targetableHeroes;
     }
-     
-    // target self                    : yes/no
-    // target                         : ally/foe/anyone/empty/anytile
-    // can be blocked by              : ally/foe/anyone/none
-    // can be blocked by terrain      : yes/no
-    // need line of sight             : yes/no
+
+    public enum TargetType
+    {
+        None,
+        Ally,
+        Foe, 
+        AnyHero,
+        EmptyTile,
+        AnyTile
+    }
+    
+    [Flags]
+    public enum PathBlocker // todo 
+    {
+        None     = 0, 
+        Ally     = 1 << 0,
+        Foe      = 1 << 1,
+        Terrain  = 1 << 2
+    }
+    public class PathfindingOptions
+    {
+        public bool canTargetSelf;
+        public TargetType targetType;
+        public PathBlocker pathBlockers;
+        // public bool needLineOfSight;
+    }
 }
