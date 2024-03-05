@@ -16,7 +16,8 @@ public class HeroMoveSelectionState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        tilesThatCanBeMovedTo = BattleGridModelData.GetNonOccupiedTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps, heroBeingMoved.isAlly);
+        tilesThatCanBeMovedTo = 
+            BattleGridModelData.GetNonOccupiedTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps, heroBeingMoved.isAlly);
 
         if (tilesThatCanBeMovedTo.Count == 0)
         {

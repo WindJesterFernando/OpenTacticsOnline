@@ -1,20 +1,18 @@
 public class HeroTurnActionState : AbstractGameState
 {
-    private Hero attackingHero;
+    private TurnAction turnAction;
+    private GridCoord target;
     
-    public HeroTurnActionState(Hero attackingHero) : base(GameState.PerformingAction)
+    public HeroTurnActionState(TurnAction action, GridCoord target) : base(GameState.PerformingAction)
     {
-        this.attackingHero = attackingHero;
+        turnAction = action;
+        this.target = target;
     }
 
     public override void OnStateEnter()
     {
-        attackingHero.visualRepresentation.GetComponent<FrameAnimator>()
-            .StartAnimation(AnimationKey.Attacking, true);
+        turnAction.AddVisuals(target);
         
-        ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
-        ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(null));
-        ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
     }
 
     public override void Update()

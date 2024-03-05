@@ -21,12 +21,8 @@ public static class UIManager
         {
             actionButtons[i].gameObject.SetActive(true);
             actionButtons[i].GetComponentInChildren<TMP_Text>().text = actions[i].name;
-            actionButtons[i].onClick.AddListener(actions[i].Execute);
-            var s = actions[i] is AttackTurnAction;
-            if (s && ((AttackTurnAction)actions[i]).resetS)
-            {
-                StateManager.PopGameStateUntilStateIs(GameState.Title);
-            }
+            TurnAction action = actions[i];
+            actionButtons[i].onClick.AddListener(() => StateManager.PushGameState(new HeroAttackSelectionState(action)));
         }
     }
     

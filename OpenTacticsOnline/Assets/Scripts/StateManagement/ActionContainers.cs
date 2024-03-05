@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ActionContainer
@@ -95,14 +93,15 @@ public class ActionMoveSpriteContainer : ActionContainer
 public class ExecuteTurnActionContainer : ActionContainer
 {
     private readonly TurnAction actionToExecute;
-    public ExecuteTurnActionContainer(TurnAction action)
+    private GridCoord target;
+    public ExecuteTurnActionContainer(TurnAction action, GridCoord target)
     {
         actionToExecute = action;
+        this.target = target;
     }
     public override void Update()
     {
-        // actionToExecute.Execute();
-        Debug.Log("Performed action");
+        actionToExecute.Execute(target);
         IsDone = true;
     }
 }

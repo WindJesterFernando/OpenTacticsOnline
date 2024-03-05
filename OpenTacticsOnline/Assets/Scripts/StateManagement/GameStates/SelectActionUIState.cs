@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 public class SelectActionUIState : AbstractGameState
 {
-    private Hero o;
+    private Hero actingHero;
     
-    public SelectActionUIState(Hero o) 
+    public SelectActionUIState(Hero actingHero) 
         : base(GameState.SelectActionUI)
     {
-        this.o = o;
+        this.actingHero = actingHero;
     }
 
     public override void OnStateEnter()
@@ -33,6 +33,6 @@ public class SelectActionUIState : AbstractGameState
 
     private void EnableButtons()
     {
-        UIManager.EnableButtons(o.actions); 
+        UIManager.EnableButtons(actingHero.actions); 
     }
 }

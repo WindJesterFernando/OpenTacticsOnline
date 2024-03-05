@@ -1,59 +1,77 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class TurnAction
 {
+    public Hero owner;
     public string name;
-    public abstract void Execute();
-    public abstract void AddVisuals();
+    public int steps;
+    public bool isTargetingFoe;
+    public bool isMoving;
+    public abstract void Execute(GridCoord target);
+    public abstract void AddVisuals(GridCoord target);
 }
 
 
 public class MoveTurnAction : TurnAction
 {
-    private Hero onwer;
-    public MoveTurnAction(Hero onwer)
+    public MoveTurnAction(Hero owner)
     {
-        this.onwer = onwer;
+        isMoving = true;
+        this.owner = owner;
         name = "Move";
     }
     
-    public override void Execute()
+    public override void Execute(GridCoord target)
     {
         Debug.Log("Moving");
-        StateManager.PushGameState(new HeroMoveSelectionState(onwer));
+        owner.coord = target;
+        // StateManager.PushGameState(new HeroMoveSelectionState(owner));
     }
 
-    public override void AddVisuals()
+    public override void AddVisuals(GridCoord target)
     {
+        GridCoord start = owner.coord;
+        LinkedList<GridCoord> path = BattleGridModelData.DoTheAStarThingMyGuy(start, target, owner.isAlly);
+        GameObject[,] bgVisuals = GridVisuals.GetTileVisuals();
+
+        Vector3 startPos = bgVisuals[start.x, start.y].transform.position;
         
+        foreach (GridCoord t in path)
+        {
+            Vector3 endPos = bgVisuals[t.x, t.y].transform.position;
+            ActionQueue.EnqueueAction(new ActionMoveSpriteContainer(owner.visualRepresentation, startPos, endPos, 0.25f ));
+
+            startPos = endPos;
+        }
+        ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
     }
 }
 
 public class AttackTurnAction : TurnAction
 {
-    private Hero l;
-    private int q;
-    public bool resetS;
-    private bool isTargetingFoe;
-
-    public AttackTurnAction(Hero e, int i = 1, string m = "Attack", bool isTargetingFoe = true)
+    public AttackTurnAction(Hero owner, int range = 1, string m = "Attack", bool isTargetingFoe = true)
     {
-        l = e;
-        q = i;
+        this.owner = owner;
+        this.steps = range;
         name = m;
         this.isTargetingFoe = isTargetingFoe;
-        if (i == 3 && m == "MM")
-            resetS = true;
     }
     
-    public override void Execute()
+    public override void Execute(GridCoord target)
     {
         Debug.Log("Attacking");
-        StateManager.PushGameState(new HeroAttackSelectionState(l, q, isTargetingFoe));
+        
+        // do damage    
+        // StateManager.PushGameState(new HeroAttackSelectionState(this));
     }
 
-    public override void AddVisuals()
+    public override void AddVisuals(GridCoord target)
     {
-        
+       owner.visualRepresentation.GetComponent<FrameAnimator>()
+            .StartAnimation(AnimationKey.Attacking, true);
+       
+       ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
+       ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
     }
 }

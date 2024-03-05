@@ -3,24 +3,26 @@ using UnityEngine;
 
 public class HeroAttackSelectionState : AbstractGameState
 {
-    private Hero attackingHero;
-    private int range;
-    
     private LinkedList<GridCoord> tilesThatCanBeMovedTo;
 
-    private bool isTargetingFoe;
+    private TurnAction turnAction;
     
-    public HeroAttackSelectionState(Hero attackingHero, int range, bool isTargetingFoe) : base(GameState.AttackSelection)
+    public HeroAttackSelectionState(TurnAction action) : base(GameState.AttackSelection)
     {
-        this.isTargetingFoe = isTargetingFoe;
-        this.attackingHero = attackingHero;
-        this.range = range;
+        turnAction = action;
     }
 
     public override void OnStateEnter()
     {
-        // todo figure out bool param 
-        tilesThatCanBeMovedTo = BattleGridModelData.GetHeroesWithinSteps(attackingHero.coord, range, isTargetingFoe);
+        if (!turnAction.isMoving)
+        {
+            tilesThatCanBeMovedTo = BattleGridModelData.GetHeroesWithinSteps(turnAction.owner.coord, turnAction.steps, turnAction.isTargetingFoe);
+        }
+        else
+        {
+            tilesThatCanBeMovedTo = BattleGridModelData.GetNonOccupiedTilesWithinSteps(turnAction.owner.coord,
+                turnAction.owner.maxSteps, turnAction.owner.isAlly);
+        }
 
         if (tilesThatCanBeMovedTo.Count == 0)
         {
@@ -46,7 +48,7 @@ public class HeroAttackSelectionState : AbstractGameState
             if (tilesThatCanBeMovedTo.Contains(coord))
             {
                 
-                StateManager.PushGameState(new HeroTurnActionState(attackingHero));
+                StateManager.PushGameState(new HeroTurnActionState(turnAction, coord));
             }
             else
             {

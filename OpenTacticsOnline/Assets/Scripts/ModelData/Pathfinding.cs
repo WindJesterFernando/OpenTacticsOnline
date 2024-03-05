@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Common;
-using System.Linq;
-using UnityEngine;
 
 public static partial class BattleGridModelData
 {
@@ -328,7 +323,7 @@ public static partial class BattleGridModelData
     }
      
     // target self                    : yes/no
-    // target                         : ally/foe/anyone 
+    // target                         : ally/foe/anyone/empty/anytile
     // can be blocked by              : ally/foe/anyone/none
     // can be blocked by terrain      : yes/no
     // need line of sight             : yes/no
