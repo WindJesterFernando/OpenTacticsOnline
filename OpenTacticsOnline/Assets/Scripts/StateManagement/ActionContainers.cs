@@ -91,3 +91,18 @@ public class ActionMoveSpriteContainer : ActionContainer
             IsDone = true;
     }
 }
+
+public class ExecuteTurnActionContainer : ActionContainer
+{
+    private readonly TurnAction actionToExecute;
+    public ExecuteTurnActionContainer(TurnAction action)
+    {
+        actionToExecute = action;
+    }
+    public override void Update()
+    {
+        // actionToExecute.Execute();
+        Debug.Log("Performed action");
+        IsDone = true;
+    }
+}

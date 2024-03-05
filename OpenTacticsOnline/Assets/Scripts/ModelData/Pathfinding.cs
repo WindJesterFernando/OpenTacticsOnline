@@ -198,6 +198,8 @@ public static partial class BattleGridModelData
             return true;
 
         
+        // isPlayerTeam: true == Player team
+        //               false == Enemy team
         isTileBlockedByFoe = hero.isAlly != isPlayerTeam;
 
         if (isTileBlockedByFoe)
@@ -313,6 +315,9 @@ public static partial class BattleGridModelData
          LinkedList<GridCoord> targetableHeroes = new LinkedList<GridCoord>();
          foreach (Hero h in heroes)
          {
+             if (h.coord == start)
+                 continue;
+             
              if (tilesWithinSteps.Contains(h.coord))
              {
                  targetableHeroes.AddLast(h.coord);
@@ -322,4 +327,9 @@ public static partial class BattleGridModelData
          return targetableHeroes;
     }
      
+    // target self                    : yes/no
+    // target                         : ally/foe/anyone 
+    // can be blocked by              : ally/foe/anyone/none
+    // can be blocked by terrain      : yes/no
+    // need line of sight             : yes/no
 }

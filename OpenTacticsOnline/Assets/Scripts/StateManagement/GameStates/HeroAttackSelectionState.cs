@@ -7,9 +7,12 @@ public class HeroAttackSelectionState : AbstractGameState
     private int range;
     
     private LinkedList<GridCoord> tilesThatCanBeMovedTo;
+
+    private bool isTargetingFoe;
     
-    public HeroAttackSelectionState(Hero attackingHero, int range) : base(GameState.AttackSelection)
+    public HeroAttackSelectionState(Hero attackingHero, int range, bool isTargetingFoe) : base(GameState.AttackSelection)
     {
+        this.isTargetingFoe = isTargetingFoe;
         this.attackingHero = attackingHero;
         this.range = range;
     }
@@ -17,13 +20,14 @@ public class HeroAttackSelectionState : AbstractGameState
     public override void OnStateEnter()
     {
         // todo figure out bool param 
-        tilesThatCanBeMovedTo = BattleGridModelData.GetHeroesWithinSteps(attackingHero.coord, range, !attackingHero.isAlly);
+        tilesThatCanBeMovedTo = BattleGridModelData.GetHeroesWithinSteps(attackingHero.coord, range, isTargetingFoe);
 
         if (tilesThatCanBeMovedTo.Count == 0)
         {
-            Debug.Log("No tiles to move to");
+            Debug.Log("No Heroes to attack");
             //TODO
             // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
+            
             StateManager.PopGameState();
         }
         
@@ -41,10 +45,7 @@ public class HeroAttackSelectionState : AbstractGameState
 
             if (tilesThatCanBeMovedTo.Contains(coord))
             {
-                attackingHero.visualRepresentation.GetComponent<FrameAnimator>()
-                    .StartAnimation(AnimationKey.Attacking, true);
                 
-                ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
                 StateManager.PushGameState(new HeroTurnActionState(attackingHero));
             }
             else

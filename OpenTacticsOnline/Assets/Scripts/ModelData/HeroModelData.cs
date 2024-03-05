@@ -23,7 +23,9 @@ public class Hero
     public int maxSteps;
     public GameObject visualRepresentation;
     
-    public int currentHealth, maxHealth;
+    public int currentHealth;
+    public int maxHealth;
+    
     public bool isAlly;
     public List<TurnAction> actions;
 
@@ -52,11 +54,13 @@ public class Hero
         switch (role)
         {
             case HeroRole.BlackMage:
-                actions.Add(new AttackTurnAction(this));
+                actions.Add(new AttackTurnAction(this, 10, "Magic Missile"));
                 break;
             case HeroRole.RedMage:
+                actions.Add(new AttackTurnAction(this, 10, "Magic Missile"));
                 break;
             case HeroRole.WhiteMage:
+                actions.Add(new AttackTurnAction(this, 10, "Heal", false));
                 break;
             case HeroRole.Fighter:
                 break;
