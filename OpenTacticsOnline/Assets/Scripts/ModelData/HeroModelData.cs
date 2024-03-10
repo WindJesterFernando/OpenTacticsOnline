@@ -59,7 +59,7 @@ public class Hero
                 actions.Add(new AttackTurnAction(this, 10, "Magic Missile"));
                 break;
             case HeroRole.WhiteMage:
-                actions.Add(new AttackTurnAction(this, 10, "Heal", false));
+                actions.Add(new HealTurnAction(this, 5, "Healing"));
                 break;
             case HeroRole.Fighter:
                 break;

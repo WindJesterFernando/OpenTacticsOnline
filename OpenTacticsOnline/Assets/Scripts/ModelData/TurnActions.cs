@@ -6,7 +6,6 @@ public abstract class TurnAction
     public Hero owner;
     public string name;
     public int steps;
-    public bool isTargetingFoe;
     public BattleGridModelData.PathfindingOptions pathfindingOptions;
     public abstract void Execute(GridCoord target);
     public abstract void AddVisuals(GridCoord target);
@@ -57,20 +56,23 @@ public class MoveTurnAction : TurnAction
 
 public class AttackTurnAction : TurnAction
 {
-    public AttackTurnAction(Hero owner, int range = 1, string name = "Attack", bool isTargetingFoe = true)
+    public AttackTurnAction(Hero owner, int range = 1, string name = "Attack")
     {
+         pathfindingOptions = new BattleGridModelData.PathfindingOptions()
+         {
+             pathBlockers = BattleGridModelData.PathBlocker.Terrain,
+             canTargetSelf = false,
+             targetType = BattleGridModelData.TargetType.Foe
+         };
         this.owner = owner;
         this.steps = range;
         base.name = name;
-        this.isTargetingFoe = isTargetingFoe;
     }
     
     public override void Execute(GridCoord target)
     {
         Debug.Log("Attacking");
         
-        // do damage    
-        // StateManager.PushGameState(new HeroAttackSelectionState(this));
     }
 
     public override void AddVisuals(GridCoord target)
@@ -80,5 +82,35 @@ public class AttackTurnAction : TurnAction
        
        ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
        ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
+    }
+}
+
+public class HealTurnAction : TurnAction
+{
+    public HealTurnAction(Hero owner, int range = 1, string name = "Heal")
+    {
+        pathfindingOptions = new BattleGridModelData.PathfindingOptions()
+        {
+            pathBlockers = BattleGridModelData.PathBlocker.Terrain,
+            canTargetSelf = true,
+            targetType = BattleGridModelData.TargetType.Ally
+        };
+        this.owner = owner;
+        this.steps = range;
+        base.name = name;
+    }
+
+    public override void Execute(GridCoord target)
+    {
+        Debug.Log("Healing");
+    }
+
+    public override void AddVisuals(GridCoord target)
+    {
+        owner.visualRepresentation.GetComponent<FrameAnimator>()
+            .StartAnimation(AnimationKey.Casting, true);
+
+        ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
+        ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
     }
 }

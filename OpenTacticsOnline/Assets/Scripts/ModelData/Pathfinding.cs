@@ -496,6 +496,7 @@ public static partial class BattleGridModelData
         bool isTileWalkable;
         bool isTileEmpty;
         bool isTileBlockedByFoe;
+        bool isTileBlockedByAlly;
         
         bool inBoundsX = coord.x >= 0 && coord.x < gridSizeX;
         bool inBoundsY = coord.y >= 0 && coord.y < gridSizeY;
@@ -512,20 +513,37 @@ public static partial class BattleGridModelData
         if (!isTileWalkable)
             return false;
 
-        // todo Continue here with blocked by heroes
+        if ((blocker & (PathBlocker.Ally | PathBlocker.Foe)) == 0)
+        {
+            return true;
+        }
+        
+        
         Hero hero = GetHeroAtCoord(coord);
         isTileEmpty = (hero == null);
 
         if (isTileEmpty) 
             return true;
 
-        
-        isTileBlockedByFoe = hero.isAlly != isPlayerTeam;
+        isTileBlockedByAlly = false;
+        isTileBlockedByFoe = false;
+        if ((blocker & PathBlocker.Ally) == 0)
+        {
+            if (hero.isAlly)
+                isTileBlockedByAlly = true;
+        }
+        if ((blocker & PathBlocker.Foe) == 0)
+        {
+            if (!hero.isAlly)
+                isTileBlockedByFoe = true;
+        }
 
+        if (isTileBlockedByAlly)
+            return false;
         if (isTileBlockedByFoe)
             return false;
-        else
-            return true;
+        
+        return true;
     }
  
     private static LinkedList<GridCoord> FilterEmptyTiles(LinkedList<GridCoord> tiles)
