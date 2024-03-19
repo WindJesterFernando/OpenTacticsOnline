@@ -6,7 +6,7 @@ public abstract class TurnAction
     public Hero owner;
     public string name;
     public int steps;
-    public BattleGridModelData.PathfindingOptions pathfindingOptions;
+    public PathfindingOptions pathfindingOptions;
     public abstract void Execute(GridCoord target);
     public abstract void AddVisuals(GridCoord target);
 }
@@ -16,13 +16,7 @@ public class MoveTurnAction : TurnAction
 {
     public MoveTurnAction(Hero owner)
     {
-        pathfindingOptions = new BattleGridModelData.PathfindingOptions()
-        {
-            pathBlockers = BattleGridModelData.PathBlocker.Foe 
-                            | BattleGridModelData.PathBlocker.Terrain,
-            canTargetSelf = false,
-            targetType = BattleGridModelData.TargetType.EmptyTile
-        };
+        pathfindingOptions = new PathfindingOptions(false, TargetType.EmptyTile, PathBlocker.Foe | PathBlocker.Terrain);
         this.owner = owner;
         name = "Move";
         steps = owner.maxSteps;
@@ -38,7 +32,7 @@ public class MoveTurnAction : TurnAction
     public override void AddVisuals(GridCoord target)
     {
         GridCoord start = owner.coord;
-        LinkedList<GridCoord> path = BattleGridModelData.DoTheAStarThingMyGuy(start, target, owner.isAlly);
+        List<GridCoord> path = BattleGridModelData.DoTheAStarThingMyGuy(start, target, owner.isAlly);
         GameObject[,] bgVisuals = GridVisuals.GetTileVisuals();
 
         Vector3 startPos = bgVisuals[start.x, start.y].transform.position;
@@ -58,12 +52,7 @@ public class AttackTurnAction : TurnAction
 {
     public AttackTurnAction(Hero owner, int range = 1, string name = "Attack")
     {
-         pathfindingOptions = new BattleGridModelData.PathfindingOptions()
-         {
-             pathBlockers = BattleGridModelData.PathBlocker.Terrain,
-             canTargetSelf = false,
-             targetType = BattleGridModelData.TargetType.Foe
-         };
+        pathfindingOptions = new PathfindingOptions(false, TargetType.Foe, PathBlocker.Terrain);
         this.owner = owner;
         this.steps = range;
         base.name = name;
@@ -89,12 +78,7 @@ public class HealTurnAction : TurnAction
 {
     public HealTurnAction(Hero owner, int range = 1, string name = "Heal")
     {
-        pathfindingOptions = new BattleGridModelData.PathfindingOptions()
-        {
-            pathBlockers = BattleGridModelData.PathBlocker.Terrain,
-            canTargetSelf = true,
-            targetType = BattleGridModelData.TargetType.Ally
-        };
+        pathfindingOptions = new PathfindingOptions(true, TargetType.Ally, PathBlocker.Terrain);
         this.owner = owner;
         this.steps = range;
         base.name = name;
