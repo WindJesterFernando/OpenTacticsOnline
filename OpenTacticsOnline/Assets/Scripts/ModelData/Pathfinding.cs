@@ -411,13 +411,15 @@ public static partial class BattleGridModelData
         return tilesWithinSteps;
     }
     
-    public static LinkedList<GridCoord> GetStuffInArea(GridCoord start, int steps, PathfindingOptions options)
+    public static List<GridCoord> GetStuffInArea(GridCoord start, int steps, PathfindingOptions options)
     {
         LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps,options.pathBlockers);
         if (!options.canTargetSelf) 
             tilesWithinSteps.Remove(start);
         LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, options.targetType);
-        return filteredByType;
+
+        List<GridCoord> filteredByTypeAsList = new List<GridCoord>(filteredByType);
+        return filteredByTypeAsList;
     }
 
     private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
