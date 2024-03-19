@@ -6,7 +6,9 @@ public class HeroMoveSelectionState : AbstractGameState
     private Hero heroBeingMoved;
 
     private List<GridCoord> tilesThatCanBeMovedTo;
-    
+
+    private GridCoord UnreachableTile = new GridCoord(-99, -99);
+
     public HeroMoveSelectionState(Hero heroBeingMoved)
         : base(GameState.MoveSelection)
     {
@@ -15,7 +17,7 @@ public class HeroMoveSelectionState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        tilesThatCanBeMovedTo = 
+        tilesThatCanBeMovedTo =
             BattleGridModelData.GetNonOccupiedTilesWithinSteps(heroBeingMoved.coord, heroBeingMoved.maxSteps, heroBeingMoved.isAlly);
 
         if (tilesThatCanBeMovedTo.Count == 0)
@@ -25,10 +27,10 @@ public class HeroMoveSelectionState : AbstractGameState
             // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
             StateManager.PopGameState();
         }
-        
+
         foreach (GridCoord t in tilesThatCanBeMovedTo)
         {
-                GridVisuals.ChangeColorOfTile(t, Color.magenta);
+            GridVisuals.ChangeColorOfTile(t, Color.magenta);
         }
     }
 
@@ -47,7 +49,7 @@ public class HeroMoveSelectionState : AbstractGameState
             {
                 StateManager.PopGameState();
             }
-            
+
             foreach (GridCoord t in tilesThatCanBeMovedTo)
             {
                 GridVisuals.ChangeColorOfTile(t, Color.white);
@@ -78,6 +80,6 @@ public class HeroMoveSelectionState : AbstractGameState
             }
         }
 
-        return GridCoord.Zero;
+        return UnreachableTile;
     }
 }

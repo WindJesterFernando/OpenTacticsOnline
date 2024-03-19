@@ -43,12 +43,11 @@ public class HeroAttackSelectionState : AbstractGameState
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GridCoord coord = GetTileUnderMouse();
+            GridCoord? coord = GetTileUnderMouse();
 
-            if (tilesThatCanBeMovedTo.Contains(coord))
+            if (coord.HasValue && tilesThatCanBeMovedTo.Contains(coord.Value))
             {
-
-                StateManager.PushGameState(new HeroTurnActionState(turnAction, coord));
+                StateManager.PushGameState(new HeroTurnActionState(turnAction, coord.Value));
             }
             else
             {
@@ -62,7 +61,7 @@ public class HeroAttackSelectionState : AbstractGameState
         }
     }
 
-    private GridCoord GetTileUnderMouse()
+    private GridCoord? GetTileUnderMouse()
     {
         Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -85,6 +84,6 @@ public class HeroAttackSelectionState : AbstractGameState
             }
         }
 
-        return GridCoord.Zero;
+        return null;
     }
 }
