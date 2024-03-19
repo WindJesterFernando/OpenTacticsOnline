@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroAttackSelectionState : AbstractGameState
+public class HeroTargetSelectionState : AbstractGameState
 {
     private List<GridCoord> tilesThatCanBeMovedTo;
 
     private TurnAction turnAction;
 
-    public HeroAttackSelectionState(TurnAction action) : base(GameState.AttackSelection)
+    public HeroTargetSelectionState(TurnAction action) : base(GameState.AttackSelection)
     {
         turnAction = action;
     }

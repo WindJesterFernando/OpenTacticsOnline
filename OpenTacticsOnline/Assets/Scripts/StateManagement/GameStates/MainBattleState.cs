@@ -43,7 +43,7 @@ public class MainBattleState : AbstractGameState
         }
         else
         {
-        List<GridCoord> nearTiles =
+            List<GridCoord> nearTiles =
                 BattleGridModelData.GetStuffInArea(nextHero.coord, nextHero.maxSteps,
                     new PathfindingOptions(false, TargetType.EmptyTile, PathBlocker.Ally | PathBlocker.Terrain));
 
@@ -56,7 +56,8 @@ public class MainBattleState : AbstractGameState
             int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
             GridCoord randomGridCoord = nearTiles[randomIndex];
 
-            StateManager.PushGameState(new HeroMovementState(nextHero, randomGridCoord));
+            StateManager.PushGameState(new HeroTurnActionState(new MoveTurnAction(nextHero), randomGridCoord));
+            // StateManager.PushGameState(new HeroMovementState(nextHero, randomGridCoord));
             nextHero.coord = randomGridCoord;
         }
         
