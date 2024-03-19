@@ -14,22 +14,12 @@ public class HeroAttackSelectionState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        if (!turnAction.isMoving)
-        {
-            tilesThatCanBeMovedTo = BattleGridModelData.GetHeroesWithinSteps(turnAction.owner.coord, turnAction.steps, turnAction.isTargetingFoe);
-        }
-        else
-        {
-            tilesThatCanBeMovedTo = BattleGridModelData.GetNonOccupiedTilesWithinSteps(turnAction.owner.coord,
-                turnAction.owner.maxSteps, turnAction.owner.isAlly);
-        }
+        tilesThatCanBeMovedTo =
+            BattleGridModelData.GetStuffInArea(turnAction.owner.coord, turnAction.steps, turnAction.pathfindingOptions);
 
         if (tilesThatCanBeMovedTo.Count == 0)
         {
-            Debug.Log("No Heroes to attack");
-            //TODO
-            // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
-
+            Debug.Log("No accessible targets");
             StateManager.PopGameState();
         }
 

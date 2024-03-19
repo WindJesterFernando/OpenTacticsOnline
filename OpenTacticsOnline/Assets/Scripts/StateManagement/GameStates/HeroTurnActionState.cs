@@ -12,14 +12,12 @@ public class HeroTurnActionState : AbstractGameState
     public override void OnStateEnter()
     {
         turnAction.AddVisuals(target);
-        
     }
 
     public override void Update()
     {
         if (ActionQueue.GetActionCount() == 0)
         {
-            //mb here do damage
             StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
         }
     }

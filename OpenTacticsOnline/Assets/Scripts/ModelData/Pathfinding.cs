@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public static partial class BattleGridModelData
 {
@@ -324,6 +325,242 @@ public static partial class BattleGridModelData
         return targetableHeroesAsList;
     }
 
+    private static LinkedList<GridCoord> GetTilesWithinSteps(GridCoord start, int steps, PathBlocker blocker)
+    {
+        LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
+        LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
+
+        int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
+
+        #region Set travelDistancesFromStart Elements to UninitializedDistance
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                travelDistancesFromStart[x, y] = UninitializedDistance;
+            }
+        }
+
+        #endregion
+
+        visitedTiles.AddLast(start);
+        travelDistancesFromStart[start.x, start.y] = 0;
+
+        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, blocker))
+        {
+            neighbourTiles.AddLast(neighbour);
+            travelDistancesFromStart[neighbour.x, neighbour.y] = MoveCost;
+        }
+
+        while (neighbourTiles.Count > 0)
+        {
+            GridCoord tileToEvaluate = neighbourTiles.First.Value;
+            int currentlyFoundMinDistance = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+
+            foreach (GridCoord neighbour in neighbourTiles)
+            {
+                int neighbourDistance = travelDistancesFromStart[neighbour.x, neighbour.y];
+
+                if (neighbourDistance < currentlyFoundMinDistance)
+                {
+                    currentlyFoundMinDistance = neighbourDistance;
+                    tileToEvaluate = neighbour;
+                }
+            }
+
+            neighbourTiles.Remove(tileToEvaluate);
+            visitedTiles.AddLast(tileToEvaluate);
+
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, blocker))
+            {
+                if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
+                {
+                    neighbourTiles.AddLast(neighbour);
+                }
+
+                int prevTileMoveCost = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+                int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
+
+                bool isDistanceUninitialized =
+                    travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
+                bool isNewMoveCostCheaper =
+                    travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost;
+
+                if (isDistanceUninitialized || isNewMoveCostCheaper)
+                {
+                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+                }
+            }
+        }
+
+        LinkedList<GridCoord> tilesWithinSteps = new LinkedList<GridCoord>();
+        
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if(travelDistancesFromStart[x, y] == UninitializedDistance)
+                    continue;
+                if(travelDistancesFromStart[x, y] > steps)
+                    continue;
+                tilesWithinSteps.AddLast(new GridCoord(x, y));
+            }
+        }
+        
+        return tilesWithinSteps;
+    }
+    
+    public static LinkedList<GridCoord> GetStuffInArea(GridCoord start, int steps, PathfindingOptions options)
+    {
+        LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps,options.pathBlockers);
+        if (!options.canTargetSelf) 
+            tilesWithinSteps.Remove(start);
+        LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, options.targetType);
+        return filteredByType;
+    }
+
+    private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
+    {
+        if (type == TargetType.AnyTile) 
+            return initial;
+        else if (type == TargetType.Ally || type == TargetType.Foe || type == TargetType.AnyHero)
+            return FilterHeroesInTiles(initial, type);
+        else // if (type == TargetType.EmptyTile)
+            return FilterEmptyTiles(initial);
+    }
+    public static LinkedList<GridCoord> GetTraversableNeighboursTiles(GridCoord coord, PathBlocker blocker)
+    {
+        LinkedList<GridCoord> walkableNeighbours = new LinkedList<GridCoord>();
+
+        GridCoord leftCoord = coord + GridCoord.Left;
+        GridCoord rightCoord = coord + GridCoord.Right;
+        GridCoord topCoord = coord + GridCoord.Up;
+        GridCoord bottomCoord = coord + GridCoord.Down;
+
+        if (IsTileTraversable(leftCoord, blocker))
+        {
+            walkableNeighbours.AddLast(leftCoord);
+        }
+
+        if (IsTileTraversable(bottomCoord, blocker))
+        {
+            walkableNeighbours.AddLast(bottomCoord);
+        }
+
+        if (IsTileTraversable(rightCoord, blocker))
+        {
+            walkableNeighbours.AddLast(rightCoord);
+        }
+
+        if (IsTileTraversable(topCoord, blocker))
+        {
+            walkableNeighbours.AddLast(topCoord);
+        }
+
+        return walkableNeighbours;
+    }
+
+    private static LinkedList<GridCoord> FilterHeroesInTiles(LinkedList<GridCoord> tiles, TargetType type)
+    {
+        LinkedList<GridCoord> result = new LinkedList<GridCoord>();
+        foreach (Hero h in heroes)
+        {
+            if (type == TargetType.AnyHero)
+            {
+                if (tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }    
+            }
+            else if (type == TargetType.Foe)
+            {
+                if (!h.isAlly && tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }
+            }
+            else if (type == TargetType.Ally)
+            {
+                 if (h.isAlly && tiles.Contains(h.coord))
+                 {
+                     result.AddLast(h.coord);
+                 }   
+            }
+        }
+
+        return result;
+    }
+    
+    private static bool IsTileTraversable(GridCoord coord, PathBlocker blocker)
+    {
+        bool isTileInBounds;
+        bool isTileWalkable;
+        bool isTileEmpty;
+        bool isTileBlockedByFoe;
+        bool isTileBlockedByAlly;
+        
+        bool inBoundsX = coord.x >= 0 && coord.x < gridSizeX;
+        bool inBoundsY = coord.y >= 0 && coord.y < gridSizeY;
+        isTileInBounds = inBoundsX && inBoundsY;
+
+        if (!isTileInBounds) 
+            return false;
+
+        if ((blocker & PathBlocker.Terrain) != 0)
+            isTileWalkable = battleGridTiles[coord.x, coord.y].isWalkable;
+        else
+            isTileWalkable = true;
+        
+        if (!isTileWalkable)
+            return false;
+
+        if ((blocker & (PathBlocker.Ally | PathBlocker.Foe)) == 0)
+        {
+            return true;
+        }
+        
+        
+        Hero hero = GetHeroAtCoord(coord);
+        isTileEmpty = (hero == null);
+
+        if (isTileEmpty) 
+            return true;
+
+        isTileBlockedByAlly = false;
+        isTileBlockedByFoe = false;
+        if ((blocker & PathBlocker.Ally) == 0)
+        {
+            if (hero.isAlly)
+                isTileBlockedByAlly = true;
+        }
+        if ((blocker & PathBlocker.Foe) == 0)
+        {
+            if (!hero.isAlly)
+                isTileBlockedByFoe = true;
+        }
+
+        if (isTileBlockedByAlly)
+            return false;
+        if (isTileBlockedByFoe)
+            return false;
+        
+        return true;
+    }
+ 
+    private static LinkedList<GridCoord> FilterEmptyTiles(LinkedList<GridCoord> tiles)
+    {
+        foreach (Hero h in heroes)
+        {
+            if (tiles.Contains(h.coord))
+            {
+                tiles.Remove(h.coord);
+            }
+        }
+
+        return tiles;
+    }
+    
     public enum TargetType
     {
         None,
