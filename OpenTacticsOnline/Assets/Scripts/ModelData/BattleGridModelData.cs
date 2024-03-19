@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public static partial class BattleGridModelData
 {
@@ -166,33 +165,6 @@ public static partial class BattleGridModelData
         return foeHeroes;
     }
 
-    
-    public static GridCoord GetTileUnderMouse()
-    {
-        Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        GameObject[,] tileVisuals = GridVisuals.GetTileVisuals();
-
-        for (int x = 0; x < BattleGridModelData.gridSizeX; x++)
-        {
-            for (int y = 0; y < BattleGridModelData.gridSizeY; y++)
-            {
-                GameObject bgt = tileVisuals[x, y];
-                Bounds b = bgt.GetComponent<SpriteRenderer>().bounds;
-
-                mouseWorldPoint.z = b.center.z;
-
-                if (b.Contains(mouseWorldPoint))
-                {
-                    Debug.Log("Tile Hit @ " + x + "," + y);
-                    return new GridCoord(x, y);
-                }
-            }
-        }
-        
-        return EmptyVector2Int;
-    }
-
     public static Hero GetHeroAtCoord(GridCoord coord)
     {
         foreach (Hero h in heroes)
@@ -208,7 +180,7 @@ public static partial class BattleGridModelData
 
 public struct BattleGridTile
 {
-    public Vector2Int coord;
+    public GridCoord coord;
     public int id;
     public bool isWalkable;
 }

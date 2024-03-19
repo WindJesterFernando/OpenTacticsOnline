@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public enum HeroRole
 {
@@ -20,7 +19,7 @@ public class Hero
     public GridCoord coord;
     public HeroRole role;
     public int maxSteps;
-    public GameObject visualRepresentation;
+    public UnityEngine.GameObject visualRepresentation;
     
     public int currentHealth;
     public int maxHealth;
@@ -37,7 +36,7 @@ public class Hero
         currentHealth = maxHealth;
         this.isAlly = isAlly;
         CreateTurnActions();
-        Debug.Log(this.maxHealth);
+        //UnityEngine.Debug.Log(this.maxHealth);
     }
 
     public bool IsAlive()

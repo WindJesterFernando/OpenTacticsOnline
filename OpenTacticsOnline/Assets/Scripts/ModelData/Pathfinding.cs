@@ -289,8 +289,8 @@ public static partial class BattleGridModelData
         return tilesWithinSteps;
     }
 
-    // TODO think about name 
-    public static LinkedList<GridCoord> GetNonOccupiedTilesWithinSteps(GridCoord start, int steps, bool isPlayerTeam)
+    // TODO think about name
+    public static List<GridCoord> GetNonOccupiedTilesWithinSteps(GridCoord start, int steps, bool isPlayerTeam)
     {
         LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps, isPlayerTeam);
         foreach (Hero h in heroes)
@@ -301,10 +301,11 @@ public static partial class BattleGridModelData
             }
         }
 
-        return tilesWithinSteps;
+        List<GridCoord> tilesWithinStepsAsList = new List<GridCoord>(tilesWithinSteps);
+        return tilesWithinStepsAsList;
     }
     
-    public static LinkedList<GridCoord> GetHeroesWithinSteps(GridCoord start, int steps, bool isTargetingFoe)
+    public static List<GridCoord> GetHeroesWithinSteps(GridCoord start, int steps, bool isTargetingFoe)
     {
          LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps, !isTargetingFoe);
          LinkedList<GridCoord> targetableHeroes = new LinkedList<GridCoord>();
@@ -318,8 +319,9 @@ public static partial class BattleGridModelData
                  targetableHeroes.AddLast(h.coord);
              }
          }
- 
-         return targetableHeroes;
+
+        List<GridCoord> targetableHeroesAsList = new List<GridCoord>(targetableHeroes);
+        return targetableHeroesAsList;
     }
 
     public enum TargetType

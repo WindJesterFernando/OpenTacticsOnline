@@ -1,34 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public abstract class AbstractGameState
 {
     GameState gameState;
 
     public virtual void OnStateEnter()
     {
-        Debug.Log("On Enter: " + GetGameState());
+        //UnityEngine.Debug.Log("On Enter: " + GetGameState());
     }
     
     public virtual void OnStateExit()
     {
-        Debug.Log("On Exit: " + GetGameState());
+        //UnityEngine.Debug.Log("On Exit: " + GetGameState());
     }
     
     public virtual void OnStateContinue()
     {
-        Debug.Log("On Continue: " + GetGameState());
+        //UnityEngine.Debug.Log("On Continue: " + GetGameState());
     }
     
     public virtual void OnStatePause()
     {
-        Debug.Log("On Pause: " + GetGameState());
+        //UnityEngine.Debug.Log("On Pause: " + GetGameState());
     }
     
     public virtual void Update()
     {
-        Debug.Log("On Update: " + GetGameState());
+        //UnityEngine.Debug.Log("On Update: " + GetGameState());
     }
     public GameState GetGameState()
     {

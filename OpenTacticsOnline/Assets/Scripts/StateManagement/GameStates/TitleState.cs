@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TitleState : AbstractGameState
@@ -17,7 +15,6 @@ public class TitleState : AbstractGameState
     
     public override void Update()
     {
-        //Debug.Log("Sanity check!!!");
         if (Input.GetMouseButtonDown(0))
         {
             StateManager.PushGameState(new MainBattleState());

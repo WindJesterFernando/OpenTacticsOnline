@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroMovementState : AbstractGameState
@@ -26,10 +24,7 @@ public class HeroMovementState : AbstractGameState
         foreach (GridCoord t in path)
         {
             Vector3 endPos = bgVisuals[t.x, t.y].transform.position;
-            //ActionQueue.instance.EnqueueAction(new ActionChangeTileContainer(t, 101));
             ActionQueue.EnqueueAction(new ActionMoveSpriteContainer(heroToMove.visualRepresentation, startPos, endPos, 0.25f ));
-            //ActionQueue.instance.EnqueueAction(new ActionWaitContainer(0.25f));
-
             startPos = endPos;
         }
     }
@@ -44,8 +39,6 @@ public class HeroMovementState : AbstractGameState
 
     public override void OnStateExit()
     {
-        //heroToMove.currentHealth = 0;
         base.OnStateExit();
-        // BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
     }
 }

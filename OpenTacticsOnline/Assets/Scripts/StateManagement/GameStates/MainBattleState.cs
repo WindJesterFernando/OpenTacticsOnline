@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class MainBattleState : AbstractGameState
@@ -45,7 +44,7 @@ public class MainBattleState : AbstractGameState
         else
         {
             List<GridCoord> nearTiles =
-                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly).ToList();
+                BattleGridModelData.GetNonOccupiedTilesWithinSteps(nextHero.coord, nextHero.maxSteps, nextHero.isAlly);
 
             if (nearTiles.Count == 0)
             {
@@ -54,8 +53,10 @@ public class MainBattleState : AbstractGameState
             }
             
             int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
-            StateManager.PushGameState(new HeroMovementState(nextHero, nearTiles[randomIndex]));
-            nextHero.coord = nearTiles[randomIndex];
+            GridCoord randomGridCoord = nearTiles[randomIndex];
+
+            StateManager.PushGameState(new HeroMovementState(nextHero, randomGridCoord));
+            nextHero.coord = randomGridCoord;
         }
         
         

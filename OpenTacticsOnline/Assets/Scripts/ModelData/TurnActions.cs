@@ -24,7 +24,7 @@ public class MoveTurnAction : TurnAction
     
     public override void Execute(GridCoord target)
     {
-        Debug.Log("Moving");
+        UnityEngine.Debug.Log("Moving");
         owner.coord = target;
         // StateManager.PushGameState(new HeroMoveSelectionState(owner));
     }
@@ -60,7 +60,7 @@ public class AttackTurnAction : TurnAction
     
     public override void Execute(GridCoord target)
     {
-        Debug.Log("Attacking");
+        UnityEngine.Debug.Log("Attacking");
         
         // do damage    
         // StateManager.PushGameState(new HeroAttackSelectionState(this));

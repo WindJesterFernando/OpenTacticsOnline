@@ -10,8 +10,6 @@ public struct GridCoord
         this.y = y;
     }
 
-    //public static readonly GridCoord One = new GridCoord(1, 1);
-
     public static readonly GridCoord Up = new GridCoord(0, 1);
 
     public static readonly GridCoord Down = new GridCoord(0, -1);
@@ -19,6 +17,8 @@ public struct GridCoord
     public static readonly GridCoord Left = new GridCoord(-1, 0);
 
     public static readonly GridCoord Right = new GridCoord(1, 0);
+
+    public static readonly GridCoord Zero = new GridCoord(0, 0);
 
     public static bool operator ==(GridCoord lhs, GridCoord rhs)
     {
@@ -64,11 +64,5 @@ public struct GridCoord
     {
         return x.GetHashCode() ^ (y.GetHashCode() << 2);
     }
-
-
-
-
-
-
 
 }
