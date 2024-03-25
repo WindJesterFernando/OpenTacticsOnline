@@ -101,7 +101,7 @@ public class ExecuteTurnActionContainer : ActionContainer
     }
     public override void Update()
     {
-        actionToExecute.Execute(target);
+        actionToExecute.ApplyEffectToModelData(target);
         IsDone = true;
     }
 }

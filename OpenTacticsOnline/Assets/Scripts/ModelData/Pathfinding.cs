@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public static partial class BattleGridModelData
 {
-    const int MoveCost = 1;
-    const float DelayBetweenMoves = 0;
-    const int UninitializedDistance = -1;
+    private const int MoveCost = 1;
+    private const int UninitializedDistance = -1;
 
     public static List<GridCoord> DoTheAStarThingMyGuy(GridCoord start, GridCoord end, bool isPlayerTeam)
     {
@@ -241,6 +239,7 @@ public static partial class BattleGridModelData
         else // if (type == TargetType.EmptyTile)
             return FilterEmptyTiles(initial);
     }
+    
     private static LinkedList<GridCoord> GetTraversableNeighboursTiles(GridCoord coord, PathBlocker blocker)
     {
         LinkedList<GridCoord> walkableNeighbours = new LinkedList<GridCoord>();
@@ -371,7 +370,6 @@ public static partial class BattleGridModelData
 
         return tiles;
     }
-    
     
 }
 

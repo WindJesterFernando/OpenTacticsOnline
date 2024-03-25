@@ -7,8 +7,8 @@ public abstract class TurnAction
     public string name;
     public int steps;
     public PathfindingOptions pathfindingOptions;
-    public abstract void Execute(GridCoord target);
-    public abstract void AddVisuals(GridCoord target);
+    public abstract void ApplyEffectToModelData(GridCoord target);
+    public abstract void EnqueueVisualSequence(GridCoord target);
 }
 
 
@@ -22,14 +22,14 @@ public class MoveTurnAction : TurnAction
         steps = owner.maxSteps;
     }
     
-    public override void Execute(GridCoord target)
+    public override void ApplyEffectToModelData(GridCoord target)
     {
         UnityEngine.Debug.Log("Moving");
         owner.coord = target;
         // StateManager.PushGameState(new HeroMoveSelectionState(owner));
     }
 
-    public override void AddVisuals(GridCoord target)
+    public override void EnqueueVisualSequence(GridCoord target)
     {
         GridCoord start = owner.coord;
         List<GridCoord> path = BattleGridModelData.DoTheAStarThingMyGuy(start, target, owner.isAlly);
@@ -58,13 +58,14 @@ public class AttackTurnAction : TurnAction
         base.name = name;
     }
     
-    public override void Execute(GridCoord target)
+    public override void ApplyEffectToModelData(GridCoord target)
     {
         UnityEngine.Debug.Log("Attacking");
         
+        // process damage effect
     }
 
-    public override void AddVisuals(GridCoord target)
+    public override void EnqueueVisualSequence(GridCoord target)
     {
        owner.visualRepresentation.GetComponent<FrameAnimator>()
             .StartAnimation(AnimationKey.Attacking, true);
@@ -84,12 +85,13 @@ public class HealTurnAction : TurnAction
         base.name = name;
     }
 
-    public override void Execute(GridCoord target)
+    public override void ApplyEffectToModelData(GridCoord target)
     {
         Debug.Log("Healing");
+        // process heal effect
     }
 
-    public override void AddVisuals(GridCoord target)
+    public override void EnqueueVisualSequence(GridCoord target)
     {
         owner.visualRepresentation.GetComponent<FrameAnimator>()
             .StartAnimation(AnimationKey.Casting, true);
@@ -97,4 +99,5 @@ public class HealTurnAction : TurnAction
         ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
         ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
     }
+    
 }

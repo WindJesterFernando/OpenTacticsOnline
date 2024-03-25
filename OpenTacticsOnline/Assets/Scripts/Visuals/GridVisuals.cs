@@ -3,10 +3,10 @@ using UnityEngine;
 
 public static class GridVisuals
 {
-    static GameObject tileParent;
-    static GameObject heroParent;
+    private static GameObject tileParent;
+    private static GameObject heroParent;
 
-    static GameObject[,] tileVisuals;
+    private static GameObject[,] tileVisuals;
     private static LinkedList<GameObject> heroVisuals;
 
     public static void CreateBattleGridVisuals(BattleGridTile[,] battleGridTiles)

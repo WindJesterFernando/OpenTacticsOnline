@@ -11,7 +11,7 @@ public class HeroTurnActionState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        turnAction.AddVisuals(target);
+        turnAction.EnqueueVisualSequence(target);
     }
 
     public override void Update()
