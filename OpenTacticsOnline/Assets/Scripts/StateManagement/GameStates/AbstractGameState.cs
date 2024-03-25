@@ -26,12 +26,13 @@ public abstract class AbstractGameState
     {
         //UnityEngine.Debug.Log("On Update: " + GetGameState());
     }
+    
     public GameState GetGameState()
     {
         return gameState;
     }
 
-    public AbstractGameState(GameState gameState)
+    protected AbstractGameState(GameState gameState)
     {
         this.gameState = gameState;
         
