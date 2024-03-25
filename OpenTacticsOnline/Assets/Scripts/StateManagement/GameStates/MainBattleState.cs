@@ -45,7 +45,8 @@ public class MainBattleState : AbstractGameState
         {
             List<GridCoord> nearTiles =
                 BattleGridModelData.GetStuffInArea(nextHero.coord, nextHero.maxSteps,
-                    new PathfindingOptions(false, TargetType.EmptyTile, PathBlocker.Ally | PathBlocker.Terrain));
+                    new PathfindingOptions(false, TargetType.EmptyTile,
+                        PathBlocker.Ally | PathBlocker.Terrain));
 
             if (nearTiles.Count == 0)
             {
