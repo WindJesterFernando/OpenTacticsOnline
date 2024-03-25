@@ -12,7 +12,9 @@ public class MainSystemBooter : MonoBehaviour
         ContentLoader.Init();
         UIManager.Init(BattleUICanvas);
         
+        NetworkClientProcessing.SetMainSystemBooter(this);
         StateManager.PushGameState(new TitleState());
+        
     }
 
     void Update()

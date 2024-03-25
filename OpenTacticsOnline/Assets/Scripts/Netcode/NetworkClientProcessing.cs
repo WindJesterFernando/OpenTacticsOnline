@@ -67,7 +67,7 @@ public static class NetworkClientProcessing
     {
         return networkClient;
     }
-    public static void SetGameLogic(MainSystemBooter mainSystemBooter)
+    public static void SetMainSystemBooter(MainSystemBooter mainSystemBooter)
     {
         NetworkClientProcessing.mainSystemBooter = mainSystemBooter;  
     }
