@@ -40,11 +40,11 @@ public class MoveTurnAction : TurnAction
         foreach (GridCoord t in path)
         {
             Vector3 endPos = bgVisuals[t.x, t.y].transform.position;
-            ActionQueue.EnqueueAction(new ActionMoveSpriteContainer(owner.visualRepresentation, startPos, endPos, 0.25f ));
+            VisualTaskQueue.EnqueueAction(new MoveSpriteVisualTask(owner.visualRepresentation, startPos, endPos, 0.25f ));
 
             startPos = endPos;
         }
-        ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
+        VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));
     }
 }
 
@@ -70,8 +70,8 @@ public class AttackTurnAction : TurnAction
        owner.visualRepresentation.GetComponent<FrameAnimator>()
             .StartAnimation(AnimationKey.Attacking, true);
        
-       ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
-       ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
+       VisualTaskQueue.EnqueueAction(new WaitVisualTask(0.5f));
+       VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));
     }
 }
 
@@ -96,8 +96,8 @@ public class HealTurnAction : TurnAction
         owner.visualRepresentation.GetComponent<FrameAnimator>()
             .StartAnimation(AnimationKey.Casting, true);
 
-        ActionQueue.EnqueueAction(new ActionWaitContainer(0.5f));
-        ActionQueue.EnqueueAction(new ExecuteTurnActionContainer(this, target));
+        VisualTaskQueue.EnqueueAction(new WaitVisualTask(0.5f));
+        VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));
     }
     
 }

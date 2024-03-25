@@ -6,7 +6,7 @@ public class MainSystemBooter : MonoBehaviour
     
     void Start()
     {
-        ActionQueue.Init();
+        VisualTaskQueue.Init();
         StateManager.Init();
         //BattleGridModelData.Init();
         ContentLoader.Init();
@@ -18,6 +18,6 @@ public class MainSystemBooter : MonoBehaviour
     void Update()
     {
         StateManager.Update();
-        ActionQueue.Update();
+        VisualTaskQueue.Update();
     }
 }

@@ -16,7 +16,7 @@ public class HeroTurnActionState : AbstractGameState
 
     public override void Update()
     {
-        if (ActionQueue.GetActionCount() == 0)
+        if (VisualTaskQueue.GetActionCount() == 0)
         {
             StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
         }
