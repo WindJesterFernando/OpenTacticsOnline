@@ -3,7 +3,7 @@ using System.Collections.Generic;
 public static partial class BattleGridModelData
 {
     public const int gridSizeX = 20, gridSizeY = 10;
-    static BattleGridTile[,] battleGridTiles;
+    private static BattleGridTile[,] battleGridTiles;
     private static LinkedList<Hero> heroes;
     
     private static LinkedList<Hero> allyHeroes;

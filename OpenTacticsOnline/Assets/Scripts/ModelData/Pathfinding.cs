@@ -5,42 +5,58 @@ public static partial class BattleGridModelData
 {
     private const int MoveCost = 1;
     private const int UninitializedDistance = -1;
+    private const int TileIsBeingBlocked = -2;
 
-    public static List<GridCoord> DoTheAStarThingMyGuy(GridCoord start, GridCoord end, bool isPlayerTeam)
+
+    private static int[,] SetupStepCosts(PathBlocker pathBlockers)
     {
-        LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
-        LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
-
-        int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
-
-        #region Set travelDistancesFromStart Elements to UninitializedDistance
+        int[,] stepCosts = new int[gridSizeX, gridSizeY];
 
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                travelDistancesFromStart[x, y] = UninitializedDistance;
+                if (IsTileBlocked(new GridCoord(x, y), pathBlockers))
+                {
+                    stepCosts[x, y] = TileIsBeingBlocked;
+                    //UnityEngine.Debug.Log("setting blocked");
+                }
+                else
+                {
+                    stepCosts[x, y] = UninitializedDistance;
+                    //UnityEngine.Debug.Log("Not blocked");
+                }
             }
         }
 
-        #endregion
+        return stepCosts;
+    }
 
-        visitedTiles.AddLast(start);
-        travelDistancesFromStart[start.x, start.y] = 0;
 
+
+    public static List<GridCoord> DoTheAStarThingMyGuy(GridCoord start, GridCoord end, bool isPlayerTeam)
+    {
         PathBlocker pathBlocker;
-        
+
         if (isPlayerTeam)
             pathBlocker = PathBlocker.Foe;
         else
             pathBlocker = PathBlocker.Ally;
-        
+
         pathBlocker = pathBlocker | PathBlocker.Terrain;
-        
-        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, pathBlocker))
+
+        int[,] stepCosts = SetupStepCosts(pathBlocker);
+
+        LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
+        LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
+
+        visitedTiles.AddLast(start);
+        stepCosts[start.x, start.y] = 0;
+
+        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, stepCosts))
         {
             neighbourTiles.AddLast(neighbour);
-            travelDistancesFromStart[neighbour.x, neighbour.y] = MoveCost;
+            stepCosts[neighbour.x, neighbour.y] = MoveCost;
         }
 
         bool isFound = false;
@@ -48,11 +64,11 @@ public static partial class BattleGridModelData
         while (neighbourTiles.Count > 0)
         {
             GridCoord tileToEvaluate = neighbourTiles.First.Value;
-            int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end) + travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+            int currentlyFoundMinDistance = GetDistance(tileToEvaluate, end) + stepCosts[tileToEvaluate.x, tileToEvaluate.y];
 
             foreach (GridCoord neighbour in neighbourTiles)
             {
-                int neighbourDistance = GetDistance(neighbour, end) + travelDistancesFromStart[neighbour.x, neighbour.y];
+                int neighbourDistance = GetDistance(neighbour, end) + stepCosts[neighbour.x, neighbour.y];
 
                 if (neighbourDistance < currentlyFoundMinDistance)
                 {
@@ -63,25 +79,27 @@ public static partial class BattleGridModelData
 
             neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
-                   
-            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, pathBlocker))
+
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, stepCosts))
             {
                 if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
                     neighbourTiles.AddLast(neighbour);
                 }
 
-                int prevTileMoveCost = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+                int prevTileMoveCost = stepCosts[tileToEvaluate.x, tileToEvaluate.y];
                 int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
 
-                bool isDistanceUninitialized = travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
-                bool isNewMoveCostCheaper = travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost;
+                bool isBlockingTile = stepCosts[neighbour.x, neighbour.y] == TileIsBeingBlocked;
+                
+                bool isDistanceUninitialized = stepCosts[neighbour.x, neighbour.y] == UninitializedDistance;
+                bool isNewMoveCostCheaper = stepCosts[neighbour.x, neighbour.y] > neighbourTileMoveCost;
 
-                if (isDistanceUninitialized || isNewMoveCostCheaper)
+                if (!isBlockingTile && (isDistanceUninitialized || isNewMoveCostCheaper))
                 {
-                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+                    stepCosts[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+                    UnityEngine.Debug.Log("Setting cost == " + neighbourTileMoveCost);
                 }
-
 
                 if (end == neighbour)
                 {
@@ -95,7 +113,10 @@ public static partial class BattleGridModelData
         }
 
         if (!isFound)
+        {
+            UnityEngine.Debug.Log("returning null, path not found");
             return null;
+        }
 
         GridCoord currentTile = end;
         LinkedList<GridCoord> path = new LinkedList<GridCoord>();
@@ -106,15 +127,16 @@ public static partial class BattleGridModelData
             int smallestDistanceToStart = Int32.MaxValue;
             GridCoord nextCoord = new GridCoord();
 
-            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(currentTile, pathBlocker))
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(currentTile, stepCosts))
             {
-                bool isDistanceUninitialized = travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
-                bool isCurrentPathLonger = smallestDistanceToStart <= travelDistancesFromStart[neighbour.x, neighbour.y];
+                bool isBlockingTile = stepCosts[neighbour.x, neighbour.y] == TileIsBeingBlocked;
+                bool isDistanceUninitialized = stepCosts[neighbour.x, neighbour.y] == UninitializedDistance;
+                bool isCurrentPathLonger = smallestDistanceToStart <= stepCosts[neighbour.x, neighbour.y];
 
-                if (isDistanceUninitialized || isCurrentPathLonger)
+                if (isDistanceUninitialized || isCurrentPathLonger || isBlockingTile)
                     continue;
 
-                smallestDistanceToStart = travelDistancesFromStart[neighbour.x, neighbour.y];
+                smallestDistanceToStart = stepCosts[neighbour.x, neighbour.y];
                 nextCoord = neighbour;
             }
 
@@ -122,52 +144,34 @@ public static partial class BattleGridModelData
         }
 
         List<GridCoord> pathAsList = new List<GridCoord>(path);
-        
+
         return pathAsList;
     }
 
-    public static int GetDistance(GridCoord start, GridCoord end)
-    {
-        GridCoord dif = end - start;
-        return Math.Abs(dif.x) + Math.Abs(dif.y);
-    }
-    
     private static LinkedList<GridCoord> GetTilesWithinSteps(GridCoord start, int steps, PathBlocker blocker)
     {
+        int[,] stepCosts = SetupStepCosts(blocker);
+
         LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
         LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
 
-        int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
-
-        #region Set travelDistancesFromStart Elements to UninitializedDistance
-
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                travelDistancesFromStart[x, y] = UninitializedDistance;
-            }
-        }
-
-        #endregion
-
         visitedTiles.AddLast(start);
-        travelDistancesFromStart[start.x, start.y] = 0;
+        stepCosts[start.x, start.y] = 0;
 
-        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, blocker))
+        foreach (GridCoord neighbour in GetTraversableNeighboursTiles(start, stepCosts))
         {
             neighbourTiles.AddLast(neighbour);
-            travelDistancesFromStart[neighbour.x, neighbour.y] = MoveCost;
+            stepCosts[neighbour.x, neighbour.y] = MoveCost;
         }
 
         while (neighbourTiles.Count > 0)
         {
             GridCoord tileToEvaluate = neighbourTiles.First.Value;
-            int currentlyFoundMinDistance = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+            int currentlyFoundMinDistance = stepCosts[tileToEvaluate.x, tileToEvaluate.y];
 
             foreach (GridCoord neighbour in neighbourTiles)
             {
-                int neighbourDistance = travelDistancesFromStart[neighbour.x, neighbour.y];
+                int neighbourDistance = stepCosts[neighbour.x, neighbour.y];
 
                 if (neighbourDistance < currentlyFoundMinDistance)
                 {
@@ -179,68 +183,69 @@ public static partial class BattleGridModelData
             neighbourTiles.Remove(tileToEvaluate);
             visitedTiles.AddLast(tileToEvaluate);
 
-            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, blocker))
+            foreach (GridCoord neighbour in GetTraversableNeighboursTiles(tileToEvaluate, stepCosts))
             {
                 if (!neighbourTiles.Contains(neighbour) && !visitedTiles.Contains(neighbour))
                 {
                     neighbourTiles.AddLast(neighbour);
                 }
 
-                int prevTileMoveCost = travelDistancesFromStart[tileToEvaluate.x, tileToEvaluate.y];
+                int prevTileMoveCost = stepCosts[tileToEvaluate.x, tileToEvaluate.y];
                 int neighbourTileMoveCost = prevTileMoveCost + MoveCost;
 
-                bool isDistanceUninitialized =
-                    travelDistancesFromStart[neighbour.x, neighbour.y] == UninitializedDistance;
-                bool isNewMoveCostCheaper =
-                    travelDistancesFromStart[neighbour.x, neighbour.y] > neighbourTileMoveCost;
+
+                bool isBlockingTile = stepCosts[neighbour.x, neighbour.y] == TileIsBeingBlocked;
+                bool isDistanceUninitialized = stepCosts[neighbour.x, neighbour.y] == UninitializedDistance;
+                bool isNewMoveCostCheaper = stepCosts[neighbour.x, neighbour.y] > neighbourTileMoveCost;
+
+                if(isBlockingTile)
+                    continue;
 
                 if (isDistanceUninitialized || isNewMoveCostCheaper)
                 {
-                    travelDistancesFromStart[neighbour.x, neighbour.y] = neighbourTileMoveCost;
+                    stepCosts[neighbour.x, neighbour.y] = neighbourTileMoveCost;
                 }
             }
         }
 
         LinkedList<GridCoord> tilesWithinSteps = new LinkedList<GridCoord>();
-        
+
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if(travelDistancesFromStart[x, y] == UninitializedDistance)
+                if (stepCosts[x, y] == UninitializedDistance)
                     continue;
-                if(travelDistancesFromStart[x, y] > steps)
+                if(stepCosts[x, y] == TileIsBeingBlocked)
                     continue;
+                if (stepCosts[x, y] > steps)
+                    continue;
+                
                 tilesWithinSteps.AddLast(new GridCoord(x, y));
             }
         }
-        
+
         return tilesWithinSteps;
     }
-    
+
+
+
     public static List<GridCoord> GetStuffInArea(GridCoord start, int steps, PathfindingOptions options)
     {
-        LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps,options.pathBlockers);
-        if (!options.canTargetSelf) 
+        LinkedList<GridCoord> tilesWithinSteps = GetTilesWithinSteps(start, steps, options.pathBlockers);
+
+        if (!options.canTargetSelf)
             tilesWithinSteps.Remove(start);
+
         LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, options.targetType);
 
         List<GridCoord> resultAsList = new List<GridCoord>(filteredByType);
-        
+
         return resultAsList;
     }
 
-    private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
-    {
-        if (type == TargetType.AnyTile) 
-            return initial;
-        else if (type == TargetType.Ally || type == TargetType.Foe || type == TargetType.AnyHero)
-            return FilterHeroesInTiles(initial, type);
-        else // if (type == TargetType.EmptyTile)
-            return FilterEmptyTiles(initial);
-    }
-    
-    private static LinkedList<GridCoord> GetTraversableNeighboursTiles(GridCoord coord, PathBlocker blocker)
+
+    private static LinkedList<GridCoord> GetTraversableNeighboursTiles(GridCoord coord, int[,] stepCosts)//PathBlocker blocker)
     {
         LinkedList<GridCoord> walkableNeighbours = new LinkedList<GridCoord>();
 
@@ -249,93 +254,74 @@ public static partial class BattleGridModelData
         GridCoord topCoord = coord + GridCoord.Up;
         GridCoord bottomCoord = coord + GridCoord.Down;
 
-        if (IsTileTraversable(leftCoord, blocker))
+        if (IsTileInBounds(leftCoord) && stepCosts[leftCoord.x, leftCoord.y] != TileIsBeingBlocked)//IsTileTraversable(leftCoord, blocker))
         {
             walkableNeighbours.AddLast(leftCoord);
         }
 
-        if (IsTileTraversable(bottomCoord, blocker))
+        if (IsTileInBounds(bottomCoord) && stepCosts[bottomCoord.x, bottomCoord.y] != TileIsBeingBlocked)//IsTileTraversable(bottomCoord, blocker))
         {
             walkableNeighbours.AddLast(bottomCoord);
         }
 
-        if (IsTileTraversable(rightCoord, blocker))
+        if (IsTileInBounds(rightCoord) && stepCosts[rightCoord.x, rightCoord.y] != TileIsBeingBlocked)//IsTileTraversable(rightCoord, blocker))
         {
             walkableNeighbours.AddLast(rightCoord);
         }
 
-        if (IsTileTraversable(topCoord, blocker))
+        if (IsTileInBounds(topCoord) && stepCosts[topCoord.x, topCoord.y] != TileIsBeingBlocked)//IsTileTraversable(topCoord, blocker))
         {
             walkableNeighbours.AddLast(topCoord);
         }
 
+        UnityEngine.Debug.Log("walkableNeighbours == " + walkableNeighbours.Count);
+
         return walkableNeighbours;
     }
 
-    private static LinkedList<GridCoord> FilterHeroesInTiles(LinkedList<GridCoord> tiles, TargetType type)
-    {
-        LinkedList<GridCoord> result = new LinkedList<GridCoord>();
-        foreach (Hero h in heroes)
-        {
-            if (type == TargetType.AnyHero)
-            {
-                if (tiles.Contains(h.coord))
-                {
-                    result.AddLast(h.coord);
-                }    
-            }
-            else if (type == TargetType.Foe)
-            {
-                if (!h.isAlly && tiles.Contains(h.coord))
-                {
-                    result.AddLast(h.coord);
-                }
-            }
-            else if (type == TargetType.Ally)
-            {
-                 if (h.isAlly && tiles.Contains(h.coord))
-                 {
-                     result.AddLast(h.coord);
-                 }   
-            }
-        }
 
-        return result;
-    }
-    
-    private static bool IsTileTraversable(GridCoord coord, PathBlocker blocker)
+    private static bool IsTileInBounds(GridCoord coord)
     {
-        bool isTileInBounds;
+        bool inBoundsX = coord.x >= 0 && coord.x < gridSizeX;
+        bool inBoundsY = coord.y >= 0 && coord.y < gridSizeY;
+        bool isTileInBounds = inBoundsX && inBoundsY;
+
+        return isTileInBounds;
+    }
+
+    private static bool IsTileBlocked(GridCoord coord, PathBlocker blocker)
+    {
+        //bool isTileInBounds;
         bool isTileWalkable;
         bool isTileEmpty;
         bool isTileBlockedByFoe;
         bool isTileBlockedByAlly;
-        
-        bool inBoundsX = coord.x >= 0 && coord.x < gridSizeX;
-        bool inBoundsY = coord.y >= 0 && coord.y < gridSizeY;
-        isTileInBounds = inBoundsX && inBoundsY;
 
-        if (!isTileInBounds) 
-            return false;
+        // bool inBoundsX = coord.x >= 0 && coord.x < gridSizeX;
+        // bool inBoundsY = coord.y >= 0 && coord.y < gridSizeY;
+        // isTileInBounds = inBoundsX && inBoundsY;
+
+        // if (!isTileInBounds)
+        //     return false;
 
         if ((blocker & PathBlocker.Terrain) != 0)
             isTileWalkable = battleGridTiles[coord.x, coord.y].isWalkable;
         else
             isTileWalkable = true;
-        
+
         if (!isTileWalkable)
-            return false;
+            return true;
 
         if ((blocker & (PathBlocker.Ally | PathBlocker.Foe)) == 0)
         {
-            return true;
+            return false;
         }
-        
+
         Hero hero = GetHeroAtCoord(coord);
         isTileEmpty = (hero == null);
 
-        if (isTileEmpty) 
-            return true;
+        if (isTileEmpty)
+            return false;
 
         isTileBlockedByAlly = false;
         isTileBlockedByFoe = false;
@@ -351,13 +337,61 @@ public static partial class BattleGridModelData
         }
 
         if (isTileBlockedByAlly)
-            return false;
+            return true;
         if (isTileBlockedByFoe)
-            return false;
-        
-        return true;
+            return true;
+
+        return false;
     }
- 
+
+    public static int GetDistance(GridCoord start, GridCoord end)
+    {
+        GridCoord dif = end - start;
+        return Math.Abs(dif.x) + Math.Abs(dif.y);
+    }
+
+
+    private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
+    {
+        if (type == TargetType.AnyTile)
+            return initial;
+        else if (type == TargetType.Ally || type == TargetType.Foe || type == TargetType.AnyHero)
+            return FilterHeroesInTiles(initial, type);
+        else // if (type == TargetType.EmptyTile)
+            return FilterEmptyTiles(initial);
+    }
+
+    private static LinkedList<GridCoord> FilterHeroesInTiles(LinkedList<GridCoord> tiles, TargetType type)
+    {
+        LinkedList<GridCoord> result = new LinkedList<GridCoord>();
+        foreach (Hero h in heroes)
+        {
+            if (type == TargetType.AnyHero)
+            {
+                if (tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }
+            }
+            else if (type == TargetType.Foe)
+            {
+                if (!h.isAlly && tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }
+            }
+            else if (type == TargetType.Ally)
+            {
+                if (h.isAlly && tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }
+            }
+        }
+
+        return result;
+    }
+
     private static LinkedList<GridCoord> FilterEmptyTiles(LinkedList<GridCoord> tiles)
     {
         foreach (Hero h in heroes)
@@ -370,14 +404,23 @@ public static partial class BattleGridModelData
 
         return tiles;
     }
-    
+
 }
+
+
+// public class PathfindingSOmethingSomething
+// {
+//     public LinkedList<GridCoord> visitedTiles = new LinkedList<GridCoord>();
+//     public LinkedList<GridCoord> neighbourTiles = new LinkedList<GridCoord>();
+
+//     public int[,] travelDistancesFromStart = new int[gridSizeX, gridSizeY];
+// }
 
 public enum TargetType
 {
     None,
     Ally,
-    Foe, 
+    Foe,
     AnyHero,
     EmptyTile,
     AnyTile
@@ -386,10 +429,10 @@ public enum TargetType
 [Flags]
 public enum PathBlocker // todo 
 {
-    None     = 0, 
-    Ally     = 1 << 0,
-    Foe      = 1 << 1,
-    Terrain  = 1 << 2
+    None = 0,
+    Ally = 1 << 0,
+    Foe = 1 << 1,
+    Terrain = 1 << 2
 }
 public class PathfindingOptions
 {
