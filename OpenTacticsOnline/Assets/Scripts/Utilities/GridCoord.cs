@@ -1,3 +1,5 @@
+using System;
+
 public struct GridCoord
 {
     public int x;
@@ -63,6 +65,12 @@ public struct GridCoord
     public override int GetHashCode()
     {
         return x.GetHashCode() ^ (y.GetHashCode() << 2);
+    }
+
+    public static int CardinalDistance(GridCoord start, GridCoord end)
+    {
+        GridCoord dif = end - start;
+        return Math.Abs(dif.x) + Math.Abs(dif.y);
     }
 
 }

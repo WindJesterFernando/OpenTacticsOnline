@@ -8,8 +8,6 @@ public static partial class BattleGridModelData
     
     private static LinkedList<Hero> allyHeroes;
     private static LinkedList<Hero> foeHeroes;
-    
-    private static GridCoord EmptyVector2Int = new GridCoord(-99, -99);
 
     public static void Init()
     {

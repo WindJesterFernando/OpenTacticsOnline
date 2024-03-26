@@ -18,10 +18,8 @@ public class MoveTurnAction : TurnAction
     public override void EnqueueVisualSequence(GridCoord target)
     {
         GridCoord start = owner.coord;
-        Debug.Log("hit 1, target == " + target);
         
-        List<GridCoord> path = BattleGridModelData.DoTheAStarThingMyGuy(start, target, owner.isAlly);
-        Debug.Log("hit 2, path count == " + path.Count);
+        List<GridCoord> path = BattleGridModelData.FindShortestPath(start, target, owner.isAlly);
         GameObject[,] bgVisuals = GridVisuals.GetTileVisuals();
 
         Vector3 startPos = bgVisuals[start.x, start.y].transform.position;
