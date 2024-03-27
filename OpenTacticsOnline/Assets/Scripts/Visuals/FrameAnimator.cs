@@ -49,47 +49,6 @@ public class FrameAnimator : MonoBehaviour
             timeUntilNextFrame = animationFrames[currentFrame].time;
             spriteRenderer.sprite = animationFrames[currentFrame].sprite;
         }
-
-        #region Animation Debug
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartAnimation(AnimationKey.Idle);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            StartAnimation(AnimationKey.Walking);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            StartAnimation(AnimationKey.Casting, true);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            StartAnimation(AnimationKey.Blocking, true);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            StartAnimation(AnimationKey.Attacking, true);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            StartAnimation(AnimationKey.Falling, true);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            StartAnimation(AnimationKey.KnockedOut);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            StartAnimation(AnimationKey.Hurt);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            StartAnimation(AnimationKey.DanceChoreography);
-        }
-
-        #endregion
     }
 
     public void StartAnimation(AnimationKey key, bool returnToIdleAfterCompletion = false)

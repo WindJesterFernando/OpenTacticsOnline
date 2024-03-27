@@ -195,17 +195,14 @@ public static partial class BattleGridModelData
         return tilesWithinSteps;
     }
 
-
-
-
-    public static List<GridCoord> GetStuffInArea(GridCoord start, int steps, PathfindingOptions options)
+    public static List<GridCoord> FindTargetsWithinSteps(GridCoord start, int steps, TargetingOptions targetingOptions)
     {
-        LinkedList<GridCoord> tilesWithinSteps = FindTilesWithinSteps(start, steps, options.pathBlockers);
+        LinkedList<GridCoord> tilesWithinSteps = FindTilesWithinSteps(start, steps, targetingOptions.pathBlockers);
 
-        if (!options.canTargetSelf)
+        if (!targetingOptions.canTargetSelf)
             tilesWithinSteps.Remove(start);
 
-        LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, options.targetType);
+        LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, targetingOptions.targetType);
 
         List<GridCoord> resultAsList = new List<GridCoord>(filteredByType);
 
@@ -302,9 +299,6 @@ public static partial class BattleGridModelData
 
 
 
-
-
-
     private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
     {
         if (type == TargetType.AnyTile)
@@ -383,21 +377,21 @@ public enum PathBlocker
     Terrain = 1 << 2
 }
 
-public class PathfindingOptions
+public class TargetingOptions
 {
     public bool canTargetSelf;
     public TargetType targetType;
     public PathBlocker pathBlockers;
     // public bool needLineOfSight;
 
-    public PathfindingOptions(bool canTargetSelf, TargetType targetType, PathBlocker pathBlockers)
+    public TargetingOptions(bool canTargetSelf, TargetType targetType, PathBlocker pathBlockers)
     {
         this.canTargetSelf = canTargetSelf;
         this.targetType = targetType;
         this.pathBlockers = pathBlockers;
     }
 
-    public PathfindingOptions()
+    public TargetingOptions()
     {
         canTargetSelf = true;
         targetType = TargetType.None;

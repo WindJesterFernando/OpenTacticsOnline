@@ -4,14 +4,14 @@ public abstract class TurnAction
     public Hero owner;
     public string name;
     public int steps;
-    public PathfindingOptions pathfindingOptions;
+    public TargetingOptions targetingOptions;
 
-    protected TurnAction(Hero owner, string name, int steps, PathfindingOptions pathfindingOptions)
+    protected TurnAction(Hero owner, string name, int steps, TargetingOptions targetingOptions)
     {
         this.owner = owner;
         this.name = name;
         this.steps = steps;
-        this.pathfindingOptions = pathfindingOptions;
+        this.targetingOptions = targetingOptions;
     }
     public abstract void ApplyEffectToModelData(GridCoord target);
     public abstract void EnqueueVisualSequence(GridCoord target);

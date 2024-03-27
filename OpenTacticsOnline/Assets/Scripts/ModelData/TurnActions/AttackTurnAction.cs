@@ -2,7 +2,7 @@
 public class AttackTurnAction : TurnAction
 {
     public AttackTurnAction(Hero owner, int range = 1, string name = "Attack") : base(owner, name, range,
-        new PathfindingOptions(false, TargetType.Foe, PathBlocker.Terrain))
+        new TargetingOptions(false, TargetType.Foe, PathBlocker.Terrain))
     {
     }
     

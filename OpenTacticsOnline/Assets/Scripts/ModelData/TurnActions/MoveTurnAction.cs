@@ -4,7 +4,7 @@ using UnityEngine;
 public class MoveTurnAction : TurnAction
 {
     public MoveTurnAction(Hero owner) : base(owner, "Move", owner.maxSteps,
-        new PathfindingOptions(false, TargetType.EmptyTile, PathBlocker.Foe | PathBlocker.Terrain))
+        new TargetingOptions(false, TargetType.EmptyTile, PathBlocker.Foe | PathBlocker.Terrain))
     {
     }
     

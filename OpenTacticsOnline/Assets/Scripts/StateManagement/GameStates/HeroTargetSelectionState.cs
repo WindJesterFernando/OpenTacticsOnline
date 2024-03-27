@@ -15,7 +15,7 @@ public class HeroTargetSelectionState : AbstractGameState
     public override void OnStateEnter()
     {
         tilesThatCanBeMovedTo = new List<GridCoord>(
-            BattleGridModelData.GetStuffInArea(turnAction.owner.coord, turnAction.steps, turnAction.pathfindingOptions));
+            BattleGridModelData.FindTargetsWithinSteps(turnAction.owner.coord, turnAction.steps, turnAction.targetingOptions));
 
         if (tilesThatCanBeMovedTo.Count == 0)
         {
