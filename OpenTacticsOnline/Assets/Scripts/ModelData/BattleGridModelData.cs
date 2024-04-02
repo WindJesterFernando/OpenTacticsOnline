@@ -85,6 +85,7 @@ public static partial class BattleGridModelData
         foeHeroes = new LinkedList<Hero>();
 
         Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, true);
+        h.currentHealth = 0;
         heroes.AddLast(h);
         
         h = new Hero(3, 2, HeroRole.RedMage, 6, 20, true);
@@ -97,6 +98,7 @@ public static partial class BattleGridModelData
         heroes.AddLast(h);
         
         h = new Hero(15, 6, HeroRole.Monk, 8, 20, false);
+        h.currentHealth = 0;
         heroes.AddLast(h);
         
         h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);

@@ -9,6 +9,8 @@ public static class UIManager
     private static Button[] actionButtons;
 
     private static Image[] turnOrderImages;
+    private static readonly Vector3 ActiveHeroScale = new Vector3(1.25f, 1.25f, 1.25f);
+    private const float KnockedOutHeroAlpha = 0.3f;
 
     public static void Init(GameObject battleCanvas)
     {
@@ -56,9 +58,30 @@ public static class UIManager
             turnOrderImages[i].sprite = heroSpriteRenderer.sprite;
             turnOrderImages[i].color = heroSpriteRenderer.color;
         }
+        SetActiveHero(0);
+    }
+
+    public static void SetActiveHero(int index)
+    {
+        foreach (Image image in turnOrderImages)
+        {
+            image.transform.localScale = Vector3.one;
+        }
+
+        turnOrderImages[index].transform.localScale = ActiveHeroScale;
+    }
+
+    public static void FadeOutKnockedOutHero(Hero[] heroes)
+    {
+        for (int i = 0; i < heroes.Length; i++)
+        {
+            Hero hero = heroes[i];
+            Color color = turnOrderImages[i].color;
+            color.a = hero.IsAlive() ? 1 : KnockedOutHeroAlpha;
+            turnOrderImages[i].color = color;
+        }
     }
     
-
     public static void DisableTurnOrder()
     {
         foreach (Image image in turnOrderImages)

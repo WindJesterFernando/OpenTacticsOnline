@@ -27,7 +27,7 @@ public class MainBattleState : AbstractGameState
 
         if (!nextHero.IsAlive())
         {
-            nextHero.visualRepresentation.GetComponent<SpriteRenderer>().color = Color.black;
+            nextHero.visualRepresentation.GetComponent<FrameAnimator>().StartAnimation(AnimationKey.KnockedOut);
             
             BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
             return;

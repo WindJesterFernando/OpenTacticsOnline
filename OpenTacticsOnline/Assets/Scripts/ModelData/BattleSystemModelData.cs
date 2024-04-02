@@ -63,6 +63,8 @@ public static class BattleSystemModelData
         if (currentHeroTurnIndex > turnOrder.Length - 1)
             currentHeroTurnIndex = 0;
         // change ui state here???
+        UIManager.SetActiveHero(currentHeroTurnIndex);
+        UIManager.FadeOutKnockedOutHero(turnOrder);
     }
 }
 
