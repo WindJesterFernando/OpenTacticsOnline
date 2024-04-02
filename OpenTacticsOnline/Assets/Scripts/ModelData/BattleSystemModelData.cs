@@ -64,7 +64,7 @@ public static class BattleSystemModelData
             currentHeroTurnIndex = 0;
         // change ui state here???
         UIManager.SetActiveHero(currentHeroTurnIndex);
-        UIManager.FadeOutKnockedOutHero(turnOrder);
+        UIManager.RefreshHeroHealthState(turnOrder);
     }
 }
 

@@ -21,9 +21,10 @@ public class Hero
     public int maxSteps;
     public UnityEngine.GameObject visualRepresentation;
     
-    public int currentHealth;
-    public int maxHealth;
+    public int currentHealth { get; private set; }
     
+    public int maxHealth;
+
     public bool isAlly;
     public List<TurnAction> actions;
 
@@ -69,6 +70,16 @@ public class Hero
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    public void ModifyHealth(int deltaHealth)
+    {
+        currentHealth += deltaHealth;
+        if (currentHealth < 0)
+            currentHealth = 0;
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+        
     }
 }
 

@@ -8,7 +8,8 @@ public static class UIManager
     private static GameObject battleUICanvas;
     private static Button[] actionButtons;
 
-    private static Image[] turnOrderImages;
+    private static List<Image> turnOrderImages;
+    private static List<Slider> heroHealthBars;
     private static readonly Vector3 ActiveHeroScale = new Vector3(1.25f, 1.25f, 1.25f);
     private const float KnockedOutHeroAlpha = 0.3f;
 
@@ -20,8 +21,14 @@ public static class UIManager
         actionButtons = buttonsLayoutGroup.GetComponentsInChildren<Button>();
         DisableButtons();
 
+        turnOrderImages = new List<Image>();
+        heroHealthBars = new List<Slider>();
         Transform turnOrderHorizontalLayout = battleUICanvas.transform.Find("TurnOrderHorizontalLayout");
-        turnOrderImages = turnOrderHorizontalLayout.GetComponentsInChildren<Image>();
+        foreach (Transform child in turnOrderHorizontalLayout.transform)
+        {
+            turnOrderImages.Add(child.GetComponent<Image>());
+            heroHealthBars.Add(child.GetComponentInChildren<Slider>());
+        }
         DisableTurnOrder();
     }
 
@@ -57,8 +64,10 @@ public static class UIManager
             turnOrderImages[i].gameObject.SetActive(true);
             turnOrderImages[i].sprite = heroSpriteRenderer.sprite;
             turnOrderImages[i].color = heroSpriteRenderer.color;
+            heroHealthBars[i].maxValue = hero.maxHealth;
         }
         SetActiveHero(0);
+        RefreshHeroHealthState(heroesTurnOrder);
     }
 
     public static void SetActiveHero(int index)
@@ -71,7 +80,7 @@ public static class UIManager
         turnOrderImages[index].transform.localScale = ActiveHeroScale;
     }
 
-    public static void FadeOutKnockedOutHero(Hero[] heroes)
+    public static void RefreshHeroHealthState(Hero[] heroes)
     {
         for (int i = 0; i < heroes.Length; i++)
         {
@@ -79,6 +88,7 @@ public static class UIManager
             Color color = turnOrderImages[i].color;
             color.a = hero.IsAlive() ? 1 : KnockedOutHeroAlpha;
             turnOrderImages[i].color = color;
+            heroHealthBars[i].value = hero.currentHealth;
         }
     }
     
