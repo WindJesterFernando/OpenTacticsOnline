@@ -48,6 +48,7 @@ public static class BattleSystemModelData
         
         #endregion
         
+        UIManager.EnableTurnOrder(turnOrder);
     }
 
     public static Hero GetActiveHero()
@@ -61,6 +62,7 @@ public static class BattleSystemModelData
 
         if (currentHeroTurnIndex > turnOrder.Length - 1)
             currentHeroTurnIndex = 0;
+        // change ui state here???
     }
 }
 
