@@ -83,25 +83,33 @@ public static partial class BattleGridModelData
         heroes = new LinkedList<Hero>();
         allyHeroes = new LinkedList<Hero>();
         foeHeroes = new LinkedList<Hero>();
+        AIContoller aiContoller = new AIContoller();
+        LocalPlayerController localPlayerController = new LocalPlayerController();
 
         Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, true);
+        h.controller = localPlayerController;
         h.ModifyHealth(-20);
         heroes.AddLast(h);
         
         h = new Hero(3, 2, HeroRole.RedMage, 6, 20, true);
+        h.controller = localPlayerController;
         heroes.AddLast(h);
         
         h = new Hero(3, 3, HeroRole.WhiteMage, 6, 20, true);
+        h.controller = localPlayerController; 
         heroes.AddLast(h);
 
         h = new Hero(15, 7, HeroRole.Fighter, 8,20, false);
+        h.controller = aiContoller;
         heroes.AddLast(h);
         
         h = new Hero(15, 6, HeroRole.Monk, 8, 20, false);
+        h.controller = aiContoller;
         h.ModifyHealth(-20);
         heroes.AddLast(h);
         
         h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);
+        h.controller = aiContoller;
         heroes.AddLast(h);
         
         

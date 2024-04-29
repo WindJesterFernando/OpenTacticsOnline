@@ -368,7 +368,7 @@ public enum TargetType
     AnyTile
 }
 
-//[Flags]
+[Flags]
 public enum PathBlocker : byte
 {
     None = 0,

@@ -20,6 +20,8 @@ public class Hero
     public HeroRole role;
     public int maxSteps;
     public UnityEngine.GameObject visualRepresentation;
+
+    public AbstractController controller;
     
     public int currentHealth { get; private set; }
     
@@ -80,6 +82,11 @@ public class Hero
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
         
+    }
+
+    public void DoTurn()
+    {
+        controller.DoTurn(this);
     }
 }
 

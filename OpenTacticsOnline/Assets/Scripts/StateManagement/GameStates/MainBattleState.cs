@@ -34,58 +34,9 @@ public class MainBattleState : AbstractGameState
         }
         
         if (CheckBattleEndConditions()) 
-            return; 
+            return;
 
-        if (nextHero.isAlly)
-        {
-            StateManager.PushGameState(new SelectActionUIState(nextHero));
-            // StateManager.PushGameState(new HeroMoveSeletionState(nextHero));
-        }
-        else
-        {
-            List<GridCoord> nearTiles =
-                BattleGridModelData.FindTargetsWithinSteps(nextHero.coord, nextHero.maxSteps,
-                    new TargetingOptions(false, TargetType.EmptyTile,
-                        PathBlocker.Ally | PathBlocker.Terrain));
-
-            if (nearTiles.Count == 0)
-            {
-                BattleSystemModelData.AdvanceCurrentHeroTurnIndex();
-                return;
-            }
-            
-            int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
-            GridCoord randomGridCoord = nearTiles[randomIndex];
-
-            StateManager.PushGameState(new HeroTurnActionState(new MoveTurnAction(nextHero), randomGridCoord));
-            // StateManager.PushGameState(new HeroMovementState(nextHero, randomGridCoord));
-            nextHero.coord = randomGridCoord;
-        }
-        
-        
-        
-        /* Mouse click on hero
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //     
-        //     GameObject[,] tileVisuals = GridVisuals.GetTileVisuals();
-        //
-        //     foreach (Hero h in BattleGridModelData.GetHeroes())
-        //     {
-        //         GameObject bgt = tileVisuals[h.coord.x, h.coord.y];
-        //         Bounds b = bgt.GetComponent<SpriteRenderer>().bounds;
-        //
-        //         mouseWorldPoint.z = b.center.z;
-        //
-        //         if (b.Contains(mouseWorldPoint))
-        //         {
-        //             Debug.Log("Tile Hit @ " + h.coord);
-        //             StateManager.PushGameState(new HeroMoveSeletionState(h));
-        //         }
-        //     }
-        // }
-        */
+        nextHero.DoTurn();
     }
 
     private static bool CheckBattleEndConditions()
