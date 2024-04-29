@@ -5,6 +5,7 @@ public class AttackTurnAction : TurnAction
     public AttackTurnAction(Hero owner, int range = 1, string name = "Attack") : base(owner, name, range,
         new TargetingOptions(false, TargetType.Foe, PathBlocker.Terrain))
     {
+        
     }
     
     public override void ApplyEffectToModelData(GridCoord target)

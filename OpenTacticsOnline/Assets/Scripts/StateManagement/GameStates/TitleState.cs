@@ -15,7 +15,7 @@ public class TitleState : AbstractGameState
     
     public override void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(MouseButton.Left))
         {
             StateManager.PushGameState(new MainBattleState());
         }

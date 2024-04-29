@@ -368,13 +368,14 @@ public enum TargetType
     AnyTile
 }
 
-[Flags]
-public enum PathBlocker
+//[Flags]
+public enum PathBlocker : byte
 {
     None = 0,
-    Ally = 1 << 0,
-    Foe = 1 << 1,
-    Terrain = 1 << 2
+    Ally = 1 << 0, //0001
+    Foe = 1 << 1, //0010
+    Terrain = 1 << 2 //0100
+
 }
 
 public class TargetingOptions
@@ -398,3 +399,5 @@ public class TargetingOptions
         pathBlockers = PathBlocker.None;
     }
 }
+
+
