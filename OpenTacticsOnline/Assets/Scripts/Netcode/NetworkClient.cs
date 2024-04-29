@@ -11,7 +11,7 @@ public class NetworkClient : MonoBehaviour
     NetworkPipeline reliableAndInOrderPipeline;
     NetworkPipeline nonReliableNotInOrderedPipeline;
     const ushort NetworkPort = 9001;
-    const string IPAddress = "192.168.2.41";
+    const string IPAddress = "10.8.48.131";
 
     void Start()
     {
@@ -37,6 +37,10 @@ public class NetworkClient : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            SendMessageToServer("jslkdf client;", TransportPipeline.ReliableAndInOrder);
+        }
         networkDriver.ScheduleUpdate().Complete();
 
         #region Check for client to server connection

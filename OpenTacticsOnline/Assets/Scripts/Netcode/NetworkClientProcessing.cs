@@ -10,7 +10,8 @@ public static class NetworkClientProcessing
 
         string[] csv = msg.Split(',');
         int signifier = int.Parse(csv[0]);
-
+        
+        
         // if (signifier == ServerToClientSignifiers.asd)
         // {
 
