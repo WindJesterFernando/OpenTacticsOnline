@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class NetworkServerProcessing
@@ -15,7 +13,7 @@ public static class NetworkServerProcessing
         gameLogic.MessageGot(clientConnectionID, signifier, msg);
 
     }
-    public static void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline)
+    public static void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
     {
         networkServer.SendMessageToClient(msg, clientConnectionID, pipeline);
     }
@@ -24,12 +22,12 @@ public static class NetworkServerProcessing
 
     #region Connection Events
 
-    static public void ConnectionEvent(int clientConnectionID)
+    public static void ConnectionEvent(int clientConnectionID)
     {
         Debug.Log("Client connection, ID == " + clientConnectionID);
         gameLogic.ClientConnected(clientConnectionID);
     }
-    static public void DisconnectionEvent(int clientConnectionID)
+    public static void DisconnectionEvent(int clientConnectionID)
     {
         Debug.Log("Client disconnection, ID == " + clientConnectionID);
         gameLogic.ClientDisconnected(clientConnectionID);
@@ -41,32 +39,19 @@ public static class NetworkServerProcessing
     static NetworkServer networkServer;
     static GameLogic gameLogic;
 
-    static public void SetNetworkServer(NetworkServer NetworkServer)
+    public static void SetNetworkServer(NetworkServer NetworkServer)
     {
         networkServer = NetworkServer;
     }
-    static public NetworkServer GetNetworkServer()
+    public static NetworkServer GetNetworkServer()
     {
         return networkServer;
     }
-    static public void SetGameLogic(GameLogic GameLogic)
+    public static void SetGameLogic(GameLogic GameLogic)
     {
         gameLogic = GameLogic;
     }
 
     #endregion
 }
-
-#region Protocol Signifiers
-static public class ClientToServerSignifiers
-{
-    public const int CreateRoom = 1;
-}
-
-static public class ServerToClientSignifiers
-{
-    public const int asd = 1;
-}
-
-#endregion
 

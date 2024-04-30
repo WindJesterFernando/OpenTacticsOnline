@@ -183,7 +183,6 @@ public static partial class BattleGridModelData
 
         return null;
     }
-    
 }
 
 public struct BattleGridTile

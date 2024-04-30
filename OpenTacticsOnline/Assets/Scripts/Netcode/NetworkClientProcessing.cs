@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class NetworkClientProcessing
 {
@@ -7,15 +9,16 @@ public static class NetworkClientProcessing
     public static void ReceivedMessageFromServer(string msg, TransportPipeline pipeline)
     {
         Debug.Log("Network msg received =  " + msg + ", from pipeline = " + pipeline);
-
-        string[] csv = msg.Split(',');
-        int signifier = int.Parse(csv[0]);
-
-
-        if (signifier == 1)
-        {
-            Camera.main.backgroundColor = new Color(Random.value, Random.value, Random.value, 1);
-        }
+        onMessageReceived.Invoke(msg);
+        //
+        // string[] csv = msg.Split(',');
+        // int signifier = int.Parse(csv[0]);
+        //
+        //
+        // if (signifier == 1)
+        // {
+        //     Camera.main.backgroundColor = new Color(Random.value, Random.value, Random.value, 1);
+        // }
        
     }
 
@@ -52,7 +55,9 @@ public static class NetworkClientProcessing
 
     #region Setup
     static NetworkClient networkClient;
-    static MainSystemBooter mainSystemBooter;
+
+    public static Action<string> onMessageReceived;
+    // static MainSystemBooter mainSystemBooter;
 
     public static void SetNetworkedClient(NetworkClient NetworkClient)
     {
@@ -62,25 +67,12 @@ public static class NetworkClientProcessing
     {
         return networkClient;
     }
-    public static void SetMainSystemBooter(MainSystemBooter mainSystemBooter)
-    {
-        NetworkClientProcessing.mainSystemBooter = mainSystemBooter;  
-    }
+    // public static void SetMainSystemBooter(MainSystemBooter mainSystemBooter)
+    // {
+    //     
+    //     NetworkClientProcessing.mainSystemBooter = mainSystemBooter;  
+    // }
 
     #endregion
 
 }
-
-#region Protocol Signifiers
-public static class ClientToServerSignifiers
-{
-    public const int asd = 1;
-}
-
-public static class ServerToClientSignifiers
-{
-    public const int asd = 1;
-}
-
-#endregion
-

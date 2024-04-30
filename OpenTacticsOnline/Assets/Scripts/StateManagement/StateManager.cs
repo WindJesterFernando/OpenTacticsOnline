@@ -53,7 +53,8 @@ public enum GameState
     PerformingAction,
     GameResults,
     SelectActionUI,
-    
+    GameRoom,
+    LocalRoom,
     // Inventory,
     // Equiping,
 }

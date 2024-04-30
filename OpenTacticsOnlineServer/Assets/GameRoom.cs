@@ -14,6 +14,7 @@ public class GameRoom
     {
         _player1 = player1;
         // send you joined 
+        NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.SelfJoinedRoom},0", _player1);
         Debug.Log("new room created");
         Debug.Log("First player joined the room");
     }
@@ -24,6 +25,10 @@ public class GameRoom
         {
             _player2 = player2; 
             Debug.Log("Second player joined the room");
+            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.SelfJoinedRoom},1", _player2);
+            
+            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled}", _player1);
+            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled}", _player2);
         }
         // send you joined 
     }
