@@ -25,6 +25,7 @@ public class MainSystemBooter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             NetworkClientProcessing.SendMessageToServer($"{ClientToServerSignifiers.Disconnect}");
+            StateManager.PopGameStateUntilStateIs(GameState.Title);
             Destroy(NetworkClientProcessing.GetNetworkedClient());
         }
     }
