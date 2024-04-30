@@ -22,7 +22,7 @@ public static class NetworkClientProcessing
        
     }
 
-    public static void SendMessageToServer(string msg, TransportPipeline pipeline)
+    public static void SendMessageToServer(string msg, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
     {
         networkClient.SendMessageToServer(msg, pipeline);
     }

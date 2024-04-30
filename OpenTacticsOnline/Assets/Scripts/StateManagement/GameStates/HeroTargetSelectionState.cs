@@ -37,6 +37,9 @@ public class HeroTargetSelectionState : AbstractGameState
 
             if (coord.HasValue && tilesThatCanBeMovedTo.Contains(coord.Value))
             {
+                // Send data
+                SendAction(coord.Value);
+
                 StateManager.PushGameState(new HeroTurnActionState(turnAction, coord.Value));
             }
             else
@@ -75,5 +78,22 @@ public class HeroTargetSelectionState : AbstractGameState
         }
 
         return null;
+    }
+
+    private void SendAction(GridCoord target)
+    {
+        List<TurnAction> turnActions = turnAction.owner.actions;
+        int turnActionIndex = -1;
+        for (int i = 0; i < turnActions.Count; i++)
+        {
+            if (turnActions[i] == turnAction)
+            {
+                turnActionIndex = i;
+                break;
+            }
+        }
+
+        NetworkClientProcessing.SendMessageToServer($"{ClientToServerSignifiers.ActionUsed},{turnActionIndex},{target.x},{target.y}");
+
     }
 }
