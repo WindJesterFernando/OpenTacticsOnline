@@ -83,46 +83,47 @@ public static partial class BattleGridModelData
         heroes = new LinkedList<Hero>();
         allyHeroes = new LinkedList<Hero>();
         foeHeroes = new LinkedList<Hero>();
-        AIContoller aiContoller = new AIContoller();
-        LocalPlayerController localPlayerController = new LocalPlayerController();
+        //AIContoller aiContoller = new AIContoller();
+        //LocalPlayerController localPlayerController = new LocalPlayerController();
 
-        Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, true);
-        h.controller = localPlayerController;
-        h.ModifyHealth(-20);
-        heroes.AddLast(h);
-        
-        h = new Hero(3, 2, HeroRole.RedMage, 6, 20, true);
-        h.controller = localPlayerController;
-        heroes.AddLast(h);
-        
-        h = new Hero(3, 3, HeroRole.WhiteMage, 6, 20, true);
-        h.controller = localPlayerController; 
-        heroes.AddLast(h);
+        //Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, true);
+        //h.controller = localPlayerController;
+        //h.ModifyHealth(-20);
+        //heroes.AddLast(h);
 
-        h = new Hero(15, 7, HeroRole.Fighter, 8,20, false);
-        h.controller = aiContoller;
-        heroes.AddLast(h);
-        
-        h = new Hero(15, 6, HeroRole.Monk, 8, 20, false);
-        h.controller = aiContoller;
-        h.ModifyHealth(-20);
-        heroes.AddLast(h);
-        
-        h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);
-        h.controller = aiContoller;
-        heroes.AddLast(h);
-        
-        
-        foreach (Hero hero in heroes)
+        //h = new Hero(3, 2, HeroRole.RedMage, 6, 20, true);
+        //h.controller = localPlayerController;
+        //heroes.AddLast(h);
+
+        //h = new Hero(3, 3, HeroRole.WhiteMage, 6, 20, true);
+        //h.controller = localPlayerController;
+        //heroes.AddLast(h);
+
+        //h = new Hero(15, 7, HeroRole.Fighter, 8, 20, false);
+        //h.controller = aiContoller;
+        //heroes.AddLast(h);
+
+        //h = new Hero(15, 6, HeroRole.Monk, 8, 20, false);
+        //h.controller = aiContoller;
+        //h.ModifyHealth(-20);
+        //heroes.AddLast(h);
+
+        //h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);
+        //h.controller = aiContoller;
+        //heroes.AddLast(h);
+
+    }
+
+    public static void AddHero(Hero hero)
+    {
+        heroes.AddLast(hero);
+        if (hero.isAlly)
         {
-            if (hero.isAlly)
-            {
-                allyHeroes.AddLast(hero);
-            }
-            else
-            {
-                foeHeroes.AddLast(hero);
-            }
+            allyHeroes.AddLast(hero);
+        }
+        else
+        {
+            foeHeroes.AddLast(hero);
         }
     }
 

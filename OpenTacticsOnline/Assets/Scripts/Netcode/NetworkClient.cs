@@ -6,14 +6,14 @@ using System.Text;
 
 public class NetworkClient : MonoBehaviour
 {
-    NetworkDriver networkDriver;
-    NetworkConnection networkConnection;
-    NetworkPipeline reliableAndInOrderPipeline;
-    NetworkPipeline nonReliableNotInOrderedPipeline;
-    const ushort NetworkPort = 9001;
-    const string IPAddress = "10.8.48.131";
+    private NetworkDriver networkDriver;
+    private NetworkConnection networkConnection;
+    private NetworkPipeline reliableAndInOrderPipeline;
+    private NetworkPipeline nonReliableNotInOrderedPipeline;
+    private const ushort NetworkPort = 9001;
+    private const string IPAddress = "10.8.80.131";
 
-    void Start()
+    private void Start()
     {
         if (NetworkClientProcessing.GetNetworkedClient() == null)
         {
@@ -23,7 +23,8 @@ public class NetworkClient : MonoBehaviour
         }
         else
         {
-            Debug.Log("Singleton-ish architecture violation detected, investigate where NetworkClient.cs Start() is being called.  Are you creating a second instance of the NetworkClient game object or has NetworkClient.cs been attached to more than one game object?");
+            Debug.Log(
+                "Singleton-ish architecture violation detected, investigate where NetworkClient.cs Start() is being called.  Are you creating a second instance of the NetworkClient game object or has NetworkClient.cs been attached to more than one game object?");
             Destroy(this.gameObject);
         }
     }
@@ -35,12 +36,8 @@ public class NetworkClient : MonoBehaviour
         networkDriver.Dispose();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            SendMessageToServer("1, Msg", TransportPipeline.ReliableAndInOrder);
-        }
         networkDriver.ScheduleUpdate().Complete();
 
         #region Check for client to server connection

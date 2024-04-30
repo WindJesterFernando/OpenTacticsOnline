@@ -7,6 +7,7 @@ public class LocalRoomState : AbstractGameState
     public override void OnStateEnter()
     {
         // Skip this state 
+        BattleGridModelData.Init();
         StateManager.PopGameState();
         StateManager.PushGameState(new MainBattleState());
     }

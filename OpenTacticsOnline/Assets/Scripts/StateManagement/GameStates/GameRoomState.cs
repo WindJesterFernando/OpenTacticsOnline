@@ -37,9 +37,85 @@ public class GameRoomState : AbstractGameState
 
     private void StartGame()
     {
+
+        BattleGridModelData.Init();
+
+        NetworkPlayerController networkPlayerController = new NetworkPlayerController();
+        LocalPlayerController localPlayerController = new LocalPlayerController();
+
+        Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, isFirstPlayer);
+        if (h.isAlly)
+        {
+            h.controller = localPlayerController;
+        }
+        else
+        {
+            h.controller = networkPlayerController;
+        }
+        h.ModifyHealth(-20);
+        BattleGridModelData.AddHero(h);
+
+        h = new Hero(3, 2, HeroRole.RedMage, 6, 20, isFirstPlayer);
+        if (h.isAlly)
+        {
+            h.controller = localPlayerController;
+        }
+        else
+        {
+            h.controller = networkPlayerController;
+        }
+        BattleGridModelData.AddHero(h);
+
+        h = new Hero(3, 3, HeroRole.WhiteMage, 6, 20, isFirstPlayer);
+        if (h.isAlly)
+        {
+            h.controller = localPlayerController;
+        }
+        else
+        {
+            h.controller = networkPlayerController;
+        }
+        BattleGridModelData.AddHero(h);
+
+        h = new Hero(15, 7, HeroRole.Fighter, 8, 20, !isFirstPlayer);
+        if (h.isAlly)
+        {
+            h.controller = localPlayerController;
+        }
+        else
+        {
+            h.controller = networkPlayerController;
+        }
+        BattleGridModelData.AddHero(h);
+
+        h = new Hero(15, 6, HeroRole.Monk, 8, 20, !isFirstPlayer);
+        if (h.isAlly)
+        {
+            h.controller = localPlayerController;
+        }
+        else
+        {
+            h.controller = networkPlayerController;
+        }
+        h.ModifyHealth(-20);
+        BattleGridModelData.AddHero(h);
+
+        h = new Hero(15, 5, HeroRole.Thief, 8, 20, !isFirstPlayer);
+        if (h.isAlly)
+        {
+            h.controller = localPlayerController;
+        }
+        else
+        {
+            h.controller = networkPlayerController;
+        }
+        BattleGridModelData.AddHero(h);
+
         if (isFirstPlayer)
         {
             Camera.main.backgroundColor = Color.red;
+
+
         }
         else
         {

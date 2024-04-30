@@ -10,7 +10,7 @@ public class MainBattleState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        BattleGridModelData.Init();
+        //BattleGridModelData.Init();
         GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
         BattleSystemModelData.RandomlyOrderTurns();
     }
