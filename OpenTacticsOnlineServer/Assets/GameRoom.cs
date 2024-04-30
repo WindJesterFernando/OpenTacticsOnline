@@ -2,7 +2,7 @@
 
 public class GameRoom
 {
-    private const int nonInitializedPlayer = -1;
+    public const int nonInitializedPlayer = -1;
     
     private int _player1 = nonInitializedPlayer;
     private int _player2 = nonInitializedPlayer;
@@ -26,9 +26,11 @@ public class GameRoom
             _player2 = player2; 
             Debug.Log("Second player joined the room");
             NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.SelfJoinedRoom},1", _player2);
-            
-            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled}", _player1);
-            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled}", _player2);
+
+            int seed = new System.Random().Next();
+
+            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled},{seed}", _player1);
+            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled},{seed}", _player2);
         }
         // send you joined 
     }
@@ -50,6 +52,6 @@ public class GameRoom
             return;
         }
         
-        NetworkServerProcessing.SendMessageToClient(msg, playerToSendTo, TransportPipeline.ReliableAndInOrder);
+        NetworkServerProcessing.SendMessageToClient(msg, playerToSendTo);
     }
 }

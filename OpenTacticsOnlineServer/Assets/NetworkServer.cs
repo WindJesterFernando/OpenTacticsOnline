@@ -27,7 +27,10 @@ public class NetworkServer : MonoBehaviour
             idToConnectionLookup = new Dictionary<int, NetworkConnection>();
             connectionToIDLookup = new Dictionary<NetworkConnection, int>();
 
-            networkDriver = NetworkDriver.Create();
+            NetworkSettings n = new NetworkSettings();
+            n.WithNetworkConfigParameters(disconnectTimeoutMS: 10000);
+
+            networkDriver = NetworkDriver.Create(n);
             reliableAndInOrderPipeline = networkDriver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
             nonReliableNotInOrderedPipeline = networkDriver.CreatePipeline(typeof(FragmentationPipelineStage));
             NetworkEndpoint endpoint = NetworkEndpoint.AnyIpv4;
@@ -171,6 +174,16 @@ public class NetworkServer : MonoBehaviour
         networkDriver.EndSend(streamWriter);
 
         buffer.Dispose();
+    }
+
+    public void DisconnectClient(int clientID)
+    {
+        NetworkConnection nc = networkConnections[clientID];
+        int id = connectionToIDLookup[nc];
+        NetworkServerProcessing.DisconnectionEvent(id);
+        idToConnectionLookup.Remove(id);
+        connectionToIDLookup.Remove(nc);
+        networkConnections[clientID] = default(NetworkConnection);
     }
 
 }

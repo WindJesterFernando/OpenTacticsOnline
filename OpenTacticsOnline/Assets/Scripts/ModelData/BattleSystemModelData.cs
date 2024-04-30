@@ -15,7 +15,7 @@ public static class BattleSystemModelData
 
         foreach (Hero h in BattleGridModelData.GetHeroes())
         {
-            HeroAndTurnPriority heroAndTurnPriority = new HeroAndTurnPriority(h, RandomGenerator.random.Next(maxRandomValue));
+            HeroAndTurnPriority heroAndTurnPriority = new HeroAndTurnPriority(h, SyncedRandomGenerator.Next(maxRandomValue));
             unorderedHeroTurnPriorities.AddLast(heroAndTurnPriority);
         }
 

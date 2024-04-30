@@ -15,7 +15,7 @@ public class AIContoller : AbstractController
              return;
          }
          
-         int randomIndex = RandomGenerator.random.Next(nearTiles.Count);
+         int randomIndex = SyncedRandomGenerator.Next(nearTiles.Count);
          GridCoord randomGridCoord = nearTiles[randomIndex];
 
          StateManager.PushGameState(new HeroTurnActionState(new MoveTurnAction(activeHero), randomGridCoord));

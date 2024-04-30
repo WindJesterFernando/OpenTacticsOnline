@@ -1,3 +1,4 @@
+using Unity.Networking.Transport;
 using UnityEngine;
 
 public static class NetworkServerProcessing
@@ -10,7 +11,16 @@ public static class NetworkServerProcessing
         string[] csv = msg.Split(',');
         int signifier = int.Parse(csv[0]);
 
-        gameLogic.MessageGot(clientConnectionID, signifier, msg);
+        if (signifier == ClientToServerSignifiers.Disconnect)
+        {
+            networkServer.DisconnectClient(clientConnectionID);
+
+        }
+        else
+        {
+            gameLogic.MessageGot(clientConnectionID, signifier, msg);
+        }
+
 
     }
     public static void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)

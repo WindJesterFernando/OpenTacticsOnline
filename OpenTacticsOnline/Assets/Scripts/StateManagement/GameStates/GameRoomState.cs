@@ -32,7 +32,7 @@ public class GameRoomState : AbstractGameState
         
         if (signifier == ServerToClientSignifiers.RoomFilled)
         {
-            
+            SyncedRandomGenerator.Reload(int.Parse(csv[1]));
             Debug.Log("Other joined the room ");
             StartGame();
         }

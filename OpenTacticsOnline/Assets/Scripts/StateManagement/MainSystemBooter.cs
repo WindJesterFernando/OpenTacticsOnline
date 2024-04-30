@@ -21,5 +21,11 @@ public class MainSystemBooter : MonoBehaviour
     {
         StateManager.Update();
         VisualTaskQueue.Update();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            NetworkClientProcessing.SendMessageToServer($"{ClientToServerSignifiers.Disconnect}");
+            Destroy(NetworkClientProcessing.GetNetworkedClient());
+        }
     }
 }

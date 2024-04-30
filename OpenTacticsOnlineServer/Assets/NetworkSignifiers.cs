@@ -2,6 +2,7 @@
 public static class ClientToServerSignifiers
 {
     public const int CreateRoom = 1;
+    public const int Disconnect = 2;
 
 
     public const int ActionUsed = 1001;
