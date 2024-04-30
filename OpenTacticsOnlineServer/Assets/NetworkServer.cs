@@ -58,11 +58,6 @@ public class NetworkServer : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            SendMessageToClient("jslkdf server;", 0, TransportPipeline.ReliableAndInOrder);
-        }
-            
         networkDriver.ScheduleUpdate().Complete();
         
         #region Remove Unused Connections

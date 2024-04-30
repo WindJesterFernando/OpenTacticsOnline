@@ -33,11 +33,11 @@ public class GameRoom
         int playerToSendTo = nonInitializedPlayer;
         if (_player1 == player)
         {
-            playerToSendTo = _player1;
+            playerToSendTo = _player2;
         }
         else if (_player2 == player)
         {
-             playerToSendTo = _player2;
+             playerToSendTo = _player1;
         }
 
         if (playerToSendTo == nonInitializedPlayer)

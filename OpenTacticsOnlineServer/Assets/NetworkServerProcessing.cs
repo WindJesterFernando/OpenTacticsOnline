@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-static public class NetworkServerProcessing
+public static class NetworkServerProcessing
 {
     #region Send and Receive Data Functions
-    static public void ReceivedMessageFromClient(string msg, int clientConnectionID, TransportPipeline pipeline)
+    public static void ReceivedMessageFromClient(string msg, int clientConnectionID, TransportPipeline pipeline)
     {
         Debug.Log("Network msg received =  " + msg + ", from connection id = " + clientConnectionID + ", from pipeline = " + pipeline);
 
@@ -15,7 +15,7 @@ static public class NetworkServerProcessing
         gameLogic.MessageGot(clientConnectionID, signifier, msg);
 
     }
-    static public void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline)
+    public static void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline)
     {
         networkServer.SendMessageToClient(msg, clientConnectionID, pipeline);
     }

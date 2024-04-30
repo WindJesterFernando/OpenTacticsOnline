@@ -10,19 +10,13 @@ public static class NetworkClientProcessing
 
         string[] csv = msg.Split(',');
         int signifier = int.Parse(csv[0]);
-        
-        
-        // if (signifier == ServerToClientSignifiers.asd)
-        // {
 
-        // }
-        // else if (signifier == ServerToClientSignifiers.asd)
-        // {
 
-        // }
-
-        //gameLogic.DoSomething();
-
+        if (signifier == 1)
+        {
+            Camera.main.backgroundColor = new Color(Random.value, Random.value, Random.value, 1);
+        }
+       
     }
 
     public static void SendMessageToServer(string msg, TransportPipeline pipeline)

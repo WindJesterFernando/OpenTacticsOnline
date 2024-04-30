@@ -39,7 +39,7 @@ public class NetworkClient : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            SendMessageToServer("jslkdf client;", TransportPipeline.ReliableAndInOrder);
+            SendMessageToServer("1, Msg", TransportPipeline.ReliableAndInOrder);
         }
         networkDriver.ScheduleUpdate().Complete();
 
