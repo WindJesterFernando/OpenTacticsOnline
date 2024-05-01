@@ -11,9 +11,9 @@ public class GameLogic : MonoBehaviour
         NetworkServerProcessing.SetGameLogic(this);
     }
 
-    public void MessageGot(int clientId, int signifier, string message)
+    public void MessageGot(int clientId, Message msg)
     {
-        gameRooms[clientId].MessageGot(clientId, message);
+        gameRooms[clientId].MessageGot(clientId, msg);
     }
 
     private void CreateRoom(int clientId)

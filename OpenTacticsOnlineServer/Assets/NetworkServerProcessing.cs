@@ -8,17 +8,16 @@ public static class NetworkServerProcessing
     {
         Debug.Log("Network msg received =  " + msg + ", from connection id = " + clientConnectionID + ", from pipeline = " + pipeline);
 
-        string[] csv = msg.Split(',');
-        int signifier = int.Parse(csv[0]);
-
-        if (signifier == ClientToServerSignifiers.Disconnect)
+        Message messageGot = new Message(msg);
+        
+        if (messageGot.signifier == NetworkSignifier.C_Disconnect)
         {
             networkServer.DisconnectClient(clientConnectionID);
 
         }
         else
         {
-            gameLogic.MessageGot(clientConnectionID, signifier, msg);
+            gameLogic.MessageGot(clientConnectionID, messageGot);
         }
 
 

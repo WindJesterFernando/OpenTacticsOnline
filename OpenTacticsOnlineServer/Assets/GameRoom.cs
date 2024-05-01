@@ -14,7 +14,10 @@ public class GameRoom
     {
         _player1 = player1;
         // send you joined 
-        NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.SelfJoinedRoom},0", _player1);
+        MessageBuilder mb = new MessageBuilder(NetworkSignifier.S_SelfJoined).AddValue(0);
+        
+        NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player1);
+        
         Debug.Log("new room created");
         Debug.Log("First player joined the room");
     }
@@ -25,17 +28,23 @@ public class GameRoom
         {
             _player2 = player2; 
             Debug.Log("Second player joined the room");
-            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.SelfJoinedRoom},1", _player2);
+            MessageBuilder mb = new MessageBuilder(NetworkSignifier.S_SelfJoined).AddValue(1);
+            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player2);
 
             int seed = new System.Random().Next();
+            
+            //TODO remove this!!!!
+            seed = 0;
 
-            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled},{seed}", _player1);
-            NetworkServerProcessing.SendMessageToClient($"{ServerToClientSignifiers.RoomFilled},{seed}", _player2);
+            mb = new MessageBuilder(NetworkSignifier.S_RoomFilled).AddValue(seed);
+            
+            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player1);
+            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player2);
         }
         // send you joined 
     }
 
-    public void MessageGot(int player, string msg)
+    public void MessageGot(int player, Message msg)
     {
         int playerToSendTo = nonInitializedPlayer;
         if (_player1 == player)
@@ -52,6 +61,6 @@ public class GameRoom
             return;
         }
         
-        NetworkServerProcessing.SendMessageToClient(msg, playerToSendTo);
+        NetworkServerProcessing.SendMessageToClient(new MessageBuilder(msg).GetMessage(), playerToSendTo);
     }
 }

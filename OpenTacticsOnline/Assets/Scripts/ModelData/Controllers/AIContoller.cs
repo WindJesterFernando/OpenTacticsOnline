@@ -15,6 +15,8 @@ public class AIContoller : AbstractController
              return;
          }
          
+         // todo: change this from synced to some other random  
+         // what if we can use it in the battle with 3 teams, one network one local, one ai
          int randomIndex = SyncedRandomGenerator.Next(nearTiles.Count);
          GridCoord randomGridCoord = nearTiles[randomIndex];
 

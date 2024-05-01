@@ -3,21 +3,18 @@ public class NetworkPlayerController : AbstractController
     private Hero activeHero;
     public NetworkPlayerController()
     {
-        NetworkClientProcessing.onMessageReceived += OnMessageReceived;
+        NetworkClientProcessing.OnMessageReceived += OnMessageReceived;
     }
 
-    private void OnMessageReceived(string msg)
+    private void OnMessageReceived(Message msg)
     {
         if (activeHero == null)
             return;
 
-        string[] csv = msg.Split(',');
-        int signifier = int.Parse(csv[0]);
-
-        if (signifier == ClientToServerSignifiers.ActionUsed)
+        if (msg.signifier == NetworkSignifier.CC_ActionUsed)
         {
-            int actionIndex = int.Parse(csv[1]);
-            GridCoord targetCoord = new GridCoord(int.Parse(csv[2]), int.Parse(csv[3]));
+            int actionIndex = int.Parse(msg.values[0]);
+            GridCoord targetCoord = GridCoord.Parse(msg.values[1]); 
 
             StateManager.PushGameState(new HeroTurnActionState(activeHero.actions[actionIndex], targetCoord));
 

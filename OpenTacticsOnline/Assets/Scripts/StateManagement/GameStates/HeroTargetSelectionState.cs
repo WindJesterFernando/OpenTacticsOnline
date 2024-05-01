@@ -93,7 +93,9 @@ public class HeroTargetSelectionState : AbstractGameState
             }
         }
 
-        NetworkClientProcessing.SendMessageToServer($"{ClientToServerSignifiers.ActionUsed},{turnActionIndex},{target.x},{target.y}");
+        MessageBuilder mb = new MessageBuilder(NetworkSignifier.CC_ActionUsed);
+        mb.AddValue(turnActionIndex).AddValue(target);
+        NetworkClientProcessing.SendMessageToServer(mb.GetMessage());
 
     }
 }

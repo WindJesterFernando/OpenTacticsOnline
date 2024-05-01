@@ -15,24 +15,23 @@ public class GameRoomState : AbstractGameState
     {
         GameObject go = new GameObject("NetworkClient");
         go.AddComponent<NetworkClient>();
-        NetworkClientProcessing.onMessageReceived += OnMessageReceived;
+        NetworkClientProcessing.OnMessageReceived += OnMessageReceived;
     }
 
-    private void OnMessageReceived(string msg)
+    private void OnMessageReceived(Message msg)
     {
-        string[] csv = msg.Split(',');
-        int signifier = int.Parse(csv[0]);
 
-        if (signifier == ServerToClientSignifiers.SelfJoinedRoom)
+        if (msg.signifier == NetworkSignifier.S_SelfJoined)
         {
             Debug.Log("WE joined the room ");
-            isFirstPlayer = csv[1] == "0";
+            
+            isFirstPlayer = msg.values[0] == "0";
             return;
         }
         
-        if (signifier == ServerToClientSignifiers.RoomFilled)
+        if (msg.signifier == NetworkSignifier.S_RoomFilled)
         {
-            SyncedRandomGenerator.Reload(int.Parse(csv[1]));
+            SyncedRandomGenerator.Reload(int.Parse(msg.values[0]));
             Debug.Log("Other joined the room ");
             StartGame();
         }
@@ -42,6 +41,7 @@ public class GameRoomState : AbstractGameState
     {
         BattleGridModelData.Init();
 
+        // Add some functionality to customize this and send the data about what we choose to the other client
         AddHero(new Hero(2, 2, HeroRole.BlackMage, 6, 20, isFirstPlayer));
         AddHero(new Hero(3, 2, HeroRole.RedMage, 6, 20, isFirstPlayer));
         AddHero(new Hero(3, 3, HeroRole.WhiteMage, 6, 20, isFirstPlayer));
@@ -62,7 +62,7 @@ public class GameRoomState : AbstractGameState
         StateManager.PopGameState();
         StateManager.PushGameState(new MainBattleState());
         
-        NetworkClientProcessing.onMessageReceived -= OnMessageReceived;
+        NetworkClientProcessing.OnMessageReceived -= OnMessageReceived;
     }
 
     private void AddHero(Hero hero)

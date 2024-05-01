@@ -44,7 +44,7 @@ public struct GridCoord
 
     public override string ToString()
     {
-        return "Grid Coord: (" + x + ", " + y + ")";
+        return $"({x},{y})";
     }
 
     public override bool Equals(object other)
@@ -73,4 +73,10 @@ public struct GridCoord
         return Math.Abs(dif.x) + Math.Abs(dif.y);
     }
 
+    public static GridCoord Parse(string s)
+    {
+        string m = s[1..^1];
+        string[] v = m.Split(',');
+        return new GridCoord(int.Parse(v[0]), int.Parse(v[1]));
+    }
 }

@@ -1,25 +1,14 @@
 using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public static class NetworkClientProcessing
 {
-
     #region Send and Receive Data Functions
     public static void ReceivedMessageFromServer(string msg, TransportPipeline pipeline)
     {
         Debug.Log("Network msg received =  " + msg + ", from pipeline = " + pipeline);
-        onMessageReceived.Invoke(msg);
-        //
-        // string[] csv = msg.Split(',');
-        // int signifier = int.Parse(csv[0]);
-        //
-        //
-        // if (signifier == 1)
-        // {
-        //     Camera.main.backgroundColor = new Color(Random.value, Random.value, Random.value, 1);
-        // }
-       
+        Message messageGot = new Message(msg);
+        OnMessageReceived?.Invoke(messageGot);
     }
 
     public static void SendMessageToServer(string msg, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
@@ -56,23 +45,28 @@ public static class NetworkClientProcessing
     #region Setup
     static NetworkClient networkClient;
 
-    public static Action<string> onMessageReceived;
-    // static MainSystemBooter mainSystemBooter;
-
-    public static void SetNetworkedClient(NetworkClient NetworkClient)
+    public static event Action<Message> OnMessageReceived;
+    
+    public static void SetNetworkedClient(NetworkClient networkClient)
     {
-        networkClient = NetworkClient;
+        NetworkClientProcessing.networkClient = networkClient;
     }
     public static NetworkClient GetNetworkedClient()
     {
         return networkClient;
     }
-    // public static void SetMainSystemBooter(MainSystemBooter mainSystemBooter)
-    // {
-    //     
-    //     NetworkClientProcessing.mainSystemBooter = mainSystemBooter;  
-    // }
-
     #endregion
 
+#region MessagesUtil
+    public static string BuildMessage(int signifier, string[] values)
+    {
+        string msg = $"{signifier}";
+        foreach (string value in values)
+        {
+            msg += $",{value}";
+        }
+        return msg;
+    }
+    
+#endregion
 }
