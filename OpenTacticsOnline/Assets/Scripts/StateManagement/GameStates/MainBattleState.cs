@@ -74,5 +74,6 @@ public class MainBattleState : AbstractGameState
         GridVisuals.DestroyBattleGridVisuals();
         BattleSystemModelData.Reset();
         BattleGridModelData.Reset();
+        VisualTaskQueue.Reset();
     }
 }

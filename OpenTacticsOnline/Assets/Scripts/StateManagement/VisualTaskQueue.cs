@@ -8,7 +8,12 @@ public static class VisualTaskQueue
     {
         taskQueue = new Queue<VisualTask>();
     }
-    
+
+    public static void Reset()
+    {
+        taskQueue.Clear();
+    }
+
     public static void Update()
     {
         if (taskQueue.Count > 0)
