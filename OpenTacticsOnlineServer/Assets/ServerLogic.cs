@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameLogic : MonoBehaviour
+public class ServerLogic : MonoBehaviour
 {
     private Dictionary<int, GameRoom> gameRooms = new Dictionary<int, GameRoom>();
     private GameRoom gameRoomToJoin;

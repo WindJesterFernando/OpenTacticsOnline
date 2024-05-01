@@ -119,7 +119,7 @@ public static partial class BattleGridModelData
         PathBlocker pathBlockers;
 
         if (isPlayerTeam)
-            pathBlockers = PathBlocker.Foe;
+            pathBlockers = PathBlocker.Opponent;
         else
             pathBlockers = PathBlocker.Ally;
 
@@ -265,7 +265,7 @@ public static partial class BattleGridModelData
         if (!isTileWalkable)
             return true;
 
-        if ((pathBlockers & (PathBlocker.Ally | PathBlocker.Foe)) == 0)
+        if ((pathBlockers & (PathBlocker.Ally | PathBlocker.Opponent)) == 0)
         {
             return false;
         }
@@ -283,7 +283,7 @@ public static partial class BattleGridModelData
             if (hero.isAlly)
                 isTileBlockedByAlly = true;
         }
-        if ((pathBlockers & PathBlocker.Foe) == PathBlocker.Foe)
+        if ((pathBlockers & PathBlocker.Opponent) == PathBlocker.Opponent)
         {
             if (!hero.isAlly)
                 isTileBlockedByFoe = true;
@@ -303,7 +303,7 @@ public static partial class BattleGridModelData
     {
         if (type == TargetType.AnyTile)
             return initial;
-        else if (type == TargetType.Ally || type == TargetType.Foe || type == TargetType.AnyHero)
+        else if (type == TargetType.Ally || type == TargetType.Opponent || type == TargetType.AnyHero)
             return FilterHeroesInTiles(initial, type);
         else // if (type == TargetType.EmptyTile)
             return FilterEmptyTiles(initial);
@@ -321,7 +321,7 @@ public static partial class BattleGridModelData
                     result.AddLast(h.coord);
                 }
             }
-            else if (type == TargetType.Foe)
+            else if (type == TargetType.Opponent)
             {
                 if (!h.isAlly && tiles.Contains(h.coord))
                 {
@@ -362,7 +362,7 @@ public enum TargetType
 {
     None,
     Ally,
-    Foe,
+    Opponent,
     AnyHero,
     EmptyTile,
     AnyTile
@@ -373,7 +373,7 @@ public enum PathBlocker : byte
 {
     None = 0,
     Ally = 1 << 0, //0001
-    Foe = 1 << 1, //0010
+    Opponent = 1 << 1, //0010
     Terrain = 1 << 2 //0100
 
 }

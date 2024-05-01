@@ -13,9 +13,9 @@ public class NetworkPlayerController : AbstractController
     { 
         if (msg.signifier == NetworkSignifier.S_OpponentDisconnected)
         {
-            LinkedList<Hero> foeHeroes = BattleGridModelData.GetFoeHeroes();
+            List<Hero> opponentHeroes = BattleGridModelData.GetOpponentHeroes();
 
-            foreach (Hero hero in foeHeroes)
+            foreach (Hero hero in opponentHeroes)
             {
                 hero.ModifyHealth(-999999);
             }

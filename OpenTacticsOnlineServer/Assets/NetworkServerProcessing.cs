@@ -17,36 +17,42 @@ public static class NetworkServerProcessing
         }
         else
         {
-            gameLogic.MessageGot(clientConnectionID, messageGot);
+            serverLogic.MessageGot(clientConnectionID, messageGot);
         }
 
 
     }
-    public static void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
+    // public static void SendMessageToClient(string msg, int clientConnectionID, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
+    // {
+    //     networkServer.SendMessageToClient(msg, clientConnectionID, pipeline);
+    // }
+
+    public static void SendMessageToClient(MessageBuilder builder, int clientConnectionID,
+        TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
     {
-        networkServer.SendMessageToClient(msg, clientConnectionID, pipeline);
+        networkServer.SendMessageToClient(builder.GetMessage(), clientConnectionID, pipeline);
     }
 
-    #endregion
+#endregion
 
     #region Connection Events
 
     public static void ConnectionEvent(int clientConnectionID)
     {
         Debug.Log("Client connection, ID == " + clientConnectionID);
-        gameLogic.ClientConnected(clientConnectionID);
+        serverLogic.ClientConnected(clientConnectionID);
     }
     public static void DisconnectionEvent(int clientConnectionID)
     {
         Debug.Log("Client disconnection, ID == " + clientConnectionID);
-        gameLogic.ClientDisconnected(clientConnectionID);
+        serverLogic.ClientDisconnected(clientConnectionID);
     }
 
     #endregion
 
     #region Setup
     static NetworkServer networkServer;
-    static GameLogic gameLogic;
+    static ServerLogic serverLogic;
 
     public static void SetNetworkServer(NetworkServer NetworkServer)
     {
@@ -56,9 +62,9 @@ public static class NetworkServerProcessing
     {
         return networkServer;
     }
-    public static void SetGameLogic(GameLogic GameLogic)
+    public static void SetGameLogic(ServerLogic serverLogic)
     {
-        gameLogic = GameLogic;
+        NetworkServerProcessing.serverLogic = serverLogic;
     }
 
     #endregion

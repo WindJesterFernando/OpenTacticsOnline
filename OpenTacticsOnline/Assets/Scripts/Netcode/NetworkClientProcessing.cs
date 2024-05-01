@@ -11,11 +11,10 @@ public static class NetworkClientProcessing
         OnMessageReceived?.Invoke(messageGot);
     }
 
-    public static void SendMessageToServer(string msg, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
+    public static void SendMessageToServer(MessageBuilder builder, TransportPipeline pipeline = TransportPipeline.ReliableAndInOrder)
     {
-        networkClient.SendMessageToServer(msg, pipeline);
+        networkClient.SendMessageToServer(builder.GetMessage(), pipeline);
     }
-
     #endregion
 
     #region Connection Related Functions and Events
@@ -57,16 +56,4 @@ public static class NetworkClientProcessing
     }
     #endregion
 
-#region MessagesUtil
-    public static string BuildMessage(int signifier, string[] values)
-    {
-        string msg = $"{signifier}";
-        foreach (string value in values)
-        {
-            msg += $",{value}";
-        }
-        return msg;
-    }
-    
-#endregion
 }

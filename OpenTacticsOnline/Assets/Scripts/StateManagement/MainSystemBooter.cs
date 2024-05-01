@@ -4,7 +4,7 @@ public class MainSystemBooter : MonoBehaviour
 {
     [SerializeField] private GameObject BattleUICanvas;
     
-    void Start()
+    public void Start()
     {
         VisualTaskQueue.Init();
         StateManager.Init();
@@ -28,7 +28,7 @@ public class MainSystemBooter : MonoBehaviour
         // Debug.Log(GridCoord.Parse(msg.values[4]));
     }
 
-    void Update()
+    public void Update()
     {
         StateManager.Update();
         VisualTaskQueue.Update();
@@ -36,7 +36,7 @@ public class MainSystemBooter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             MessageBuilder mb = new MessageBuilder(NetworkSignifier.C_Disconnect);
-            NetworkClientProcessing.SendMessageToServer(mb.GetMessage());
+            NetworkClientProcessing.SendMessageToServer(mb);
             StateManager.PopGameStateUntilStateIs(GameState.Title);
             Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
         }

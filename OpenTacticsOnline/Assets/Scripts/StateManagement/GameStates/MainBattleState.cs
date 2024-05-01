@@ -47,7 +47,7 @@ public class MainBattleState : AbstractGameState
             return true;
         }
 
-        if (IsTeamDead(BattleGridModelData.GetFoeHeroes()))
+        if (IsTeamDead(BattleGridModelData.GetOpponentHeroes()))
         {
             StateManager.PushGameState(new GameResultsState(true));
             return true;
@@ -56,7 +56,7 @@ public class MainBattleState : AbstractGameState
         return false;
     }
 
-    private static bool IsTeamDead(LinkedList<Hero> team)
+    private static bool IsTeamDead(List<Hero> team)
     {
         foreach (Hero h in team)
         {
@@ -72,5 +72,7 @@ public class MainBattleState : AbstractGameState
     public override void OnStateExit()
     {
         GridVisuals.DestroyBattleGridVisuals();
+        BattleSystemModelData.Reset();
+        BattleGridModelData.Reset();
     }
 }

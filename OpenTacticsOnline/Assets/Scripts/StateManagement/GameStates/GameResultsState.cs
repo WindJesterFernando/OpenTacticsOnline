@@ -22,4 +22,8 @@ public class GameResultsState : AbstractGameState
             StateManager.PopGameStateUntilStateIs(GameState.Title);
         }
     }
+
+    public override void OnStateExit()
+    {
+    }
 }

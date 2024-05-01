@@ -82,6 +82,10 @@ public class HeroTargetSelectionState : AbstractGameState
 
     private void SendAction(GridCoord target)
     {
+        if (NetworkClientProcessing.GetNetworkedClient() == null) 
+            return;
+        
+        
         List<TurnAction> turnActions = turnAction.owner.actions;
         int turnActionIndex = -1;
         for (int i = 0; i < turnActions.Count; i++)
@@ -95,6 +99,6 @@ public class HeroTargetSelectionState : AbstractGameState
 
         MessageBuilder mb = new MessageBuilder(NetworkSignifier.CC_ActionUsed);
         mb.AddValue(turnActionIndex).AddValue(target);
-        NetworkClientProcessing.SendMessageToServer(mb.GetMessage());
+        NetworkClientProcessing.SendMessageToServer(mb);
     }
 }

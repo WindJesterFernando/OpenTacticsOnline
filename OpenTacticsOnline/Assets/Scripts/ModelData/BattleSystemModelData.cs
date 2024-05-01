@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.PlayerLoop;
 
 public static class BattleSystemModelData
 { 
@@ -65,6 +66,13 @@ public static class BattleSystemModelData
         // change ui state here???
         UIManager.SetActiveHero(currentHeroTurnIndex);
         UIManager.RefreshHeroHealthState(turnOrder);
+    }
+
+    public static void Reset()
+    {
+        turnOrder = null; 
+        currentHeroTurnIndex = 0;
+        UIManager.DisableTurnOrder();
     }
 }
 

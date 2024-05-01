@@ -21,7 +21,7 @@ public class GameRoom
         // send you joined 
         MessageBuilder mb = new MessageBuilder(NetworkSignifier.S_SelfJoined).AddValue(0);
         
-        NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), this.playerId1);
+        NetworkServerProcessing.SendMessageToClient(mb, this.playerId1);
         
         Debug.Log("new room created");
         Debug.Log("First player joined the room");
@@ -34,7 +34,7 @@ public class GameRoom
             this.playerId2 = player2; 
             Debug.Log("Second player joined the room");
             MessageBuilder mb = new MessageBuilder(NetworkSignifier.S_SelfJoined).AddValue(1);
-            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), this.playerId2);
+            NetworkServerProcessing.SendMessageToClient(mb, this.playerId2);
 
             int seed = new System.Random().Next();
             
@@ -43,8 +43,8 @@ public class GameRoom
 
             mb = new MessageBuilder(NetworkSignifier.S_RoomFilled).AddValue(seed);
             
-            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), playerId1);
-            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), this.playerId2);
+            NetworkServerProcessing.SendMessageToClient(mb, playerId1);
+            NetworkServerProcessing.SendMessageToClient(mb, this.playerId2);
         }
         // send you joined 
     }
@@ -66,7 +66,7 @@ public class GameRoom
             return;
         }
         
-        NetworkServerProcessing.SendMessageToClient(new MessageBuilder(msg).GetMessage(), playerToSendTo);
+        NetworkServerProcessing.SendMessageToClient(new MessageBuilder(msg), playerToSendTo);
     }
 
     public void HandleDisconnect(int playerId)
@@ -86,6 +86,6 @@ public class GameRoom
             return;
         }
 
-        NetworkServerProcessing.SendMessageToClient(new MessageBuilder(NetworkSignifier.S_OpponentDisconnected).GetMessage(), playerToSentTo);
+        NetworkServerProcessing.SendMessageToClient(new MessageBuilder(NetworkSignifier.S_OpponentDisconnected), playerToSentTo);
     }
 }

@@ -6,10 +6,10 @@ public static partial class BattleGridModelData
     private static BattleGridTile[,] battleGridTiles;
     
     // TODO change to list 
-    private static LinkedList<Hero> heroes;
+    private static List<Hero> heroes;
     
-    private static LinkedList<Hero> allyHeroes;
-    private static LinkedList<Hero> foeHeroes;
+    private static List<Hero> allyHeroes;
+    private static List<Hero> opponentHeroes;
 
     public static void Init()
     {
@@ -82,50 +82,21 @@ public static partial class BattleGridModelData
 
         SetAllTilesToDefault();
 
-        heroes = new LinkedList<Hero>();
-        allyHeroes = new LinkedList<Hero>();
-        foeHeroes = new LinkedList<Hero>();
-        //AIContoller aiContoller = new AIContoller();
-        //LocalPlayerController localPlayerController = new LocalPlayerController();
-
-        //Hero h = new Hero(2, 2, HeroRole.BlackMage, 6, 20, true);
-        //h.controller = localPlayerController;
-        //h.ModifyHealth(-20);
-        //heroes.AddLast(h);
-
-        //h = new Hero(3, 2, HeroRole.RedMage, 6, 20, true);
-        //h.controller = localPlayerController;
-        //heroes.AddLast(h);
-
-        //h = new Hero(3, 3, HeroRole.WhiteMage, 6, 20, true);
-        //h.controller = localPlayerController;
-        //heroes.AddLast(h);
-
-        //h = new Hero(15, 7, HeroRole.Fighter, 8, 20, false);
-        //h.controller = aiContoller;
-        //heroes.AddLast(h);
-
-        //h = new Hero(15, 6, HeroRole.Monk, 8, 20, false);
-        //h.controller = aiContoller;
-        //h.ModifyHealth(-20);
-        //heroes.AddLast(h);
-
-        //h = new Hero(15, 5, HeroRole.Thief, 8, 20, false);
-        //h.controller = aiContoller;
-        //heroes.AddLast(h);
-
+        heroes = new List<Hero>();
+        allyHeroes = new List<Hero>();
+        opponentHeroes = new List<Hero>();
     }
 
     public static void AddHero(Hero hero)
     {
-        heroes.AddLast(hero);
+        heroes.Add(hero);
         if (hero.isAlly)
         {
-            allyHeroes.AddLast(hero);
+            allyHeroes.Add(hero);
         }
         else
         {
-            foeHeroes.AddLast(hero);
+            opponentHeroes.Add(hero);
         }
     }
 
@@ -153,27 +124,23 @@ public static partial class BattleGridModelData
                     ChangeTileID(new GridCoord(x, y), 48);
                 else
                     ChangeTileID(new GridCoord(x, y), 54);
-
-                //     battleGridTiles[x, y].id = 1;
-                // else
-                //     battleGridTiles[x, y].id = 54;
             }
         }
     }
 
-    public static LinkedList<Hero> GetHeroes()
+    public static List<Hero> GetHeroes()
     {
         return heroes;
     }
     
-    public static LinkedList<Hero> GetAllyHeroes()
+    public static List<Hero> GetAllyHeroes()
     {
         return allyHeroes;
     }
     
-    public static LinkedList<Hero> GetFoeHeroes()
+    public static List<Hero> GetOpponentHeroes()
     {
-        return foeHeroes;
+        return opponentHeroes;
     }
 
     public static Hero GetHeroAtCoord(GridCoord coord)
@@ -185,6 +152,14 @@ public static partial class BattleGridModelData
         }
 
         return null;
+    }
+
+    public static void Reset()
+    {
+        heroes.Clear();
+        opponentHeroes.Clear();
+        allyHeroes.Clear();
+        SetAllTilesToDefault();
     }
 }
 
