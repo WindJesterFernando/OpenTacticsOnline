@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 public class NetworkPlayerController : AbstractController
 {
     private Hero activeHero;
@@ -7,7 +10,20 @@ public class NetworkPlayerController : AbstractController
     }
 
     private void OnMessageReceived(Message msg)
-    {
+    { 
+        if (msg.signifier == NetworkSignifier.S_OpponentDisconnected)
+        {
+            LinkedList<Hero> foeHeroes = BattleGridModelData.GetFoeHeroes();
+
+            foreach (Hero hero in foeHeroes)
+            {
+                hero.ModifyHealth(-999999);
+            }
+            
+            GameObject.Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
+            StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
+        }   
+        
         if (activeHero == null)
             return;
 
@@ -20,6 +36,7 @@ public class NetworkPlayerController : AbstractController
 
             activeHero = null;
         }
+
     }
 
     public override void DoTurn(Hero activeHero)

@@ -35,16 +35,21 @@ public class GameLogic : MonoBehaviour
 
     public void ClientDisconnected(int clientId)
     {
-        if (gameRooms[clientId].PlayerId2 == GameRoom.nonInitializedPlayer)
+        // game is not started 
+        if (!gameRooms.ContainsKey(clientId))
+            return;
+        
+        if (!gameRooms[clientId].HasGameStarted())
         {
             gameRoomToJoin = null;
             gameRooms.Remove(clientId);
             return;
         }
 
-        bool player1Disconnected = clientId == gameRooms[clientId].PlayerId1;
-        // Other player wins
-
+        GameRoom room = gameRooms[clientId];
+        room.HandleDisconnect(clientId);
+        gameRooms.Remove(room.PlayerId1);
+        gameRooms.Remove(room.PlayerId2);
     }
 
     public void ClientConnected(int clientId)

@@ -38,7 +38,7 @@ public class MainSystemBooter : MonoBehaviour
             MessageBuilder mb = new MessageBuilder(NetworkSignifier.C_Disconnect);
             NetworkClientProcessing.SendMessageToServer(mb.GetMessage());
             StateManager.PopGameStateUntilStateIs(GameState.Title);
-            Destroy(NetworkClientProcessing.GetNetworkedClient());
+            Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
         }
     }
 }

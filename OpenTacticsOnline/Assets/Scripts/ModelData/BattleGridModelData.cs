@@ -4,6 +4,8 @@ public static partial class BattleGridModelData
 {
     public const int gridSizeX = 20, gridSizeY = 10;
     private static BattleGridTile[,] battleGridTiles;
+    
+    // TODO change to list 
     private static LinkedList<Hero> heroes;
     
     private static LinkedList<Hero> allyHeroes;

@@ -96,6 +96,5 @@ public class HeroTargetSelectionState : AbstractGameState
         MessageBuilder mb = new MessageBuilder(NetworkSignifier.CC_ActionUsed);
         mb.AddValue(turnActionIndex).AddValue(target);
         NetworkClientProcessing.SendMessageToServer(mb.GetMessage());
-
     }
 }

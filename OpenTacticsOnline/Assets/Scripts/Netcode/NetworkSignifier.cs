@@ -1,3 +1,4 @@
+
 public enum NetworkSignifier
 {
     C_CreateRoom = 0,
@@ -6,5 +7,6 @@ public enum NetworkSignifier
     CC_ActionUsed = 100,
     
     S_RoomFilled = 1000,
-    S_SelfJoined
+    S_SelfJoined,
+    S_OpponentDisconnected
 }

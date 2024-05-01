@@ -4,19 +4,24 @@ public class GameRoom
 {
     public const int nonInitializedPlayer = -1;
     
-    private int _player1 = nonInitializedPlayer;
-    private int _player2 = nonInitializedPlayer;
+    private int playerId1 = nonInitializedPlayer;
+    private int playerId2 = nonInitializedPlayer;
 
-    public int PlayerId1 => _player1;
-    public int PlayerId2 => _player2;
+    public int PlayerId1 => playerId1;
+    public int PlayerId2 => playerId2;
 
-    public GameRoom(int player1)
+    public bool HasGameStarted()
     {
-        _player1 = player1;
+        return playerId2 != nonInitializedPlayer;
+    }
+
+    public GameRoom(int playerId1)
+    {
+        this.playerId1 = playerId1;
         // send you joined 
         MessageBuilder mb = new MessageBuilder(NetworkSignifier.S_SelfJoined).AddValue(0);
         
-        NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player1);
+        NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), this.playerId1);
         
         Debug.Log("new room created");
         Debug.Log("First player joined the room");
@@ -24,12 +29,12 @@ public class GameRoom
 
     public void JoinRoom(int player2)
     {
-        if (_player2 == nonInitializedPlayer)
+        if (this.playerId2 == nonInitializedPlayer)
         {
-            _player2 = player2; 
+            this.playerId2 = player2; 
             Debug.Log("Second player joined the room");
             MessageBuilder mb = new MessageBuilder(NetworkSignifier.S_SelfJoined).AddValue(1);
-            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player2);
+            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), this.playerId2);
 
             int seed = new System.Random().Next();
             
@@ -38,8 +43,8 @@ public class GameRoom
 
             mb = new MessageBuilder(NetworkSignifier.S_RoomFilled).AddValue(seed);
             
-            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player1);
-            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), _player2);
+            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), playerId1);
+            NetworkServerProcessing.SendMessageToClient(mb.GetMessage(), this.playerId2);
         }
         // send you joined 
     }
@@ -47,13 +52,13 @@ public class GameRoom
     public void MessageGot(int player, Message msg)
     {
         int playerToSendTo = nonInitializedPlayer;
-        if (_player1 == player)
+        if (playerId1 == player)
         {
-            playerToSendTo = _player2;
+            playerToSendTo = playerId2;
         }
-        else if (_player2 == player)
+        else if (playerId2 == player)
         {
-             playerToSendTo = _player1;
+             playerToSendTo = playerId1;
         }
 
         if (playerToSendTo == nonInitializedPlayer)
@@ -62,5 +67,25 @@ public class GameRoom
         }
         
         NetworkServerProcessing.SendMessageToClient(new MessageBuilder(msg).GetMessage(), playerToSendTo);
+    }
+
+    public void HandleDisconnect(int playerId)
+    {
+        int playerToSentTo = nonInitializedPlayer;
+        if (playerId == playerId1)
+        {
+            playerToSentTo = playerId2;
+        }
+        else if (playerId == playerId2)
+        {
+            playerToSentTo = playerId1;
+        }
+        else
+        {
+            Debug.LogError("Trying to disconnect not related player to this room");
+            return;
+        }
+
+        NetworkServerProcessing.SendMessageToClient(new MessageBuilder(NetworkSignifier.S_OpponentDisconnected).GetMessage(), playerToSentTo);
     }
 }

@@ -3,7 +3,7 @@ public class Message
 {
     public readonly NetworkSignifier signifier;
     public readonly string[] values;
-    
+   
     public Message(string message)
     {
          string[] csv = message.Split(MessageBuilder.Separator); 
