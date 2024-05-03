@@ -3,8 +3,8 @@ using UnityEngine;
 public class GameRoomState : AbstractGameState
 {
     private bool isFirstPlayer;
-    NetworkPlayerController networkPlayerController = new NetworkPlayerController();
-    LocalPlayerController localPlayerController = new LocalPlayerController();
+    private NetworkPlayerController networkPlayerController;
+    private LocalPlayerController localPlayerController;
 
     public GameRoomState() : base(GameState.GameRoom)
     {
@@ -40,6 +40,8 @@ public class GameRoomState : AbstractGameState
     private void StartGame()
     {
         BattleGridModelData.Init();
+        networkPlayerController = new NetworkPlayerController();
+        localPlayerController = new LocalPlayerController();
 
         // Add some functionality to customize this and send the data about what we choose to the other client
         AddHero(new Hero(2, 2, HeroRole.BlackMage, 6, 20, isFirstPlayer));
@@ -59,10 +61,15 @@ public class GameRoomState : AbstractGameState
             Camera.main.backgroundColor = Color.green;
         }
         
-        StateManager.PopGameState();
         StateManager.PushGameState(new MainBattleState());
         
         NetworkClientProcessing.OnMessageReceived -= OnMessageReceived;
+    }
+
+    public override void OnStateExit()
+    {
+        GameObject.Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
+        NetworkClientProcessing.SetNetworkedClient(null);
     }
 
     private void AddHero(Hero hero)

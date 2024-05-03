@@ -18,7 +18,7 @@ public class AttackTurnAction : TurnAction
 
     public override void EnqueueVisualSequence(GridCoord target)
     {
-       owner.visualRepresentation.GetComponent<FrameAnimator>()
+       owner.GetVisualRepresentation().GetComponent<FrameAnimator>()
             .StartAnimation(AnimationKey.Attacking, true);
        
        VisualTaskQueue.EnqueueAction(new WaitVisualTask(0.5f));

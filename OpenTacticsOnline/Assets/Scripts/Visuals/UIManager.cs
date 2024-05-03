@@ -58,7 +58,7 @@ public static class UIManager
         for (int i = 0; i < heroesTurnOrder.Length; i++)
         {
             Hero hero = heroesTurnOrder[i];
-            GameObject heroVisualRep = hero.visualRepresentation;
+            GameObject heroVisualRep = hero.GetVisualRepresentation();
             SpriteRenderer heroSpriteRenderer = heroVisualRep.GetComponent<SpriteRenderer>();
             
             turnOrderImages[i].gameObject.SetActive(true);

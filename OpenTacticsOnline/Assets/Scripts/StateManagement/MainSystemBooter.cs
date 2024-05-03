@@ -30,15 +30,14 @@ public class MainSystemBooter : MonoBehaviour
 
     public void Update()
     {
-        StateManager.Update();
-        VisualTaskQueue.Update();
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             MessageBuilder mb = new MessageBuilder(NetworkSignifier.C_Disconnect);
             NetworkClientProcessing.SendMessageToServer(mb);
             StateManager.PopGameStateUntilStateIs(GameState.Title);
-            Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
         }
+        StateManager.Update();
+        VisualTaskQueue.Update();
+
     }
 }

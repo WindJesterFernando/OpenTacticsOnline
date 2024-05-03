@@ -13,7 +13,7 @@ public class HealTurnAction : TurnAction
 
     public override void EnqueueVisualSequence(GridCoord target)
     {
-        owner.visualRepresentation.GetComponent<FrameAnimator>()
+        owner.GetVisualRepresentation().GetComponent<FrameAnimator>()
             .StartAnimation(AnimationKey.Casting, true);
 
         VisualTaskQueue.EnqueueAction(new WaitVisualTask(0.5f));

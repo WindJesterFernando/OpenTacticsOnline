@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum HeroRole
 {
@@ -19,7 +20,7 @@ public class Hero
     public GridCoord coord;
     public HeroRole role;
     public int maxSteps;
-    public UnityEngine.GameObject visualRepresentation;
+    private UnityEngine.GameObject visualRepresentation;
 
     public AbstractController controller;
     
@@ -45,6 +46,16 @@ public class Hero
     public bool IsAlive()
     {
         return currentHealth > 0;
+    }
+
+    public void SetVisualRepresentation(GameObject visuals)
+    {
+        visualRepresentation = visuals;
+    }
+
+    public GameObject GetVisualRepresentation()
+    {
+        return visualRepresentation;
     }
 
     private void CreateTurnActions()

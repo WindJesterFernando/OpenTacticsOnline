@@ -27,7 +27,7 @@ public class MoveTurnAction : TurnAction
         foreach (GridCoord t in path)
         {
             Vector3 endPos = bgVisuals[t.x, t.y].transform.position;
-            VisualTaskQueue.EnqueueAction(new MoveSpriteVisualTask(owner.visualRepresentation, startPos, endPos, 0.25f ));
+            VisualTaskQueue.EnqueueAction(new MoveSpriteVisualTask(owner.GetVisualRepresentation(), startPos, endPos, 0.25f ));
 
             startPos = endPos;
         }

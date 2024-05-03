@@ -2,6 +2,8 @@ using UnityEngine;
 using Unity.Collections;
 using Unity.Networking.Transport;
 using System.Text;
+using System.Net.NetworkInformation;
+using System.Net;
 
 public class NetworkClient : MonoBehaviour
 {
@@ -10,12 +12,26 @@ public class NetworkClient : MonoBehaviour
     private NetworkPipeline reliableAndInOrderPipeline;
     private NetworkPipeline nonReliableNotInOrderedPipeline;
     private const ushort NetworkPort = 9001;
-    private const string IPAddress = "10.8.48.138";
+    private string IPAddress = "10.8.80.113";
 
     private void Start()
     {
         if (NetworkClientProcessing.GetNetworkedClient() == null)
         {
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && ni.Name == "Wi-Fi")
+                {
+                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            IPAddress = ip.Address.ToString();
+                        }
+                    }
+                }
+            }
+
             DontDestroyOnLoad(this.gameObject);
             NetworkClientProcessing.SetNetworkedClient(this);
             Connect();

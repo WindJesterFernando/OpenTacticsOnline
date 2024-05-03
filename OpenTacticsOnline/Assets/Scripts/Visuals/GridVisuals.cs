@@ -50,16 +50,14 @@ public static class GridVisuals
             hGameObject.transform.position = new Vector3(h.coord.x + xOffSet, h.coord.y + yOffSet, 0);
             hGameObject.transform.parent = heroParent.transform;
             heroVisuals.AddLast(hGameObject);
-            h.visualRepresentation = hGameObject;
-
-            
+            h.SetVisualRepresentation(hGameObject);
         }
     }
 
     public static void DestroyBattleGridVisuals()
     {
         foreach (Hero h in BattleGridModelData.GetHeroes())
-            h.visualRepresentation = null;
+            h.SetVisualRepresentation(null);
         
         heroVisuals.Clear();
         heroVisuals = null;

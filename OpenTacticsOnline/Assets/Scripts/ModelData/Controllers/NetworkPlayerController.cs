@@ -20,15 +20,16 @@ public class NetworkPlayerController : AbstractController
                 hero.ModifyHealth(-999999);
             }
             
-            GameObject.Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
-            StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
+            StateManager.PopGameStateUntilStateIs(GameState.Title);
+            NetworkClientProcessing.OnMessageReceived -= OnMessageReceived;
         }   
         
-        if (activeHero == null)
-            return;
 
         if (msg.signifier == NetworkSignifier.CC_ActionUsed)
         {
+            if (activeHero == null)
+                return;
+
             int actionIndex = int.Parse(msg.values[0]);
             GridCoord targetCoord = GridCoord.Parse(msg.values[1]); 
 
