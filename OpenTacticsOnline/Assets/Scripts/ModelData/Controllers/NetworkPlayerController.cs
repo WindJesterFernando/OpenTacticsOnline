@@ -6,11 +6,11 @@ public class NetworkPlayerController : AbstractController
     private Hero activeHero;
     public NetworkPlayerController()
     {
-        NetworkClientProcessing.OnMessageReceived += OnMessageReceived;
+        NetworkClientProcessing.SetMessageReceiver(OnMessageReceived);
     }
 
     private void OnMessageReceived(Message msg)
-    { 
+    {
         if (msg.signifier == NetworkSignifier.S_OpponentDisconnected)
         {
             List<Hero> opponentHeroes = BattleGridModelData.GetOpponentHeroes();
@@ -21,7 +21,7 @@ public class NetworkPlayerController : AbstractController
             }
             
             StateManager.PopGameStateUntilStateIs(GameState.Title);
-            NetworkClientProcessing.OnMessageReceived -= OnMessageReceived;
+            NetworkClientProcessing.ClearMessageReceiver();
         }   
         
 

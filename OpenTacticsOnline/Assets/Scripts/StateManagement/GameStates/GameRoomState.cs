@@ -15,7 +15,7 @@ public class GameRoomState : AbstractGameState
     {
         GameObject go = new GameObject("NetworkClient");
         go.AddComponent<NetworkClient>();
-        NetworkClientProcessing.OnMessageReceived += OnMessageReceived;
+        NetworkClientProcessing.SetMessageReceiver(OnMessageReceived);
     }
 
     private void OnMessageReceived(Message msg)
@@ -40,6 +40,7 @@ public class GameRoomState : AbstractGameState
     private void StartGame()
     {
         BattleGridModelData.Init();
+        NetworkClientProcessing.ClearMessageReceiver();
         networkPlayerController = new NetworkPlayerController();
         localPlayerController = new LocalPlayerController();
 
@@ -62,14 +63,16 @@ public class GameRoomState : AbstractGameState
         }
         
         StateManager.PushGameState(new MainBattleState());
-        
-        NetworkClientProcessing.OnMessageReceived -= OnMessageReceived;
+
     }
+
+
 
     public override void OnStateExit()
     {
         GameObject.Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
         NetworkClientProcessing.SetNetworkedClient(null);
+        NetworkClientProcessing.ClearMessageReceiver();
     }
 
     private void AddHero(Hero hero)
