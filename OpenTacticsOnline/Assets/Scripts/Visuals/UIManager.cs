@@ -39,6 +39,8 @@ public static class UIManager
             actionButtons[i].gameObject.SetActive(true);
             actionButtons[i].GetComponentInChildren<TMP_Text>().text = actions[i].name;
             TurnAction action = actions[i];
+
+            
             actionButtons[i].onClick
                 .AddListener(() => StateManager.PushGameState(new HeroTargetSelectionState(action)));
         }

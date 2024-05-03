@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class HeroTurnActionState : AbstractGameState
 {
     private TurnAction turnAction;

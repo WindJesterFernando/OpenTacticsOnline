@@ -83,6 +83,7 @@ public class Hero
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        actions.Add(new PassTurnAction(this));
     }
 
     public void ModifyHealth(int deltaHealth)
