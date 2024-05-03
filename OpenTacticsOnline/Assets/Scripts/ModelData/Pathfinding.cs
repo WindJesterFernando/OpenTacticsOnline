@@ -303,7 +303,7 @@ public static partial class BattleGridModelData
     {
         if (type == TargetType.AnyTile)
             return initial;
-        else if (type == TargetType.Ally || type == TargetType.Opponent || type == TargetType.AnyHero)
+        else if (type == TargetType.Ally || type == TargetType.Opponent || type == TargetType.AnyHero || type == TargetType.KnockedOutAllies)
             return FilterHeroesInTiles(initial, type);
         else // if (type == TargetType.EmptyTile)
             return FilterEmptyTiles(initial);
@@ -314,23 +314,30 @@ public static partial class BattleGridModelData
         LinkedList<GridCoord> result = new LinkedList<GridCoord>();
         foreach (Hero h in heroes)
         {
-            if (type == TargetType.AnyHero)
+            if (type == TargetType.KnockedOutAllies)
             {
-                if (tiles.Contains(h.coord))
+                if (!h.IsAlive() && tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }
+            }
+            else if (type == TargetType.AnyHero)
+            {
+                if (h.IsAlive() && tiles.Contains(h.coord))
                 {
                     result.AddLast(h.coord);
                 }
             }
             else if (type == TargetType.Opponent)
             {
-                if (!h.isAlly && tiles.Contains(h.coord))
+                if (h.IsAlive() && !h.isAlly && tiles.Contains(h.coord))
                 {
                     result.AddLast(h.coord);
                 }
             }
             else if (type == TargetType.Ally)
             {
-                if (h.isAlly && tiles.Contains(h.coord))
+                if (h.IsAlive() && h.isAlly && tiles.Contains(h.coord))
                 {
                     result.AddLast(h.coord);
                 }
@@ -363,6 +370,7 @@ public enum TargetType
     None,
     Ally,
     Opponent,
+    KnockedOutAllies,
     AnyHero,
     EmptyTile,
     AnyTile

@@ -73,6 +73,7 @@ public class Hero
                 break;
             case HeroRole.WhiteMage:
                 actions.Add(new HealTurnAction(this, 5, "Healing"));
+                actions.Add(new ReviveTurnAction(this));
                 break;
             case HeroRole.Fighter:
                 break;
