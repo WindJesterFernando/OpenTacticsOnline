@@ -3,7 +3,6 @@ using System.Collections.Generic;
 public class MainBattleState : AbstractGameState
 {
     public MainBattleState()
-        : base(GameState.MainPlay)
     {
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public static class StateManager
@@ -32,22 +33,9 @@ public static class StateManager
         if(gameStateStack.Count > 0)
             gameStateStack.Peek().OnStateContinue();
     }
-    public static void PopGameStateUntilStateIs(GameState gameState)
+    public static void PopGameStateUntilStateIs(Type gameState)
     {
-        while(gameStateStack.Peek().GetGameState() != gameState)
+        while(gameStateStack.Peek().GetType() != gameState)
             PopGameState();
     }
-}
-
-public enum GameState
-{
-    Title,
-    SelectSaveFile,
-    MainPlay,
-    TargetSelection,
-    PerformingAction,
-    GameResults,
-    SelectActionUI,
-    GameRoom,
-    LocalRoom,
 }

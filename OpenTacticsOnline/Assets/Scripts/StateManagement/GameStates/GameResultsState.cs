@@ -4,7 +4,7 @@ public class GameResultsState : AbstractGameState
 {
     private bool playerWon;
     
-    public GameResultsState( bool playerWon) : base(GameState.GameResults)
+    public GameResultsState( bool playerWon)
     {
         this.playerWon = playerWon;
     }
@@ -28,7 +28,7 @@ public class GameResultsState : AbstractGameState
     {
         if(Input.GetMouseButtonDown(MouseButton.Left))
         {
-            StateManager.PopGameStateUntilStateIs(GameState.Title);
+            StateManager.PopGameStateUntilStateIs(typeof(TitleState));
         }
     }
 

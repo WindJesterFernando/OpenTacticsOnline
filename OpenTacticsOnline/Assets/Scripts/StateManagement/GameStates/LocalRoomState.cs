@@ -6,7 +6,7 @@ public class LocalRoomState : AbstractGameState
      AIContoller aiController= new AIContoller();
      LocalPlayerController localPlayerController = new LocalPlayerController();
 
-    public LocalRoomState() : base(GameState.LocalRoom)
+    public LocalRoomState()
     {
     }
 

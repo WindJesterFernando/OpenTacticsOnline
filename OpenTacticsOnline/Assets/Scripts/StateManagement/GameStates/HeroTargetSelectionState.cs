@@ -7,7 +7,7 @@ public class HeroTargetSelectionState : AbstractGameState
 
     private TurnAction turnAction;
 
-    public HeroTargetSelectionState(TurnAction action) : base(GameState.TargetSelection)
+    public HeroTargetSelectionState(TurnAction action)
     {
         turnAction = action;
     }

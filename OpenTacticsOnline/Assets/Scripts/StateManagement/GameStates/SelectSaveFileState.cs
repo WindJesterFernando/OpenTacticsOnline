@@ -3,7 +3,6 @@ using UnityEngine;
 public class SelectSaveFileState : AbstractGameState
 {
     public SelectSaveFileState()
-        : base(GameState.SelectSaveFile)
     {
 
     }

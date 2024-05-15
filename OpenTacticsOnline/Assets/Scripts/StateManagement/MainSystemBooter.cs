@@ -21,7 +21,7 @@ public class MainSystemBooter : MonoBehaviour
         {
             MessageBuilder mb = new MessageBuilder(NetworkSignifier.C_Disconnect);
             NetworkClientProcessing.SendMessageToServer(mb);
-            StateManager.PopGameStateUntilStateIs(GameState.Title);
+            StateManager.PopGameStateUntilStateIs(typeof(TitleState));
         }
         StateManager.Update();
         VisualTaskQueue.Update();

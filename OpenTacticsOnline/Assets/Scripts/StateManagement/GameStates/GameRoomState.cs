@@ -6,7 +6,7 @@ public class GameRoomState : AbstractGameState
     private NetworkPlayerController networkPlayerController;
     private LocalPlayerController localPlayerController;
 
-    public GameRoomState() : base(GameState.GameRoom)
+    public GameRoomState()
     {
         
     }

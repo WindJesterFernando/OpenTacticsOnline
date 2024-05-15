@@ -3,7 +3,6 @@ public class SelectActionUIState : AbstractGameState
     private Hero actingHero;
     
     public SelectActionUIState(Hero actingHero) 
-        : base(GameState.SelectActionUI)
     {
         this.actingHero = actingHero;
     }

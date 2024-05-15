@@ -1,7 +1,6 @@
 public class TitleState : AbstractGameState
 {
     public TitleState()
-        : base(GameState.Title)
     {
 
     }

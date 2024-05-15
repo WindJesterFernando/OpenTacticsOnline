@@ -3,7 +3,7 @@ public class HeroTurnActionState : AbstractGameState
     private TurnAction turnAction;
     private GridCoord target;
     
-    public HeroTurnActionState(TurnAction action, GridCoord target) : base(GameState.PerformingAction)
+    public HeroTurnActionState(TurnAction action, GridCoord target)
     {
         turnAction = action;
         this.target = target;
@@ -18,7 +18,7 @@ public class HeroTurnActionState : AbstractGameState
     {
         if (VisualTaskQueue.GetActionCount() == 0)
         {
-            StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
+            StateManager.PopGameStateUntilStateIs(typeof(MainBattleState));
         }
     }
 }

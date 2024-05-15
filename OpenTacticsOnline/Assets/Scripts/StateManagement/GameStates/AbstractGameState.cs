@@ -1,7 +1,5 @@
 public abstract class AbstractGameState
 {
-    GameState gameState;
-
     public virtual void OnStateEnter()
     {
 
@@ -25,15 +23,5 @@ public abstract class AbstractGameState
     public virtual void Update()
     {
 
-    }
-    
-    public GameState GetGameState()
-    {
-        return gameState;
-    }
-
-    protected AbstractGameState(GameState gameState)
-    {
-        this.gameState = gameState;
     }
 }
