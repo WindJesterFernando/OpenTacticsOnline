@@ -13,7 +13,7 @@ public class GameRoomState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        UIManager.EnableWaitingText();
+        UIManager.EnablePopupText("Waiting for opponent...");
         GameObject go = new GameObject("NetworkClient");
         go.AddComponent<NetworkClient>();
         NetworkClientProcessing.SetMessageReceiver(OnMessageReceived);
@@ -21,7 +21,7 @@ public class GameRoomState : AbstractGameState
 
     public override void OnStatePause()
     {
-        UIManager.DisableWaitingText();
+        UIManager.DisablePopupText();
     }
 
     private void OnMessageReceived(Message msg)
@@ -70,7 +70,7 @@ public class GameRoomState : AbstractGameState
 
     public override void OnStateExit()
     {
-        UIManager.DisableWaitingText();
+        UIManager.DisablePopupText();
         GameObject.Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
         NetworkClientProcessing.SetNetworkedClient(null);
         NetworkClientProcessing.ClearMessageReceiver();

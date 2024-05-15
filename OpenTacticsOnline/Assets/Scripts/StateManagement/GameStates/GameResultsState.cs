@@ -12,7 +12,16 @@ public class GameResultsState : AbstractGameState
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        Debug.Log($"Player won: {playerWon}");
+        string resultsText;
+        if (playerWon)
+        {
+            resultsText = "You Won!";
+        }
+        else
+        {
+            resultsText = "You Lost!";
+        }
+        UIManager.EnablePopupText(resultsText);
     }
 
     public override void Update()
@@ -25,5 +34,6 @@ public class GameResultsState : AbstractGameState
 
     public override void OnStateExit()
     {
+        UIManager.DisablePopupText();
     }
 }

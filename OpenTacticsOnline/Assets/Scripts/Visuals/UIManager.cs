@@ -7,7 +7,7 @@ public static class UIManager
 {
     private static Button[] menuButtons;
     private static Button[] actionButtons;
-    private static GameObject waitingText;
+    private static GameObject popupText;
 
     private static List<Image> turnOrderImages;
     private static List<Slider> heroHealthBars;
@@ -19,8 +19,8 @@ public static class UIManager
         menuButtons = menuCanvas.GetComponentsInChildren<Button>();
         DisableMenuButtons();
 
-        waitingText = menuCanvas.transform.Find("WaitingText").gameObject;
-        DisableWaitingText();
+        popupText = menuCanvas.transform.Find("PopupText").gameObject;
+        DisablePopupText();
 
         Transform actionButtonsLayoutGroup = battleCanvas.transform.Find("TurnActionBtnsVerticalLayout");
         actionButtons = actionButtonsLayoutGroup.GetComponentsInChildren<Button>();
@@ -127,13 +127,14 @@ public static class UIManager
         }
     }
 
-    public static void EnableWaitingText()
+    public static void EnablePopupText(string text)
     {
-        waitingText.gameObject.SetActive(true);
+        popupText.GetComponent<TMP_Text>().text = text;
+        popupText.SetActive(true);
     }
 
-    public static void DisableWaitingText()
+    public static void DisablePopupText()
     {
-        waitingText.gameObject.SetActive(false);
+        popupText.gameObject.SetActive(false);
     }
 }
