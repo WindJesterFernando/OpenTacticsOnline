@@ -12,7 +12,7 @@ public class NetworkClient : MonoBehaviour
     private NetworkPipeline reliableAndInOrderPipeline;
     private NetworkPipeline nonReliableNotInOrderedPipeline;
     private const ushort NetworkPort = 9001;
-    private string IPAddress = "10.8.80.113";
+    private string IPAddress;
 
     private void Start()
     {

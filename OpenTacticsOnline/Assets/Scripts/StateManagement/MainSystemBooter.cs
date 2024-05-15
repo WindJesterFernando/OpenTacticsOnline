@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class MainSystemBooter : MonoBehaviour
 {
+    [SerializeField] private GameObject TitleUICanvas;
     [SerializeField] private GameObject BattleUICanvas;
     
     public void Start()
@@ -10,7 +11,7 @@ public class MainSystemBooter : MonoBehaviour
         StateManager.Init();
         //BattleGridModelData.Init();
         ContentLoader.Init();
-        UIManager.Init(BattleUICanvas);
+        UIManager.Init(TitleUICanvas, BattleUICanvas);
         
         // NetworkClientProcessing.SetMainSystemBooter(this);
         StateManager.PushGameState(new TitleState());

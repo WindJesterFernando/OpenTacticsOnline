@@ -8,20 +8,26 @@ public class TitleState : AbstractGameState
 
     }
 
-    public override void OnStateEnter()
-    {
-        Debug.Log("Press Left mouse to play AI, Press Right mouse to connect");
-    }
-    
     public override void Update()
     {
-        if (Input.GetMouseButtonDown(MouseButton.Left))
+        if (Input.GetMouseButtonDown(1))
         {
-            StateManager.PushGameState(new LocalRoomState());
+            //StateManager.PushGameState(new GameRoomState());
         }
-        if (Input.GetMouseButtonDown(MouseButton.Right))
-        {
-            StateManager.PushGameState(new GameRoomState());
-        }
+    }
+
+    public override void OnStateEnter()
+    {
+        UIManager.EnableMenuButtons();
+    }
+
+    public override void OnStateContinue()
+    {
+        UIManager.EnableMenuButtons();
+    }
+
+    public override void OnStatePause()
+    {
+        UIManager.DisableMenuButtons();
     }
 }

@@ -5,25 +5,29 @@ using UnityEngine.UI;
 
 public static class UIManager
 {
-    private static GameObject battleUICanvas;
+    private static Button[] menuButtons;
     private static Button[] actionButtons;
+    private static GameObject waitingText;
 
     private static List<Image> turnOrderImages;
     private static List<Slider> heroHealthBars;
     private static readonly Vector3 ActiveHeroScale = new Vector3(1.25f, 1.25f, 1.25f);
     private const float KnockedOutHeroAlpha = 0.3f;
 
-    public static void Init(GameObject battleCanvas)
+    public static void Init(GameObject menuCanvas, GameObject battleCanvas)
     {
-        battleUICanvas = battleCanvas;
+        menuButtons = menuCanvas.GetComponentsInChildren<Button>();
+        DisableMenuButtons();
+        waitingText = menuCanvas.transform.Find("WaitingText").gameObject;
+        DisableWaitingText();
 
-        Transform buttonsLayoutGroup = battleUICanvas.transform.Find("TurnActionBtnsVerticalLayout");
-        actionButtons = buttonsLayoutGroup.GetComponentsInChildren<Button>();
+        Transform actionButtonsLayoutGroup = battleCanvas.transform.Find("TurnActionBtnsVerticalLayout");
+        actionButtons = actionButtonsLayoutGroup.GetComponentsInChildren<Button>();
         DisableButtons();
 
         turnOrderImages = new List<Image>();
         heroHealthBars = new List<Slider>();
-        Transform turnOrderHorizontalLayout = battleUICanvas.transform.Find("TurnOrderHorizontalLayout");
+        Transform turnOrderHorizontalLayout = battleCanvas.transform.Find("TurnOrderHorizontalLayout");
         foreach (Transform child in turnOrderHorizontalLayout.transform)
         {
             turnOrderImages.Add(child.GetComponent<Image>());
@@ -100,5 +104,35 @@ public static class UIManager
         {
             image.gameObject.SetActive(false);
         }
+    }
+
+    public static void EnableMenuButtons()
+    {
+        menuButtons[0].gameObject.SetActive(true);
+        menuButtons[0].onClick
+            .AddListener(() => StateManager.PushGameState(new LocalRoomState()));
+
+        menuButtons[1].gameObject.SetActive(true);
+        menuButtons[1].onClick
+            .AddListener(() => StateManager.PushGameState(new GameRoomState()));
+    }
+
+    public static void DisableMenuButtons()
+    {
+        foreach (Button button in menuButtons)
+        {
+            button.onClick.RemoveAllListeners();
+            button.gameObject.SetActive(false);
+        }
+    }
+
+    public static void EnableWaitingText()
+    {
+        waitingText.gameObject.SetActive(true);
+    }
+
+    public static void DisableWaitingText()
+    {
+        waitingText.gameObject.SetActive(false);
     }
 }

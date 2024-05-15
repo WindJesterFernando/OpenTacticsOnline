@@ -13,9 +13,15 @@ public class GameRoomState : AbstractGameState
 
     public override void OnStateEnter()
     {
+        UIManager.EnableWaitingText();
         GameObject go = new GameObject("NetworkClient");
         go.AddComponent<NetworkClient>();
         NetworkClientProcessing.SetMessageReceiver(OnMessageReceived);
+    }
+
+    public override void OnStatePause()
+    {
+        UIManager.DisableWaitingText();
     }
 
     private void OnMessageReceived(Message msg)
@@ -70,6 +76,7 @@ public class GameRoomState : AbstractGameState
 
     public override void OnStateExit()
     {
+        UIManager.DisableWaitingText();
         GameObject.Destroy(NetworkClientProcessing.GetNetworkedClient().gameObject);
         NetworkClientProcessing.SetNetworkedClient(null);
         NetworkClientProcessing.ClearMessageReceiver();

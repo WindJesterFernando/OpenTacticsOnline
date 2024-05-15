@@ -20,7 +20,7 @@ public class NetworkPlayerController : AbstractController
                 hero.ModifyHealth(-999999);
             }
             
-            StateManager.PopGameStateUntilStateIs(GameState.Title);
+            StateManager.PopGameStateUntilStateIs(GameState.MainPlay);
             NetworkClientProcessing.ClearMessageReceiver();
         }   
         
