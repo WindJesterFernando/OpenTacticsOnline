@@ -106,9 +106,6 @@ public static partial class BattleGridModelData
         }
     }
 
-
-
-
     public static List<GridCoord> FindShortestPath(GridCoord start, GridCoord end, bool isPlayerTeam)
     {
         int[,] stepCosts = InitializeStepCosts();
@@ -118,11 +115,11 @@ public static partial class BattleGridModelData
         PathBlocker pathBlockers;
 
         if (isPlayerTeam)
-            pathBlockers = PathBlocker.Opponent;
+            pathBlockers = BlockerFlag.Opponent;
         else
-            pathBlockers = PathBlocker.Ally;
+            pathBlockers = BlockerFlag.Ally;
 
-        pathBlockers = pathBlockers | PathBlocker.Terrain;
+        pathBlockers += BlockerFlag.Terrain;
 
         #endregion
 
@@ -256,7 +253,7 @@ public static partial class BattleGridModelData
         bool isTileBlockedByFoe;
         bool isTileBlockedByAlly;
 
-        if ((pathBlockers & PathBlocker.Terrain) != 0)
+        if (pathBlockers.Contains(BlockerFlag.Terrain))
             isTileWalkable = battleGridTiles[coord.x, coord.y].isWalkable;
         else
             isTileWalkable = true;
@@ -264,7 +261,7 @@ public static partial class BattleGridModelData
         if (!isTileWalkable)
             return true;
 
-        if ((pathBlockers & (PathBlocker.Ally | PathBlocker.Opponent)) == 0)
+        if (!pathBlockers.Contains(BlockerFlag.Ally) && !pathBlockers.Contains(BlockerFlag.Opponent))
         {
             return false;
         }
@@ -277,12 +274,12 @@ public static partial class BattleGridModelData
 
         isTileBlockedByAlly = false;
         isTileBlockedByFoe = false;
-        if ((pathBlockers & PathBlocker.Ally) == PathBlocker.Ally)
+        if (pathBlockers.Contains(BlockerFlag.Ally))
         {
             if (hero.isAlly)
                 isTileBlockedByAlly = true;
         }
-        if ((pathBlockers & PathBlocker.Opponent) == PathBlocker.Opponent)
+        if (pathBlockers.Contains(BlockerFlag.Opponent))
         {
             if (!hero.isAlly)
                 isTileBlockedByFoe = true;
@@ -369,15 +366,6 @@ public enum TargetType
     AnyTile
 }
 
-[Flags]
-public enum PathBlocker : byte
-{
-    None = 0,
-    Ally = 1 << 0, //0001
-    Opponent = 1 << 1, //0010
-    Terrain = 1 << 2 //0100
-}
-
 public class TargetingOptions
 {
     public bool canTargetSelf;
@@ -396,6 +384,6 @@ public class TargetingOptions
     {
         canTargetSelf = true;
         targetType = TargetType.None;
-        pathBlockers = PathBlocker.None;
+        pathBlockers = BlockerFlag.None;
     }
 }

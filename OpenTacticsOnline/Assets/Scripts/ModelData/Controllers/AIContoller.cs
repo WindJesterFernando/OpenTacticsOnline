@@ -7,7 +7,7 @@ public class AIContoller : AbstractController
          List<GridCoord> nearTiles =
             BattleGridModelData.FindTargetsWithinSteps(activeHero.coord, activeHero.maxSteps,
                  new TargetingOptions(false, TargetType.EmptyTile,
-                     PathBlocker.Ally | PathBlocker.Terrain));
+                     BlockerFlag.Ally | BlockerFlag.Terrain));
 
          if (nearTiles.Count == 0)
          {
