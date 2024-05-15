@@ -7,7 +7,7 @@ public class HeroTargetSelectionState : AbstractGameState
 
     private TurnAction turnAction;
 
-    public HeroTargetSelectionState(TurnAction action) : base(GameState.AttackSelection)
+    public HeroTargetSelectionState(TurnAction action) : base(GameState.TargetSelection)
     {
         turnAction = action;
     }
@@ -76,7 +76,6 @@ public class HeroTargetSelectionState : AbstractGameState
 
                 if (b.Contains(mouseWorldPoint))
                 {
-                    Debug.Log("Tile Hit @ " + x + "," + y);
                     return new GridCoord(x, y);
                 }
             }

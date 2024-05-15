@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine.PlayerLoop;
 
 public static class BattleSystemModelData
 { 
@@ -43,8 +42,6 @@ public static class BattleSystemModelData
             unorderedHeroTurnPriorities.Remove(highest);
             turnOrder[currentIndex] = highest.hero;
             currentIndex++;
-            
-            //Debug.Log("adding " + highest.priority);
         }
         
         #endregion
@@ -63,7 +60,6 @@ public static class BattleSystemModelData
 
         if (currentHeroTurnIndex > turnOrder.Length - 1)
             currentHeroTurnIndex = 0;
-        // change ui state here???
         UIManager.SetActiveHero(currentHeroTurnIndex);
         UIManager.RefreshHeroHealthState(turnOrder);
     }
@@ -76,7 +72,6 @@ public static class BattleSystemModelData
     }
 }
 
-
 class HeroAndTurnPriority
 {
     public Hero hero;
@@ -87,5 +82,4 @@ class HeroAndTurnPriority
         this.hero = hero;
         this.priority = priority;
     }
-    
 }

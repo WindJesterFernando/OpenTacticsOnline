@@ -1,11 +1,9 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public static class NetworkClientProcessing
 {
     private static NetworkClient networkClient;
-    //private static IMessageReceiver receiver;
     public delegate void ReceivedMessage(Message message);
 
     private static ReceivedMessage onMessageReceived;
@@ -15,7 +13,6 @@ public static class NetworkClientProcessing
     {
         Debug.Log("Network msg received =  " + msg + ", from pipeline = " + pipeline);
         Message messageGot = new Message(msg);
-        //receiver.OnMessageReceived(messageGot);
         onMessageReceived?.Invoke(messageGot);
     }
 
@@ -60,19 +57,6 @@ public static class NetworkClientProcessing
         return networkClient;
     }
 
-    //public static void SetMessageReceiver(IMessageReceiver newReceiver)
-    //{
-    //    if (receiver != null)
-    //        throw new Exception("Message receiver is already set!");
-
-    //    receiver = newReceiver;
-    //}
-
-    //public static void ClearMessageReceiver()
-    //{
-    //    receiver = null;
-    //}
-
     public static void SetMessageReceiver(ReceivedMessage receiver)
     {
         if (onMessageReceived != null)
@@ -86,5 +70,4 @@ public static class NetworkClientProcessing
     }
 
     #endregion
-
 }

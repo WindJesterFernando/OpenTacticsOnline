@@ -8,7 +8,6 @@ public static partial class BattleGridModelData
     private const int TileIsBeingBlocked = -2;
     private static readonly GridCoord EmptyGridCoord = new GridCoord(-99, -99);
 
-
     private static int[,] InitializeStepCosts()
     {
         int[,] stepCosts = new int[gridSizeX, gridSizeY];
@@ -297,8 +296,6 @@ public static partial class BattleGridModelData
         return false;
     }
 
-
-
     private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
     {
         if (type == TargetType.AnyTile)
@@ -359,10 +356,6 @@ public static partial class BattleGridModelData
 
         return tiles;
     }
-
-
-
-
 }
 
 public enum TargetType
@@ -383,7 +376,6 @@ public enum PathBlocker : byte
     Ally = 1 << 0, //0001
     Opponent = 1 << 1, //0010
     Terrain = 1 << 2 //0100
-
 }
 
 public class TargetingOptions
@@ -407,5 +399,3 @@ public class TargetingOptions
         pathBlockers = PathBlocker.None;
     }
 }
-
-

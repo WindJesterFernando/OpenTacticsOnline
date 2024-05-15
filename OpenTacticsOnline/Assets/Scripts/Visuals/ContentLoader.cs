@@ -134,7 +134,5 @@ public static class ContentLoader
         fa.StartAnimation(AnimationKey.Idle);
 
         return go;
-
     }
-
 }

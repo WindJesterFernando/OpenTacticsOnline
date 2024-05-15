@@ -1,4 +1,3 @@
-
 public enum NetworkSignifier
 {
     C_CreateRoom = 0,

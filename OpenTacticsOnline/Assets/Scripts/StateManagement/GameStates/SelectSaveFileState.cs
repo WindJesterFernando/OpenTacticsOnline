@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SelectSaveFileState : AbstractGameState
@@ -18,6 +16,4 @@ public class SelectSaveFileState : AbstractGameState
             StateManager.PushGameState(new MainBattleState());
         }
     }
-
-
 }

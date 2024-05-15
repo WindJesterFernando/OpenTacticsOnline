@@ -29,8 +29,6 @@ public class GameRoomState : AbstractGameState
 
         if (msg.signifier == NetworkSignifier.S_SelfJoined)
         {
-            Debug.Log("WE joined the room ");
-            
             isFirstPlayer = msg.values[0] == "0";
             return;
         }
@@ -38,7 +36,6 @@ public class GameRoomState : AbstractGameState
         if (msg.signifier == NetworkSignifier.S_RoomFilled)
         {
             SyncedRandomGenerator.Reload(int.Parse(msg.values[0]));
-            Debug.Log("Other joined the room ");
             StartGame();
         }
     }
@@ -50,7 +47,7 @@ public class GameRoomState : AbstractGameState
         networkPlayerController = new NetworkPlayerController();
         localPlayerController = new LocalPlayerController();
 
-        // Add some functionality to customize this and send the data about what we choose to the other client
+        //TODO Add some functionality to customize this and send the data about what we choose to the other client
         AddHero(new Hero(2, 2, HeroRole.BlackMage, 6, 20, isFirstPlayer));
         AddHero(new Hero(3, 2, HeroRole.RedMage, 6, 20, isFirstPlayer));
         AddHero(new Hero(3, 3, HeroRole.WhiteMage, 6, 20, isFirstPlayer));
@@ -69,10 +66,7 @@ public class GameRoomState : AbstractGameState
         }
         
         StateManager.PushGameState(new MainBattleState());
-
     }
-
-
 
     public override void OnStateExit()
     {

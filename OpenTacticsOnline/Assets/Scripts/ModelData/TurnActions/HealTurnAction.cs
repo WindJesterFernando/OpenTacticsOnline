@@ -7,8 +7,8 @@ public class HealTurnAction : TurnAction
 
     public override void ApplyEffectToModelData(GridCoord target)
     {
-        UnityEngine.Debug.Log("Healing");
-        // process heal effect
+        Hero hero = BattleGridModelData.GetHeroAtCoord(target);
+        hero.ModifyHealth(10);
     }
 
     public override void EnqueueVisualSequence(GridCoord target)
@@ -19,5 +19,4 @@ public class HealTurnAction : TurnAction
         VisualTaskQueue.EnqueueAction(new WaitVisualTask(0.5f));
         VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));
     }
-    
 }

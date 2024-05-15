@@ -5,9 +5,7 @@ public static partial class BattleGridModelData
     public const int gridSizeX = 20, gridSizeY = 10;
     private static BattleGridTile[,] battleGridTiles;
     
-    // TODO change to list 
     private static List<Hero> heroes;
-    
     private static List<Hero> allyHeroes;
     private static List<Hero> opponentHeroes;
 
@@ -169,4 +167,3 @@ public struct BattleGridTile
     public int id;
     public bool isWalkable;
 }
-

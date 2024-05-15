@@ -64,7 +64,6 @@ public class FrameAnimator : MonoBehaviour
     {
         frameAnimationLibrary.Add(key, frames);
     }
-
 }
 
 public class AnimationFrame
@@ -78,4 +77,3 @@ public class AnimationFrame
         this.time = time;
     }
 }
-

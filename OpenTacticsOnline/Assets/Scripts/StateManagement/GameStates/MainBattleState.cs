@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public class MainBattleState : AbstractGameState
 {
@@ -10,7 +9,6 @@ public class MainBattleState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        //BattleGridModelData.Init();
         GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());
         BattleSystemModelData.RandomlyOrderTurns();
     }
@@ -67,7 +65,6 @@ public class MainBattleState : AbstractGameState
         }
         return true;
     }
-
 
     public override void OnStateExit()
     {

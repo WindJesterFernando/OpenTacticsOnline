@@ -11,10 +11,7 @@ public enum HeroRole
     Monk,
     Thief
 }
-/// <summary>
-/// something here <br/>
-/// <para>more comments</para>
-/// </summary>
+
 public class Hero
 {
     public GridCoord coord;
@@ -40,7 +37,6 @@ public class Hero
         currentHealth = maxHealth;
         this.isAlly = isAlly;
         CreateTurnActions();
-        //UnityEngine.Debug.Log(this.maxHealth);
     }
 
     public bool IsAlive()
@@ -102,5 +98,3 @@ public class Hero
         controller.DoTurn(this);
     }
 }
-
-

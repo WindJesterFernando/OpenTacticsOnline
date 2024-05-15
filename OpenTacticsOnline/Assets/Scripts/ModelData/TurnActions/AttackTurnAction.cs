@@ -1,4 +1,3 @@
-
 public class AttackTurnAction : TurnAction
 {
     public AttackTurnAction(Hero owner, int range = 1, string name = "Attack") : base(owner, name, range,
@@ -9,9 +8,6 @@ public class AttackTurnAction : TurnAction
     
     public override void ApplyEffectToModelData(GridCoord target)
     {
-        UnityEngine.Debug.Log("Attacking");
-        
-        // process damage effect
         Hero hero = BattleGridModelData.GetHeroAtCoord(target); 
         hero.ModifyHealth(-5);
     }

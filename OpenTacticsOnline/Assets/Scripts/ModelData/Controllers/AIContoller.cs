@@ -21,7 +21,6 @@ public class AIContoller : AbstractController
          GridCoord randomGridCoord = nearTiles[randomIndex];
 
          StateManager.PushGameState(new HeroTurnActionState(new MoveTurnAction(activeHero), randomGridCoord));
-         // StateManager.PushGameState(new HeroMovementState(activeHero, randomGridCoord));
          activeHero.coord = randomGridCoord;   
     }
 }

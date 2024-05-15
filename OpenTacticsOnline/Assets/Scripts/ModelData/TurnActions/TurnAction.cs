@@ -1,4 +1,3 @@
-
 public abstract class TurnAction
 {
     public readonly Hero owner;
@@ -23,7 +22,6 @@ public abstract class TurnAction
         this.steps = 0;
         this.targetingOptions = null;
     }
-
 
     public abstract void ApplyEffectToModelData(GridCoord target);
     public abstract void EnqueueVisualSequence(GridCoord target);

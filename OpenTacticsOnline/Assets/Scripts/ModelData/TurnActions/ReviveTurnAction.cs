@@ -7,8 +7,6 @@
 
     public override void ApplyEffectToModelData(GridCoord target)
     {
-        UnityEngine.Debug.Log("Reviving");
-
         Hero hero = BattleGridModelData.GetHeroAtCoord(target);
         if(!hero.IsAlive())
             hero.ModifyHealth(5);
@@ -22,5 +20,4 @@
         VisualTaskQueue.EnqueueAction(new WaitVisualTask(0.5f));
         VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));
     }
-
 }

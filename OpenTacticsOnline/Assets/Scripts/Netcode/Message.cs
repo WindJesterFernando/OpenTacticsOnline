@@ -1,4 +1,3 @@
-
 public class Message
 {
     public readonly NetworkSignifier signifier;

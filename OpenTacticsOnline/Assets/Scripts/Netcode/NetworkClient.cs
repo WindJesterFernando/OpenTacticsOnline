@@ -3,7 +3,6 @@ using Unity.Collections;
 using Unity.Networking.Transport;
 using System.Text;
 using System.Net.NetworkInformation;
-using System.Net;
 
 public class NetworkClient : MonoBehaviour
 {
@@ -150,7 +149,6 @@ public class NetworkClient : MonoBehaviour
         networkConnection.Disconnect(networkDriver);
         networkConnection = default(NetworkConnection);
     }
-
 }
 
 public enum TransportPipeline

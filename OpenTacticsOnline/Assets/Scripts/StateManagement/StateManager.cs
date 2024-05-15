@@ -26,8 +26,6 @@ public static class StateManager
     
     public static void PopGameState()
     {
-        //Debug.Log("popping " + gameStateStack.Peek().GetGameState());
-        
         gameStateStack.Peek().OnStateExit();
         gameStateStack.Pop();
         
@@ -39,7 +37,6 @@ public static class StateManager
         while(gameStateStack.Peek().GetGameState() != gameState)
             PopGameState();
     }
-    
 }
 
 public enum GameState
@@ -47,14 +44,10 @@ public enum GameState
     Title,
     SelectSaveFile,
     MainPlay,
-    MoveSelection,
-    AttackSelection,
-    PerformingMove,
+    TargetSelection,
     PerformingAction,
     GameResults,
     SelectActionUI,
     GameRoom,
     LocalRoom,
-    // Inventory,
-    // Equiping,
 }

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class TitleState : AbstractGameState
 {
     public TitleState()
@@ -10,10 +8,6 @@ public class TitleState : AbstractGameState
 
     public override void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            //StateManager.PushGameState(new GameRoomState());
-        }
     }
 
     public override void OnStateEnter()

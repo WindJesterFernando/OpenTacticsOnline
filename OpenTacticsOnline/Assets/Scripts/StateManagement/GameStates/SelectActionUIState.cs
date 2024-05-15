@@ -1,4 +1,3 @@
-
 public class SelectActionUIState : AbstractGameState
 {
     private Hero actingHero;

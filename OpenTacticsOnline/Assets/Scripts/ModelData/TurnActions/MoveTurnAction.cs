@@ -12,7 +12,6 @@ public class MoveTurnAction : TurnAction
     {
         UnityEngine.Debug.Log("Moving");
         owner.coord = target;
-        // StateManager.PushGameState(new HeroMoveSelectionState(owner));
     }
 
     public override void EnqueueVisualSequence(GridCoord target)

@@ -18,6 +18,7 @@ public static class UIManager
     {
         menuButtons = menuCanvas.GetComponentsInChildren<Button>();
         DisableMenuButtons();
+
         waitingText = menuCanvas.transform.Find("WaitingText").gameObject;
         DisableWaitingText();
 
