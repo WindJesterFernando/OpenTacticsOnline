@@ -9,6 +9,17 @@ public enum BlockerFlag : byte
     Terrain = 1 << 2 //0100
 }
 
+public enum TargetType : byte
+{
+    None = 0,
+    Ally = 1 << 0,
+    Opponent = 1 << 1,
+    KnockedOutAllies = 1 << 2,
+    AnyHero = 1 << 3,
+    EmptyTile = 1 << 4,
+    AnyTile = 1 << 5
+}
+
 public struct PathBlocker
 {
     private readonly BlockerFlag value;
@@ -52,6 +63,11 @@ public struct PathBlocker
     public bool Contains(PathBlocker blocker)
     {
         return (value & blocker.value) == blocker.value;
+    }
+
+    public bool ContainsAny(PathBlocker blocker)
+    {
+        return (value & blocker.value) > 0;
     }
 
     public bool Equals(PathBlocker other)

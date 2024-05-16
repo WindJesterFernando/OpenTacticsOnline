@@ -261,7 +261,7 @@ public static partial class BattleGridModelData
         if (!isTileWalkable)
             return true;
 
-        if (!pathBlockers.Contains(BlockerFlag.Ally) && !pathBlockers.Contains(BlockerFlag.Opponent))
+        if (!pathBlockers.ContainsAny(BlockerFlag.Ally | BlockerFlag.Opponent))
         {
             return false;
         }
@@ -355,16 +355,7 @@ public static partial class BattleGridModelData
     }
 }
 
-public enum TargetType
-{
-    None,
-    Ally,
-    Opponent,
-    KnockedOutAllies,
-    AnyHero,
-    EmptyTile,
-    AnyTile
-}
+
 
 public class TargetingOptions
 {
