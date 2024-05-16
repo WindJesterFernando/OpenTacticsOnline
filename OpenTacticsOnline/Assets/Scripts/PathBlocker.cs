@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Flags]
 public enum BlockerFlag : byte
@@ -9,6 +10,7 @@ public enum BlockerFlag : byte
     Terrain = 1 << 2 //0100
 }
 
+[Flags]
 public enum TargetType : byte
 {
     None = 0,
@@ -20,68 +22,98 @@ public enum TargetType : byte
     AnyTile = 1 << 5
 }
 
-public struct PathBlocker
+public struct BitFlag<T> where T : Enum
 {
-    private readonly BlockerFlag value;
+    private readonly byte flagContainer;
 
-    private PathBlocker(BlockerFlag blockerFlag)
+    private BitFlag(T flag)
     {
-        value = blockerFlag;
+        flagContainer = ToByte(flag);
+    }
+
+    private BitFlag(int flag)
+    {
+        flagContainer = ToByte(flag);
     }
 
     // Overload assignment operator (=)
-    public static implicit operator PathBlocker(BlockerFlag value)
+    public static implicit operator BitFlag<T>(T newFlag)
     {
-        return new PathBlocker(value);
+        return new BitFlag<T>(newFlag);
     }
 
-    public static PathBlocker operator +(PathBlocker a, PathBlocker b)
+    public static BitFlag<T> operator +(BitFlag<T> leftFlag, BitFlag<T> rightFlag)
     {
-        return new PathBlocker(a.value | b.value);
+        int flags = ToByte(leftFlag) | ToByte(rightFlag);
+        return new BitFlag<T>(flags);
     }
 
-    public static PathBlocker operator -(PathBlocker a, PathBlocker b)
+    public static BitFlag<T> operator -(BitFlag<T> leftFlag, BitFlag<T> rightFlag)
     {
         // remove thing
         // a = 100101
         // b = 000110
         // t = a & b // 000100
         // r = a & ~t // 100001
-        return new PathBlocker(a.value & ~(a.value & b.value));
+
+        int flags = ToByte(leftFlag) & ~(ToByte(leftFlag) & ToByte(rightFlag));
+
+        return new BitFlag<T>(flags);
     }
 
-    public static bool operator ==(PathBlocker a, PathBlocker b)
+    public static bool operator ==(BitFlag<T> leftFlag, BitFlag<T> rightFlag)
     {
-        return a.value == b.value;
+        return ToByte(leftFlag) == ToByte(rightFlag);
     }
 
-    public static bool operator !=(PathBlocker a, PathBlocker b)
+    public static bool operator !=(BitFlag<T> leftFlag, BitFlag<T> rightFlag)
     {
-        return a.value != b.value;
+        return ToByte(leftFlag) != ToByte(rightFlag);
     }
 
-    public bool Contains(PathBlocker blocker)
+    public bool Contains(BitFlag<T> queriedFlag)
     {
-        return (value & blocker.value) == blocker.value;
+        return (ToByte(flagContainer) & ToByte(queriedFlag)) == ToByte(queriedFlag);
     }
 
-    public bool ContainsAny(PathBlocker blocker)
+    public bool ContainsAny(BitFlag<T> queriedFlag)
     {
-        return (value & blocker.value) > 0;
+        return (ToByte(flagContainer) & ToByte(queriedFlag)) > 0;
     }
 
-    public bool Equals(PathBlocker other)
+    #region wrappers
+
+    public static byte ToByte(T flag)
     {
-        return value == other.value;
+        return Convert.ToByte(flag);
+    }
+    public static byte ToByte(BitFlag<T> flag)
+    {
+        return Convert.ToByte(flag.flagContainer);
+    }
+    public static byte ToByte(int flag)
+    {
+        return Convert.ToByte(flag);
+    }
+
+    #endregion
+
+    #region auto generated
+
+    public bool Equals(BitFlag<T> other)
+    {
+        return ToByte(flagContainer) == ToByte(other.flagContainer);
     }
 
     public override bool Equals(object obj)
     {
-        return obj is PathBlocker other && Equals(other);
+        return obj is BitFlag<T> other && Equals(other);
     }
 
     public override int GetHashCode()
     {
-        return (int)value;
+        return ToByte(flagContainer);
     }
+
+    #endregion
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using UnityEngine;
+
 public static partial class BattleGridModelData
 {
     private const int StepCost = 1;
@@ -23,7 +25,7 @@ public static partial class BattleGridModelData
         return stepCosts;
     }
 
-    private static void SetupBlockedSteps(int[,] stepCosts, PathBlocker pathBlockers)
+    private static void SetupBlockedSteps(int[,] stepCosts, BitFlag<BlockerFlag> pathBlockers)
     {
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -112,14 +114,16 @@ public static partial class BattleGridModelData
 
         #region Determine Path Blockers
 
-        PathBlocker pathBlockers;
+        BitFlag<BlockerFlag> pathBlockers;
 
         if (isPlayerTeam)
             pathBlockers = BlockerFlag.Opponent;
         else
             pathBlockers = BlockerFlag.Ally;
 
+        Debug.Log("Top");
         pathBlockers += BlockerFlag.Terrain;
+        Debug.Log("Bottom");
 
         #endregion
 
@@ -159,7 +163,7 @@ public static partial class BattleGridModelData
         return new List<GridCoord>(path);
     }
 
-    private static LinkedList<GridCoord> FindTilesWithinSteps(GridCoord start, int steps, PathBlocker pathBlockers)
+    private static LinkedList<GridCoord> FindTilesWithinSteps(GridCoord start, int steps, BitFlag<BlockerFlag> pathBlockers)
     {
         int[,] stepCosts = InitializeStepCosts();
 
@@ -246,7 +250,7 @@ public static partial class BattleGridModelData
         return isTileInBounds;
     }
 
-    private static bool IsTileBlocked(GridCoord coord, PathBlocker pathBlockers)
+    private static bool IsTileBlocked(GridCoord coord, BitFlag<BlockerFlag> pathBlockers)
     {
         bool isTileWalkable;
         bool isTileEmpty;
@@ -361,10 +365,10 @@ public class TargetingOptions
 {
     public bool canTargetSelf;
     public TargetType targetType;
-    public PathBlocker pathBlockers;
+    public BitFlag<BlockerFlag> pathBlockers;
     // public bool needLineOfSight;
 
-    public TargetingOptions(bool canTargetSelf, TargetType targetType, PathBlocker pathBlockers)
+    public TargetingOptions(bool canTargetSelf, TargetType targetType, BitFlag<BlockerFlag> pathBlockers)
     {
         this.canTargetSelf = canTargetSelf;
         this.targetType = targetType;
