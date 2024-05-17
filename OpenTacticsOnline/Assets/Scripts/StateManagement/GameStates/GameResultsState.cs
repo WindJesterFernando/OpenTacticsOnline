@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class GameResultsState : AbstractGameState
 {
     private bool playerWon;
