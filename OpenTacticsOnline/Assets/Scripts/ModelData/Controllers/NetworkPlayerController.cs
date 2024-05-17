@@ -23,7 +23,6 @@ public class NetworkPlayerController : AbstractController
             NetworkClientProcessing.ClearMessageReceiver();
         }   
         
-
         if (msg.signifier == NetworkSignifier.CC_ActionUsed)
         {
             if (activeHero == null)
@@ -36,7 +35,6 @@ public class NetworkPlayerController : AbstractController
 
             activeHero = null;
         }
-
     }
 
     public override void DoTurn(Hero activeHero)

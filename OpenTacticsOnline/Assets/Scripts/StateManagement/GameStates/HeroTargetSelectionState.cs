@@ -83,6 +83,7 @@ public class HeroTargetSelectionState : AbstractGameState
 
         return null;
     }
+
     private void SendAction(GridCoord target)
     {
         if (NetworkClientProcessing.GetNetworkedClient() == null)

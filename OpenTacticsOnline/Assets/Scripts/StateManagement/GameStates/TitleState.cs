@@ -1,26 +1,17 @@
 public class TitleState : AbstractGameState
 {
-    public TitleState()
-    {
-
-    }
-
-    public override void Update()
-    {
-    }
-
     public override void OnStateEnter()
     {
-        UIManager.EnableMenuButtons();
+        UIManager.EnablePlayButtons();
     }
 
     public override void OnStateContinue()
     {
-        UIManager.EnableMenuButtons();
+        UIManager.EnablePlayButtons();
     }
 
     public override void OnStatePause()
     {
-        UIManager.DisableMenuButtons();
+        UIManager.DisablePlayButtons();
     }
 }

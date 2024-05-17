@@ -2,10 +2,6 @@ using System.Collections.Generic;
 
 public class MainBattleState : AbstractGameState
 {
-    public MainBattleState()
-    {
-    }
-
     public override void OnStateEnter()
     {
         GridVisuals.CreateBattleGridVisuals(BattleGridModelData.GetBattleGridTiles());

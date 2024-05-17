@@ -10,6 +10,5 @@
 
     public override void EnqueueVisualSequence(GridCoord target)
     {
-        VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));
     }
 }

@@ -22,18 +22,12 @@ public class GameResultsState : AbstractGameState
             resultsText = "You Lost!";
         }
         UIManager.EnablePopupText(resultsText);
-    }
-
-    public override void Update()
-    {
-        if(Input.GetMouseButtonDown(MouseButton.Left))
-        {
-            StateManager.PopGameStateUntilStateIs(typeof(TitleState));
-        }
+        UIManager.EnableMenuButton();
     }
 
     public override void OnStateExit()
     {
         UIManager.DisablePopupText();
+        UIManager.DisableMenuButton();
     }
 }

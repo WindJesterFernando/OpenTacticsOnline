@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public static class UIManager
 {
-    private static Button[] menuButtons;
+    private static Button[] playButtons;
     private static Button[] actionButtons;
     private static GameObject popupText;
+    private static Button menuButton;
 
     private static List<Image> turnOrderImages;
     private static List<Slider> heroHealthBars;
@@ -16,15 +17,19 @@ public static class UIManager
 
     public static void Init(GameObject menuCanvas, GameObject battleCanvas)
     {
-        menuButtons = menuCanvas.GetComponentsInChildren<Button>();
-        DisableMenuButtons();
+        menuButton = menuCanvas.transform.Find("MenuButton").GetComponent<Button>();
+        DisableMenuButton();
+
+        Transform playButtonsLayoutGroup = menuCanvas.transform.Find("PlayModeButtonLayout");
+        playButtons = playButtonsLayoutGroup.GetComponentsInChildren<Button>();
+        DisablePlayButtons();
 
         popupText = menuCanvas.transform.Find("PopupText").gameObject;
         DisablePopupText();
 
         Transform actionButtonsLayoutGroup = battleCanvas.transform.Find("TurnActionBtnsVerticalLayout");
         actionButtons = actionButtonsLayoutGroup.GetComponentsInChildren<Button>();
-        DisableButtons();
+        DisableActionButtons();
 
         turnOrderImages = new List<Image>();
         heroHealthBars = new List<Slider>();
@@ -37,21 +42,21 @@ public static class UIManager
         DisableTurnOrder();
     }
 
-    public static void EnableButtons(List<TurnAction> actions)
+
+    public static void EnableActionButtons(List<TurnAction> actions)
     {
         for (int i = 0; i < actions.Count; i++)
         {
             actionButtons[i].gameObject.SetActive(true);
             actionButtons[i].GetComponentInChildren<TMP_Text>().text = actions[i].name;
             TurnAction action = actions[i];
-
             
             actionButtons[i].onClick
                 .AddListener(() => StateManager.PushGameState(new HeroTargetSelectionState(action)));
         }
     }
 
-    public static void DisableButtons()
+    public static void DisableActionButtons()
     {
         foreach (Button button in actionButtons)
         {
@@ -107,20 +112,20 @@ public static class UIManager
         }
     }
 
-    public static void EnableMenuButtons()
+    public static void EnablePlayButtons()
     {
-        menuButtons[0].gameObject.SetActive(true);
-        menuButtons[0].onClick
+        playButtons[0].gameObject.SetActive(true);
+        playButtons[0].onClick
             .AddListener(() => StateManager.PushGameState(new LocalRoomState()));
 
-        menuButtons[1].gameObject.SetActive(true);
-        menuButtons[1].onClick
+        playButtons[1].gameObject.SetActive(true);
+        playButtons[1].onClick
             .AddListener(() => StateManager.PushGameState(new GameRoomState()));
     }
 
-    public static void DisableMenuButtons()
+    public static void DisablePlayButtons()
     {
-        foreach (Button button in menuButtons)
+        foreach (Button button in playButtons)
         {
             button.onClick.RemoveAllListeners();
             button.gameObject.SetActive(false);
@@ -136,5 +141,18 @@ public static class UIManager
     public static void DisablePopupText()
     {
         popupText.gameObject.SetActive(false);
+    }
+
+    public static void EnableMenuButton()
+    {
+        menuButton.gameObject.SetActive(true);
+        menuButton.onClick
+            .AddListener(() => StateManager.PopGameStateUntilStateIs(typeof(TitleState)));
+    }
+
+    public static void DisableMenuButton()
+    {
+        menuButton.onClick.RemoveAllListeners();
+        menuButton.gameObject.SetActive(false);
     }
 }

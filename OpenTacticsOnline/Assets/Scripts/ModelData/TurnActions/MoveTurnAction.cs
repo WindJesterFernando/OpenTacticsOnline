@@ -10,7 +10,6 @@ public class MoveTurnAction : TurnAction
     
     public override void ApplyEffectToModelData(GridCoord target)
     {
-        UnityEngine.Debug.Log("Moving");
         owner.coord = target;
     }
 
@@ -27,7 +26,6 @@ public class MoveTurnAction : TurnAction
         {
             Vector3 endPos = bgVisuals[t.x, t.y].transform.position;
             VisualTaskQueue.EnqueueAction(new MoveSpriteVisualTask(owner.GetVisualRepresentation(), startPos, endPos, 0.25f ));
-
             startPos = endPos;
         }
         VisualTaskQueue.EnqueueAction(new ApplyEffectToModelDataVisualTask(this, target));

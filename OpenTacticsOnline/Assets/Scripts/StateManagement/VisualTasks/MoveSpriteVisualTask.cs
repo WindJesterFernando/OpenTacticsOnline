@@ -7,7 +7,7 @@ public class MoveSpriteVisualTask : VisualTask
     Vector3 startPos;
     Vector3 endPos;
 
-    float curTime;
+    float currentTime;
     
     public MoveSpriteVisualTask(GameObject heroVisualRepresentation, Vector3 startPos, Vector3 endPos, float duration)
     {
@@ -19,13 +19,13 @@ public class MoveSpriteVisualTask : VisualTask
 
     public override void Update()
     {
-        curTime += Time.deltaTime;
+        currentTime += Time.deltaTime;
 
-        Vector3 lerpVal = Vector3.Lerp(startPos, endPos, curTime / duration);
+        Vector3 lerpVal = Vector3.Lerp(startPos, endPos, currentTime / duration);
         lerpVal.z = heroVisualRepresentation.transform.position.z;
         heroVisualRepresentation.transform.position = lerpVal;
         
-        if(curTime >= duration)
+        if(currentTime >= duration)
             IsDone = true;
     }
 }

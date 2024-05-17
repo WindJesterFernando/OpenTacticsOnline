@@ -9,7 +9,7 @@ public class SelectActionUIState : AbstractGameState
 
     public override void OnStateEnter()
     {
-        // construct list of actions based on hero
+        // construct list of actions based on hero role
        EnableButtons();
     }
 
@@ -20,16 +20,16 @@ public class SelectActionUIState : AbstractGameState
 
     public override void OnStatePause()
     {
-        UIManager.DisableButtons();
+        UIManager.DisableActionButtons();
     }
     
     public override void OnStateExit()
     {
-        UIManager.DisableButtons();
+        UIManager.DisableActionButtons();
     }
 
     private void EnableButtons()
     {
-        UIManager.EnableButtons(actingHero.actions); 
+        UIManager.EnableActionButtons(actingHero.actions); 
     }
 }

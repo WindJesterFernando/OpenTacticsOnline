@@ -87,11 +87,6 @@ public static class GridVisuals
         return tileVisuals;
     }
 
-    public static LinkedList<GameObject> GetHeroVisuals()
-    {
-        return heroVisuals;
-    }
-
     public static void ChangeColorOfTile(GridCoord coord, Color color)
     {
         tileVisuals[coord.x, coord.y].GetComponent<SpriteRenderer>().color = color;

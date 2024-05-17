@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class SelectSaveFileState : AbstractGameState
 {
-    public SelectSaveFileState()
-    {
-
-    }
 
     public override void Update()
     {

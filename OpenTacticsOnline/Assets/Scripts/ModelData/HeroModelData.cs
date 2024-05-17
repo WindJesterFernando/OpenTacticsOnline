@@ -17,12 +17,10 @@ public class Hero
     public GridCoord coord;
     public HeroRole role;
     public int maxSteps;
-    private UnityEngine.GameObject visualRepresentation;
-
+    private GameObject visualRepresentation;
     public AbstractController controller;
     
     public int currentHealth { get; private set; }
-    
     public int maxHealth;
 
     public bool isAlly;
@@ -90,7 +88,6 @@ public class Hero
             currentHealth = 0;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
-        
     }
 
     public void DoTurn()

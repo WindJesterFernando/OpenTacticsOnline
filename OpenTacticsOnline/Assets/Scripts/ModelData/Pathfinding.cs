@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using UnityEngine;
-
 public static partial class BattleGridModelData
 {
     private const int StepCost = 1;
@@ -121,9 +119,7 @@ public static partial class BattleGridModelData
         else
             pathBlockers = PathBlocker.Ally;
 
-        Debug.Log("Top");
         pathBlockers += PathBlocker.Terrain;
-        Debug.Log("Bottom");
 
         #endregion
 
@@ -351,7 +347,6 @@ public static partial class BattleGridModelData
         return tiles;
     }
 }
-
 
 
 public class TargetingOptions

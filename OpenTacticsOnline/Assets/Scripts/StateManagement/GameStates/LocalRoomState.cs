@@ -6,10 +6,6 @@ public class LocalRoomState : AbstractGameState
      AIContoller aiController= new AIContoller();
      LocalPlayerController localPlayerController = new LocalPlayerController();
 
-    public LocalRoomState()
-    {
-    }
-
     public override void OnStateEnter()
     {
         BattleGridModelData.Init();
@@ -21,7 +17,6 @@ public class LocalRoomState : AbstractGameState
     {
         BattleGridModelData.Init();
     
-        //TODO Add some functionality to customize this and send the data about what we choose to the other client
         AddHero(new Hero(2, 2, HeroRole.BlackMage, 6, 20, true));
         AddHero(new Hero(3, 2, HeroRole.RedMage, 6, 20, true));
         AddHero(new Hero(3, 3, HeroRole.WhiteMage, 6, 20, true));

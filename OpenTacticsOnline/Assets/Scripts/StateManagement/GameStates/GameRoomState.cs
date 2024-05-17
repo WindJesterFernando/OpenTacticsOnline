@@ -6,11 +6,6 @@ public class GameRoomState : AbstractGameState
     private NetworkPlayerController networkPlayerController;
     private LocalPlayerController localPlayerController;
 
-    public GameRoomState()
-    {
-        
-    }
-
     public override void OnStateEnter()
     {
         UIManager.EnablePopupText("Waiting for opponent...");
