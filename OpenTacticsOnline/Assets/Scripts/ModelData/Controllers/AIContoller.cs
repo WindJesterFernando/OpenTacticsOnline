@@ -4,10 +4,8 @@ public class AIContoller : AbstractController
 {
     public override void DoTurn(Hero activeHero)
     {
-         List<GridCoord> nearTiles =
-            BattleGridModelData.FindTargetsWithinSteps(activeHero.coord, activeHero.maxSteps,
-                 new TargetingOptions(false, TargetType.EmptyTile,
-                     BlockerFlag.Ally | BlockerFlag.Terrain));
+        TargetingOptions targets = new TargetingOptions(false, TargetType.EmptyTile, PathBlocker.Ally | PathBlocker.Terrain);
+         List<GridCoord> nearTiles = BattleGridModelData.FindTargetsWithinSteps(activeHero.coord, activeHero.maxSteps, targets);
 
          if (nearTiles.Count == 0)
          {

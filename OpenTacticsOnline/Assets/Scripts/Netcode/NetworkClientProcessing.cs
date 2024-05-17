@@ -33,6 +33,8 @@ public static class NetworkClientProcessing
     }
     public static bool IsConnectedToServer()
     {
+        if (networkClient == null) 
+            return false;
         return networkClient.IsConnected();
     }
     public static void ConnectToServer()

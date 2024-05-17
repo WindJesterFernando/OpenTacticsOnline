@@ -19,8 +19,11 @@ public class MainSystemBooter : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            MessageBuilder mb = new MessageBuilder(NetworkSignifier.C_Disconnect);
-            NetworkClientProcessing.SendMessageToServer(mb);
+            if (NetworkClientProcessing.IsConnectedToServer())
+            {
+                MessageBuilder mb = new MessageBuilder(NetworkSignifier.C_Disconnect);
+                NetworkClientProcessing.SendMessageToServer(mb);
+            }
             StateManager.PopGameStateUntilStateIs(typeof(TitleState));
         }
         StateManager.Update();

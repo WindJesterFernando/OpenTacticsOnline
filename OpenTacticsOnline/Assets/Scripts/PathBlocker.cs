@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Flags]
-public enum BlockerFlag : byte
+public enum PathBlocker : byte
 {
     None = 0,
     Ally = 1 << 0, //0001
@@ -17,12 +17,11 @@ public enum TargetType : byte
     Ally = 1 << 0,
     Opponent = 1 << 1,
     KnockedOutAllies = 1 << 2,
-    AnyHero = 1 << 3,
-    EmptyTile = 1 << 4,
-    AnyTile = 1 << 5
+    EmptyTile = 1 << 3,
+    AnyTile = byte.MaxValue
 }
 
-public struct BitFlag<T> where T : Enum
+public readonly struct BitFlag<T> where T : Enum
 {
     private readonly byte flagContainer;
 

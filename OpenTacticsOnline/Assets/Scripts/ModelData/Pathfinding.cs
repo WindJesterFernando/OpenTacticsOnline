@@ -25,7 +25,7 @@ public static partial class BattleGridModelData
         return stepCosts;
     }
 
-    private static void SetupBlockedSteps(int[,] stepCosts, BitFlag<BlockerFlag> pathBlockers)
+    private static void SetupBlockedSteps(int[,] stepCosts, BitFlag<PathBlocker> pathBlockers)
     {
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -114,15 +114,15 @@ public static partial class BattleGridModelData
 
         #region Determine Path Blockers
 
-        BitFlag<BlockerFlag> pathBlockers;
+        BitFlag<PathBlocker> pathBlockers;
 
         if (isPlayerTeam)
-            pathBlockers = BlockerFlag.Opponent;
+            pathBlockers = PathBlocker.Opponent;
         else
-            pathBlockers = BlockerFlag.Ally;
+            pathBlockers = PathBlocker.Ally;
 
         Debug.Log("Top");
-        pathBlockers += BlockerFlag.Terrain;
+        pathBlockers += PathBlocker.Terrain;
         Debug.Log("Bottom");
 
         #endregion
@@ -163,7 +163,7 @@ public static partial class BattleGridModelData
         return new List<GridCoord>(path);
     }
 
-    private static LinkedList<GridCoord> FindTilesWithinSteps(GridCoord start, int steps, BitFlag<BlockerFlag> pathBlockers)
+    private static LinkedList<GridCoord> FindTilesWithinSteps(GridCoord start, int steps, BitFlag<PathBlocker> pathBlockers)
     {
         int[,] stepCosts = InitializeStepCosts();
 
@@ -250,14 +250,14 @@ public static partial class BattleGridModelData
         return isTileInBounds;
     }
 
-    private static bool IsTileBlocked(GridCoord coord, BitFlag<BlockerFlag> pathBlockers)
+    private static bool IsTileBlocked(GridCoord coord, BitFlag<PathBlocker> pathBlockers)
     {
         bool isTileWalkable;
         bool isTileEmpty;
         bool isTileBlockedByFoe;
         bool isTileBlockedByAlly;
 
-        if (pathBlockers.Contains(BlockerFlag.Terrain))
+        if (pathBlockers.Contains(PathBlocker.Terrain))
             isTileWalkable = battleGridTiles[coord.x, coord.y].isWalkable;
         else
             isTileWalkable = true;
@@ -265,7 +265,7 @@ public static partial class BattleGridModelData
         if (!isTileWalkable)
             return true;
 
-        if (!pathBlockers.ContainsAny(BlockerFlag.Ally | BlockerFlag.Opponent))
+        if (!pathBlockers.ContainsAny(PathBlocker.Ally | PathBlocker.Opponent))
         {
             return false;
         }
@@ -278,12 +278,12 @@ public static partial class BattleGridModelData
 
         isTileBlockedByAlly = false;
         isTileBlockedByFoe = false;
-        if (pathBlockers.Contains(BlockerFlag.Ally))
+        if (pathBlockers.Contains(PathBlocker.Ally))
         {
             if (hero.isAlly)
                 isTileBlockedByAlly = true;
         }
-        if (pathBlockers.Contains(BlockerFlag.Opponent))
+        if (pathBlockers.Contains(PathBlocker.Opponent))
         {
             if (!hero.isAlly)
                 isTileBlockedByFoe = true;
@@ -297,45 +297,38 @@ public static partial class BattleGridModelData
         return false;
     }
 
-    private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, TargetType type)
+    private static LinkedList<GridCoord> FilterByType(LinkedList<GridCoord> initial, BitFlag<TargetType> type)
     {
         if (type == TargetType.AnyTile)
             return initial;
-        else if (type == TargetType.Ally || type == TargetType.Opponent || type == TargetType.AnyHero || type == TargetType.KnockedOutAllies)
+        else if (type.ContainsAny(TargetType.Ally | TargetType.Opponent | TargetType.KnockedOutAllies))
             return FilterHeroesInTiles(initial, type);
         else // if (type == TargetType.EmptyTile)
             return FilterEmptyTiles(initial);
     }
 
-    private static LinkedList<GridCoord> FilterHeroesInTiles(LinkedList<GridCoord> tiles, TargetType type)
+    private static LinkedList<GridCoord> FilterHeroesInTiles(LinkedList<GridCoord> tiles, BitFlag<TargetType> type)
     {
         LinkedList<GridCoord> result = new LinkedList<GridCoord>();
         foreach (Hero h in heroes)
         {
-            if (type == TargetType.KnockedOutAllies)
-            {
-                if (!h.IsAlive() && tiles.Contains(h.coord))
-                {
-                    result.AddLast(h.coord);
-                }
-            }
-            else if (type == TargetType.AnyHero)
-            {
-                if (h.IsAlive() && tiles.Contains(h.coord))
-                {
-                    result.AddLast(h.coord);
-                }
-            }
-            else if (type == TargetType.Opponent)
+            if (type.Contains(TargetType.Opponent))
             {
                 if (h.IsAlive() && !h.isAlly && tiles.Contains(h.coord))
                 {
                     result.AddLast(h.coord);
                 }
             }
-            else if (type == TargetType.Ally)
+            if (type.Contains(TargetType.Ally))
             {
                 if (h.IsAlive() && h.isAlly && tiles.Contains(h.coord))
+                {
+                    result.AddLast(h.coord);
+                }
+            }
+            else if (type.Contains(TargetType.KnockedOutAllies))
+            {
+                if (!h.IsAlive() && tiles.Contains(h.coord))
                 {
                     result.AddLast(h.coord);
                 }
@@ -364,11 +357,11 @@ public static partial class BattleGridModelData
 public class TargetingOptions
 {
     public bool canTargetSelf;
-    public TargetType targetType;
-    public BitFlag<BlockerFlag> pathBlockers;
+    public BitFlag<TargetType> targetType;
+    public BitFlag<PathBlocker> pathBlockers;
     // public bool needLineOfSight;
 
-    public TargetingOptions(bool canTargetSelf, TargetType targetType, BitFlag<BlockerFlag> pathBlockers)
+    public TargetingOptions(bool canTargetSelf, BitFlag<TargetType> targetType, BitFlag<PathBlocker> pathBlockers)
     {
         this.canTargetSelf = canTargetSelf;
         this.targetType = targetType;
@@ -379,6 +372,6 @@ public class TargetingOptions
     {
         canTargetSelf = true;
         targetType = TargetType.None;
-        pathBlockers = BlockerFlag.None;
+        pathBlockers = PathBlocker.None;
     }
 }
