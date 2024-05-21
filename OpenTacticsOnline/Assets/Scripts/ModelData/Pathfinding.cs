@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static partial class BattleGridModelData
 {
@@ -195,10 +196,14 @@ public static partial class BattleGridModelData
     {
         LinkedList<GridCoord> tilesWithinSteps = FindTilesWithinSteps(start, steps, targetingOptions.pathBlockers);
 
+
         if (!targetingOptions.canTargetSelf)
             tilesWithinSteps.Remove(start);
 
         LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, targetingOptions.targetType);
+
+        if (targetingOptions.needLineOfSight)
+            filteredByType = FilterLineOfSight(start, tilesWithinSteps);
 
         List<GridCoord> resultAsList = new List<GridCoord>(filteredByType);
 
@@ -346,6 +351,51 @@ public static partial class BattleGridModelData
 
         return tiles;
     }
+
+    private static LinkedList<GridCoord> FilterLineOfSight(GridCoord start, LinkedList<GridCoord> tiles)
+    {
+        int xLength = battleGridTiles.GetLength(0);
+        int yLength = battleGridTiles.GetLength(1);
+        float xOffSet = -(xLength - 1) / 2f;
+        float yOffSet = -(yLength - 1) / 2f;
+
+        LinkedList<GridCoord> toBeRemoved = new LinkedList<GridCoord>();
+
+        foreach (GridCoord tile in tiles)
+        {
+            UnityEngine.Vector2 lineStart = new UnityEngine.Vector2(start.x, start.y);
+            UnityEngine.Vector2 line = new UnityEngine.Vector2(tile.x - start.x, tile.y - start.y);
+
+            LinkedList<GridCoord> collidingTiles = new LinkedList<GridCoord>();
+            int checkDistance = (int)(line.magnitude * 2.9f);
+            for (int i = 0; i < checkDistance; i++)
+            {
+                GridCoord tileUnder = new GridCoord((int)MathF.Round(lineStart.x + line.x / (checkDistance + 1) * i), (int)MathF.Round(lineStart.y + line.y / (checkDistance + 1) * i));
+                if (!collidingTiles.Contains(tileUnder))
+                {
+                    collidingTiles.AddLast(tileUnder);
+                }
+            }
+
+            bool blocked = false;
+            foreach (GridCoord hit in collidingTiles)
+            {
+                if (!battleGridTiles[hit.x, hit.y].isWalkable)
+                    blocked = true;
+            }
+
+            if (blocked)
+                toBeRemoved.AddLast(tile);
+            else
+                UnityEngine.Debug.DrawRay(lineStart + new Vector2(xOffSet, yOffSet), line, Color.black, 15);
+        }
+
+        foreach (GridCoord tile in toBeRemoved)
+        {
+            tiles.Remove(tile);
+        }
+        return tiles;
+    }
 }
 
 
@@ -353,8 +403,8 @@ public class TargetingOptions
 {
     public bool canTargetSelf;
     public BitFlag<TargetType> targetType;
-    public BitFlag<PathBlocker> pathBlockers;
-    // public bool needLineOfSight;
+    public BitFlag<PathBlocker> pathBlockers; 
+    public bool needLineOfSight;
 
     public TargetingOptions(bool canTargetSelf, BitFlag<TargetType> targetType, BitFlag<PathBlocker> pathBlockers)
     {
