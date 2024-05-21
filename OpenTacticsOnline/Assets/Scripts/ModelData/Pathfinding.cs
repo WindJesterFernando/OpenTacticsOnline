@@ -420,16 +420,10 @@ public static partial class BattleGridModelData
                 }
 
                 if (mapPosition == tile)
-                {
                     hit = LOSRayResult.ReachedTarget;
-                    break;
-                }
 
-                if (!battleGridTiles[mapPosition.x, mapPosition.y].isWalkable)
-                {
+                else if (!battleGridTiles[mapPosition.x, mapPosition.y].isWalkable)
                     hit = LOSRayResult.HitWall;
-                    break;
-                }
             }
 
             if (hit == LOSRayResult.HitWall)
