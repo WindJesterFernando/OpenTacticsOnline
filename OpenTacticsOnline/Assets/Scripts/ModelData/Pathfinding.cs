@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public static partial class BattleGridModelData
 {
@@ -356,11 +355,6 @@ public static partial class BattleGridModelData
 
     private static LinkedList<GridCoord> FilterLineOfSight(GridCoord start, LinkedList<GridCoord> tiles)
     {
-        int xLength = battleGridTiles.GetLength(0);
-        int yLength = battleGridTiles.GetLength(1);
-        float xOffSet = -(xLength - 1) / 2f;
-        float yOffSet = -(yLength - 1) / 2f;
-
         LinkedList<GridCoord> toBeRemoved = new LinkedList<GridCoord>();
 
         foreach (GridCoord tile in tiles)
