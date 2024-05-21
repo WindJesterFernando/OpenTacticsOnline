@@ -45,7 +45,7 @@ public static partial class BattleGridModelData
 
         //battleGridTiles[7, 9].isWalkable = false;
         battleGridTiles[7, 8].isWalkable = false;
-        battleGridTiles[7, 7].isWalkable = false;
+        //battleGridTiles[7, 7].isWalkable = false;
         battleGridTiles[7, 6].isWalkable = false;
         battleGridTiles[7, 5].isWalkable = false;
         battleGridTiles[7, 4].isWalkable = false;

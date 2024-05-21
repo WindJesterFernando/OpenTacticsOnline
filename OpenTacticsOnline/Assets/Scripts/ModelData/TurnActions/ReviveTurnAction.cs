@@ -1,7 +1,7 @@
 ﻿public class ReviveTurnAction : TurnAction
 {
     public ReviveTurnAction(Hero owner, int range = 10, string name = "Revive") : base(owner, name, range,
-        new TargetingOptions(true, TargetType.KnockedOutAllies, PathBlocker.Terrain))
+        new TargetingOptions(true, TargetType.KnockedOutAllies, PathBlocker.Terrain, true))
     {
     }
 

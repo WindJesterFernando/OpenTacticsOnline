@@ -1,7 +1,7 @@
 public class HealTurnAction : TurnAction
 {
     public HealTurnAction(Hero owner, int range = 1, string name = "Heal") : base(owner, name, range,
-        new TargetingOptions(true, TargetType.Ally, PathBlocker.Terrain))
+        new TargetingOptions(true, TargetType.Ally, PathBlocker.Terrain, true))
     {
     }
 

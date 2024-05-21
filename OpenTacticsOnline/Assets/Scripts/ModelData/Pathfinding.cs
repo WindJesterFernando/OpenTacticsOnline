@@ -7,6 +7,8 @@ public static partial class BattleGridModelData
     private const int StepCost = 1;
     private const int UninitializedDistance = -1;
     private const int TileIsBeingBlocked = -2;
+    private const float LOSMarginOfError = 0.00001f;
+
     private static readonly GridCoord EmptyGridCoord = new GridCoord(-99, -99);
 
     private static int[,] InitializeStepCosts()
@@ -202,8 +204,8 @@ public static partial class BattleGridModelData
 
         LinkedList<GridCoord> filteredByType = FilterByType(tilesWithinSteps, targetingOptions.targetType);
 
-        if (targetingOptions.needLineOfSight)
-            filteredByType = FilterLineOfSight(start, tilesWithinSteps);
+        if (targetingOptions.needsLineOfSight)
+            filteredByType = FilterLineOfSight(start, filteredByType);
 
         List<GridCoord> resultAsList = new List<GridCoord>(filteredByType);
 
@@ -363,31 +365,77 @@ public static partial class BattleGridModelData
 
         foreach (GridCoord tile in tiles)
         {
-            UnityEngine.Vector2 lineStart = new UnityEngine.Vector2(start.x, start.y);
-            UnityEngine.Vector2 line = new UnityEngine.Vector2(tile.x - start.x, tile.y - start.y);
+            if(tile == start) 
+                continue;
 
-            LinkedList<GridCoord> collidingTiles = new LinkedList<GridCoord>();
-            int checkDistance = (int)(line.magnitude * 2.9f);
-            for (int i = 0; i < checkDistance; i++)
+            float lineX = tile.x - start.x;
+            float lineY = tile.y - start.y;
+
+            GridCoord mapPosition = start;
+
+            float deltaDistX = MathF.Abs(1 / lineX);
+            float deltaDistY = MathF.Abs(1 / lineY);
+            float sideDistX = 0.5f * deltaDistX;
+            float sideDistY = 0.5f * deltaDistY;
+            int stepX;
+            int stepY;
+            LOSRayResult hit = LOSRayResult.Undefined;
+
+            if (lineX < 0)
+                stepX = -1;
+            else
+                stepX = 1;
+
+            if (lineY < 0)
+                stepY = -1;
+            else
+                stepY = 1;
+
+            while (hit == LOSRayResult.Undefined)
             {
-                GridCoord tileUnder = new GridCoord((int)MathF.Round(lineStart.x + line.x / (checkDistance + 1) * i), (int)MathF.Round(lineStart.y + line.y / (checkDistance + 1) * i));
-                if (!collidingTiles.Contains(tileUnder))
+                if (MathF.Abs(sideDistX - sideDistY) < LOSMarginOfError)
                 {
-                    collidingTiles.AddLast(tileUnder);
+                    if (!battleGridTiles[mapPosition.x + stepX, mapPosition.y].isWalkable
+                        && !battleGridTiles[mapPosition.x, mapPosition.y + stepY].isWalkable)
+                    {
+                        hit = LOSRayResult.HitWall;
+                        break;
+                    }
+
+                    sideDistX += deltaDistX;
+                    mapPosition.x += stepX;
+                    sideDistY += deltaDistY;
+                    mapPosition.y += stepY;
+
+                }
+                else if (sideDistX < sideDistY)
+                {
+                    sideDistX += deltaDistX;
+                    mapPosition.x += stepX;
+                }
+                else
+                {
+                    sideDistY += deltaDistY;
+                    mapPosition.y += stepY;
+                }
+
+                if (mapPosition == tile)
+                {
+                    hit = LOSRayResult.ReachedTarget;
+                    break;
+                }
+
+                if (!battleGridTiles[mapPosition.x, mapPosition.y].isWalkable)
+                {
+                    hit = LOSRayResult.HitWall;
+                    break;
                 }
             }
 
-            bool blocked = false;
-            foreach (GridCoord hit in collidingTiles)
+            if (hit == LOSRayResult.HitWall)
             {
-                if (!battleGridTiles[hit.x, hit.y].isWalkable)
-                    blocked = true;
-            }
-
-            if (blocked)
                 toBeRemoved.AddLast(tile);
-            else
-                UnityEngine.Debug.DrawRay(lineStart + new Vector2(xOffSet, yOffSet), line, Color.black, 15);
+            }
         }
 
         foreach (GridCoord tile in toBeRemoved)
@@ -404,13 +452,14 @@ public class TargetingOptions
     public bool canTargetSelf;
     public BitFlag<TargetType> targetType;
     public BitFlag<PathBlocker> pathBlockers; 
-    public bool needLineOfSight;
+    public bool needsLineOfSight;
 
-    public TargetingOptions(bool canTargetSelf, BitFlag<TargetType> targetType, BitFlag<PathBlocker> pathBlockers)
+    public TargetingOptions(bool canTargetSelf, BitFlag<TargetType> targetType, BitFlag<PathBlocker> pathBlockers, bool needsLineOfSight)
     {
         this.canTargetSelf = canTargetSelf;
         this.targetType = targetType;
         this.pathBlockers = pathBlockers;
+        this.needsLineOfSight = needsLineOfSight;
     }
 
     public TargetingOptions()
@@ -418,5 +467,13 @@ public class TargetingOptions
         canTargetSelf = true;
         targetType = TargetType.None;
         pathBlockers = PathBlocker.None;
+        needsLineOfSight = false;
     }
+}
+
+public enum LOSRayResult
+{
+    Undefined = -1,
+    ReachedTarget,
+    HitWall
 }
